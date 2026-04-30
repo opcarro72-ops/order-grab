@@ -766,6 +766,10 @@ cron.schedule("0 0 * * *", async () => {
   timezone: "Europe/London"
 });
 
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
+});
+
 /* ---------------- SERVER ---------------- */
 const PORT = process.env.PORT || 3000;
 
