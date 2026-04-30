@@ -767,7 +767,7 @@ cron.schedule("0 0 * * *", async () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
+  res.sendFile(__dirname + "/public/login.html");
 });
 
 /* ---------------- SERVER ---------------- */
