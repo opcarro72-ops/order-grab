@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dark">
+
+<div style="max-width:400px;margin:20px auto;background:#111;padding:20px;border-radius:12px;">
+
+  <div style="text-align:center; position:relative;">
+    <span onclick="goPage('deposit.html')" 
+      style="position:absolute;left:0;cursor:pointer;">⬅</span>
+    <h3>Deposit</h3>
+  </div>
+
+  <h1 style="text-align:center;" id="amountText"></h1>
+  <p style="text-align:center;">Network - TRON(TRC-20)</p>
+
+  <div style="text-align:center; margin-top:20px;">
+    <p id="addressTitle">Address:</p>
+    <img src="qr.png" width="200">
+  </div>
+
+  <div style="margin-top:20px;text-align:center;">
+    <div style="display:flex;align-items:center;">
+      <input id="address" readonly
+        style="flex:1;padding:10px;border:none;border-radius:5px;">
+      
+      <button onclick="copyAddress()" 
+        style="margin-left:5px;background:#444;color:white;border:none;padding:10px;border-radius:5px;">
+        📋
+      </button>
+    </div>
+  </div>
+
+  <p style="text-align:center;margin-top:15px;" id="msg">
+    Waiting for payment...
+  </p>
+
+  <div style="margin-top:20px;font-size:13px;color:#ccc;">
+    <b>Tips:</b><br><br>
+
+    1. The minimum recharge amount is subject to the actual transfer amount, 
+    not less than <span style="color:red;">10 USDT</span>.<br><br>
+
+    2. After recharging, it will take about 
+    <span style="color:red;">1 to 2 minutes</span> 
+    to confirm the payment. Please wait patiently.
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+let amount = localStorage.getItem("depositAmount") || 0;
+let warning = localStorage.getItem("depositWarning");
+
+document.getElementById("amountText").innerText = amount + " USDT";
+
+let address = "TSNXDp4jH45dfCMyRvZQzbxGnCB3n9b6oc";
+document.getElementById("address").value = address;
+
+// warning থাকলে লাল warning দেখাবে
+if (warning && warning !== "null") {
+  document.getElementById("addressTitle").innerHTML =
+    `<span style="color:red;">${warning}</span>`;
+} else {
+  document.getElementById("addressTitle").innerText = "Address:";
+}
+
+function copyAddress() {
+  navigator.clipboard.writeText(address);
+  document.getElementById("msg").innerText = "Copied ✅";
+}
+
+function goPage(page) {
+  window.location.href = page;
+}
+</script>
+
+</body>
+</html>

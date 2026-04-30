@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Withdraw Records</title>
+  <style>
+    body{
+      margin:0;
+      background:#111517;
+      color:white;
+      font-family:Arial, sans-serif;
+    }
+
+    .header{
+      text-align:center;
+      padding:15px;
+      font-size:24px;
+      font-weight:bold;
+      position:relative;
+      border-bottom:1px solid #333;
+    }
+
+    .back{
+      position:absolute;
+      left:15px;
+      top:15px;
+      font-size:24px;
+      cursor:pointer;
+    }
+
+    #recordList{
+      padding:15px;
+    }
+
+    .record-item{
+      background:#1b1f22;
+      margin-bottom:12px;
+      padding:15px;
+      border-radius:8px;
+      border:1px solid #333;
+      position:relative;
+    }
+
+    .record-item p{
+      margin:6px 0;
+    }
+
+    .status{
+      position:absolute;
+      top:15px;
+      right:15px;
+      padding:4px 10px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:bold;
+      color:white;
+    }
+
+    .processing{
+      background:#b8860b;
+    }
+
+    .success{
+      background:#1f8b4c;
+    }
+
+    .rejected{
+      background:#b22222;
+    }
+
+    .empty{
+      text-align:center;
+      color:#aaa;
+      margin-top:30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <span class="back" onclick="history.back()">&#8592;</span>
+  Withdraw Records
+</div>
+
+<div id="recordList"></div>
+
+<script>
+async function loadWithdrawRecords() {
+  const token = localStorage.getItem("token");
+  const box = document.getElementById("recordList");
+
+  if (!token) {
+    box.innerHTML = '<p class="empty">User not logged in</p>';
+    return;
+  }
+
+  box.innerHTML = '<p class="empty">Loading...</p>';
+
+  try {
+    const res = await fetch("/my-withdraws", {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    const records = await res.json();
+
+    if (!Array.isArray(records) || records.length === 0) {
+      box.innerHTML = '<p class="empty">No withdrawal records found</p>';
+      return;
+    }
+
+    box.innerHTML = "";
+
+    records.forEach(r => {
+      let statusClass = "processing";
+
+      if (r.status === "Success") statusClass = "success";
+      if (r.status === "Rejected") statusClass = "rejected";
+
+      // যদি approvedAmount থাকে সেটা দেখাবে, না থাকলে amount দেখাবে
+      const displayAmount = r.approvedAmount > 0 ? r.approvedAmount : r.amount;
+
+      box.innerHTML += `
+        <div class="record-item">
+          <div class="status ${statusClass}">${r.status}</div>
+          <p>Amount: ${displayAmount} USDT</p>
+          <p>Time: ${new Date(r.time).toLocaleString()}</p>
+        </div>
+      `;
+    });
+
+  } catch (error) {
+    box.innerHTML = '<p class="empty">Server error loading records</p>';
+  }
+}
+
+loadWithdrawRecords();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deposit Records</title>
+  <style>
+    body{
+      margin:0;
+      background:#111517;
+      color:white;
+      font-family:Arial, sans-serif;
+    }
+
+    .header{
+      text-align:center;
+      padding:15px;
+      font-size:24px;
+      font-weight:bold;
+      position:relative;
+      border-bottom:1px solid #333;
+    }
+
+    .back{
+      position:absolute;
+      left:15px;
+      top:15px;
+      font-size:24px;
+      cursor:pointer;
+    }
+
+    #recordList{
+      padding:15px;
+    }
+
+    .record-item{
+      background:#1b1f22;
+      margin-bottom:12px;
+      padding:15px;
+      border-radius:8px;
+      border:1px solid #333;
+      position:relative;
+    }
+
+    .record-item p{
+      margin:6px 0;
+    }
+
+    .status{
+      position:absolute;
+      top:15px;
+      right:15px;
+      padding:4px 10px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:bold;
+    }
+
+    .success{
+      background:#1f8b4c;
+      color:white;
+    }
+
+    .pending{
+      background:#b8860b;
+      color:white;
+    }
+
+    .empty{
+      text-align:center;
+      color:#aaa;
+      margin-top:30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <span class="back" onclick="history.back()">&#8592;</span>
+  Deposit Records
+</div>
+
+<div id="recordList"></div>
+
+<script>
+async function loadDeposits() {
+  const token = localStorage.getItem("token");
+  const box = document.getElementById("recordList");
+
+  const res = await fetch("/my-deposits", {
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  });
+
+  const records = await res.json();
+
+  box.innerHTML = "";
+
+  if (!Array.isArray(records) || records.length === 0) {
+    box.innerHTML = '<p class="empty">No deposit records found</p>';
+    return;
+  }
+
+  records.forEach(r => {
+    let statusClass = r.status === "Pending" ? "pending" : "success";
+
+    box.innerHTML += `
+      <div class="record-item">
+        <div class="status ${statusClass}">${r.status}</div>
+        <p>Requested: ${r.amount} USDT</p>
+        <p>Approved: ${r.approvedAmount || 0} USDT</p>
+        <p>Time: ${new Date(r.time).toLocaleString()}</p>
+      </div>
+    `;
+  });
+}
+
+loadDeposits();
+</script>
+
+</body>
+</html>

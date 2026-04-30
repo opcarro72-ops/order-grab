@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alibaba</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="amazon-header">
+    <div class="back-btn" onclick="history.back()">←</div>
+    <div class="amazon-title">Alibaba</div>
+
+    <div class="balance-box">
+      <p>Account Balance:</p>
+      <h2 id="balance">0 USDT</h2>
+    </div>
+  </div>
+
+  <!-- Stats Card -->
+  <div class="stats-card">
+    <div class="stats-grid">
+      <div class="stat">
+        <h4 id="todayTimes">0</h4>
+        <p>Today's Times</p>
+      </div>
+
+      <div class="stat">
+        <h4 id="todayCommission">0.0000 USDT</h4>
+        <p>Today's commission</p>
+      </div>
+
+      <div class="stat">
+        <h4 id="cashGap">0.0000 USDT</h4>
+        <p>Cash gap between tasks</p>
+      </div>
+
+      <div class="stat">
+        <h4 id="yesterdayCommission">0.0000 USDT</h4>
+        <p>Yesterday's buy commission</p>
+      </div>
+
+      <div class="stat">
+        <h4>0 USDT</h4>
+        <p>Yesterday's team commission</p>
+      </div>
+
+      <div class="stat">
+        <h4>0 USDT</h4>
+        <p>Money frozen in accounts</p>
+      </div>
+    </div>
+
+    <button class="grab-btn" onclick="openPopup()">
+      Grab the order immediately
+    </button>
+  </div>
+
+  <!-- Hint -->
+  <div class="hint-box">
+    <p>Hint:</p>
+    <p>1: 8% of the amount of completed transactions earned.</p>
+    <p>2: The system sends tasks randomly. Complete them as soon as possible after matching them.</p>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup-overlay" id="popup" style="display:none;">
+    <div class="order-popup">
+
+      <div class="popup-header">
+        <span>Successful order</span>
+        <span class="close-btn" onclick="closePopup()">×</span>
+      </div>
+
+      <div class="order-number">
+        Order Nos: <span id="orderNo"></span>
+      </div>
+
+      <div id="productList"></div>
+
+      <div class="order-info">
+        <p><span>Transaction time</span><span id="trxTime"></span></p>
+        <p><span>Order amount</span><span id="orderAmount">0 USDT</span></p>
+        <p><span>Commissions</span><span id="commissionAmount">0 USDT</span></p>
+        <p class="income-row">
+          <span>Expected income</span>
+          <span class="income" id="expectedIncome">0 USDT</span>
+        </p>
+      </div>
+
+      <button class="submit-btn" onclick="submitOrder()">
+        Submit order
+      </button>
+    </div>
+  </div>
+
+  <script src="products.js"></script>
+
+  <script>
+let currentCommission = 0;
+let currentOrderAmount = 0;
+
+async function openPopup() {
+  const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
+
+  const pending = JSON.parse(localStorage.getItem(`pendingAlibabaOrder_${username}`));
+
+  if (pending) {
+    alert("You have an unpaid order, please complete that order first.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/task-status", {
+      headers: { Authorization: "Bearer " + token }
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert(data.msg || "Failed to load user status");
+      return;
+    }
+
+    if (data.balance < 499) {
+      alert("You don't have sufficient balance in your account.");
+      return;
+    }
+
+    if (data.balance > 898.99) {
+      alert("Alibaba allows for up to 499 - 899 order tasks, so you've been upgraded.");
+      return;
+    }
+
+    if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
+      alert("No order yet, please contact customer service to get the task orders.");
+      return;
+    }
+
+    let usedProducts = JSON.parse(localStorage.getItem("usedProducts_alibaba")) || [];
+    if (usedProducts.length >= 25) usedProducts = [];
+
+    let availableProducts = products.filter(p => !usedProducts.includes(p.id));
+    if (availableProducts.length < 4) {
+      usedProducts = [];
+      availableProducts = [...products];
+    }
+
+    const currentPosition = data.todayTasks + 1;
+
+    const isMixedOrder =
+      data.mixedOrderPositions &&
+      data.mixedOrderPositions.includes(currentPosition);
+
+    let selectedProducts = [];
+
+    if (isMixedOrder) {
+      for (let i = 0; i < 4; i++) {
+        let randomIndex = Math.floor(Math.random() * availableProducts.length);
+        let product = availableProducts[randomIndex];
+        selectedProducts.push(product);
+        usedProducts.push(product.id);
+        availableProducts.splice(randomIndex, 1);
+      }
+    } else {
+      let randomIndex = Math.floor(Math.random() * availableProducts.length);
+      let product = availableProducts[randomIndex];
+      selectedProducts.push(product);
+      usedProducts.push(product.id);
+    }
+
+    localStorage.setItem("usedProducts_alibaba", JSON.stringify(usedProducts));
+
+    let targetOrderAmount = 0;
+
+    if (
+      isMixedOrder &&
+      data.mixedOrderPercentRanges &&
+      data.mixedOrderPercentRanges[currentPosition]
+    ) {
+      const range = data.mixedOrderPercentRanges[currentPosition];
+
+      const percent =
+        Math.random() * (range.max - range.min) + range.min;
+
+      targetOrderAmount =
+        data.balance + (data.balance * percent / 100);
+
+    } else {
+      const minPercent = 30;
+      const maxPercent = 70;
+
+      const percent =
+        Math.random() * (maxPercent - minPercent) + minPercent;
+
+      targetOrderAmount =
+        data.balance * percent / 100;
+
+      if (targetOrderAmount > data.balance) {
+        targetOrderAmount = data.balance;
+      }
+    }
+
+    targetOrderAmount = Number(targetOrderAmount.toFixed(2));
+
+    let totalAmount = 0;
+    let productHTML = "";
+    let currentProducts = [];
+
+    selectedProducts.forEach((product, index) => {
+      let qty = 1;
+
+      if (index === selectedProducts.length - 1) {
+        qty = Math.max(
+          1,
+          Math.floor((targetOrderAmount - totalAmount) / product.price)
+        );
+      } else {
+        qty = Math.max(
+          1,
+          Math.floor(targetOrderAmount / selectedProducts.length / product.price)
+        );
+      }
+
+      let subtotal = product.price * qty;
+      totalAmount += subtotal;
+
+      currentProducts.push({
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        qty: qty
+      });
+
+      productHTML += `
+        <div class="product-box">
+          <img src="${product.image}" width="80">
+          <div class="product-details">
+            <div class="product-name">${product.name}</div>
+            <div class="product-price-row">
+              <span>${product.price.toFixed(2)} USDT</span>
+              <span>x${qty}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    currentOrderAmount = Number(totalAmount.toFixed(2));
+    currentCommission = Number((currentOrderAmount * 0.08).toFixed(4));
+
+    const userBalance = data.balance;
+    let gap = 0;
+
+    if (currentOrderAmount > userBalance) {
+      gap = currentOrderAmount - userBalance;
+    }
+
+    document.getElementById("cashGap").innerText =
+      gap.toFixed(4) + " USDT";
+
+    localStorage.setItem("cashGap_alibaba", gap);
+
+    const orderNo = "ALI" + Date.now();
+    const trxTime = new Date().toLocaleString();
+
+    document.getElementById("orderNo").innerText = orderNo;
+    document.getElementById("trxTime").innerText = trxTime;
+
+    document.getElementById("orderAmount").innerText =
+      currentOrderAmount.toFixed(2) + " USDT";
+
+    document.getElementById("commissionAmount").innerText =
+      currentCommission.toFixed(4) + " USDT";
+
+    document.getElementById("expectedIncome").innerText =
+      (currentOrderAmount + currentCommission).toFixed(4) + " USDT";
+
+    document.getElementById("productList").innerHTML = productHTML;
+    document.getElementById("popup").style.display = "flex";
+
+    localStorage.setItem(`pendingAlibabaOrder_${username}`, JSON.stringify({
+      orderNo,
+      trxTime,
+      orderAmount: currentOrderAmount,
+      commission: currentCommission,
+      products: currentProducts
+    }));
+
+  } catch (err) {
+    console.log(err);
+    alert("Server error");
+  }
+}
+
+async function submitOrder() {
+  const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
+
+  const userBalance = parseFloat(
+    document.getElementById("balance").innerText.replace(" USDT", "")
+  );
+
+  if (userBalance < currentOrderAmount) {
+    const shortage = (currentOrderAmount - userBalance).toFixed(4);
+    alert(`Your account balance is not enough, you need to recharge ${shortage} to complete this order`);
+    return;
+  }
+
+  const res = await fetch("/add-commission", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({
+      orderAmount: currentOrderAmount,
+      commission: currentCommission
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+
+    const pending = JSON.parse(localStorage.getItem(`pendingAlibabaOrder_${username}`));
+    let completeOrders = JSON.parse(localStorage.getItem(`completeOrders_alibaba_${username}`)) || [];
+
+    if (pending) {
+      completeOrders.unshift(pending);
+      localStorage.setItem(`completeOrders_alibaba_${username}`, JSON.stringify(completeOrders));
+    }
+
+    localStorage.removeItem(`pendingAlibabaOrder_${username}`);
+
+    document.getElementById("todayTimes").innerText = data.todayTasks;
+    document.getElementById("todayCommission").innerText =
+      data.todayCommission.toFixed(4) + " USDT";
+    document.getElementById("yesterdayCommission").innerText =
+      data.yesterdayCommission.toFixed(4) + " USDT";
+    document.getElementById("balance").innerText =
+      data.balance.toFixed(4) + " USDT";
+
+    document.getElementById("cashGap").innerText = "0.0000 USDT";
+    localStorage.removeItem("cashGap_alibaba");
+
+    closePopup();
+    alert("Order submitted successfully");
+
+  } else {
+    alert(data.msg || "Submit failed");
+  }
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+async function loadUserStatus() {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("/task-status", {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+
+    document.getElementById("todayTimes").innerText = data.todayTasks;
+    document.getElementById("todayCommission").innerText =
+      data.todayCommission.toFixed(4) + " USDT";
+    document.getElementById("yesterdayCommission").innerText =
+      data.yesterdayCommission.toFixed(4) + " USDT";
+    document.getElementById("balance").innerText =
+      data.balance.toFixed(4) + " USDT";
+
+    const savedGap = localStorage.getItem("cashGap_alibaba") || 0;
+    document.getElementById("cashGap").innerText =
+      Number(savedGap).toFixed(4) + " USDT";
+  }
+}
+
+window.onload = loadUserStatus;
+</script>
+
+</body>
+</html>

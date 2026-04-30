@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wallet View</title>
+
+  <style>
+    body {
+      background:#0b1a2a;
+      color:white;
+      font-family:Arial;
+      padding:20px;
+    }
+
+    .card {
+      background: linear-gradient(90deg,#8a3c3c,#5a2d82);
+      padding:20px;
+      border-radius:10px;
+    }
+
+    h3 {
+      margin:0;
+    }
+
+    p {
+      margin:5px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Wallet Management</h2>
+
+<div class="card">
+  <h3 id="walletName"></h3>
+  <p id="walletProtocol"></p>
+  <p id="walletAddress"></p>
+</div>
+
+<script>
+let user = localStorage.getItem("username");
+let data = JSON.parse(localStorage.getItem("walletData_" + user));
+
+if (data) {
+  document.getElementById("walletName").innerText = data.name;
+  document.getElementById("walletProtocol").innerText = data.protocol;
+  document.getElementById("walletAddress").innerText = data.address;
+}
+</script>
+
+</body>
+</html>

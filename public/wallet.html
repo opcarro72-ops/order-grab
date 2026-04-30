@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wallet Management</title>
+
+  <style>
+    body {
+      background:#0b1a2a;
+      color:white;
+      font-family:Arial;
+      padding:20px;
+    }
+
+    input {
+      width:100%;
+      padding:10px;
+      margin:10px 0;
+      background:#12263a;
+      border:none;
+      color:white;
+    }
+
+    button {
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border:none;
+      cursor:pointer;
+    }
+
+    #okBtn {
+      background:gray;
+      color:white;
+    }
+
+    #okBtn.active {
+      background:#8a3c3c;
+    }
+
+    #cancelBtn {
+      background:transparent;
+      border:1px solid #555;
+      color:white;
+    }
+  </style>
+</head>
+
+<body>
+
+<script>
+let user = localStorage.getItem("username");
+
+if (localStorage.getItem("walletLocked_" + user) === "true") {
+  window.location.href = "wallet-view.html";
+}
+</script>
+
+<h2>Virtual Currency</h2>
+
+<input id="name" placeholder="Wallet name" autocomplete="off">
+<input id="protocol" placeholder="Virtual currency protocol" autocomplete="off">
+<input id="address" placeholder="Wallet address" autocomplete="off">
+
+<div style="position:relative;">
+  <input id="password" placeholder="Withdrawal password" type="password" autocomplete="new-password" style="padding-right:40px;">
+  
+  <span onclick="togglePassword()" 
+        style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;">
+    👁️
+  </span>
+</div>
+
+<button id="okBtn" disabled>OK</button>
+<button id="cancelBtn">Cancel</button>
+
+<script>
+const nameInput = document.getElementById("name");
+const protocolInput = document.getElementById("protocol");
+const addressInput = document.getElementById("address");
+const passwordInput = document.getElementById("password");
+
+const inputs = [nameInput, protocolInput, addressInput, passwordInput];
+
+const okBtn = document.getElementById("okBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+
+inputs.forEach(input => {
+  input.addEventListener("input", () => {
+    let filled = inputs.every(i => i.value.trim() !== "");
+    
+    if (filled) {
+      okBtn.disabled = false;
+      okBtn.classList.add("active");
+    } else {
+      okBtn.disabled = true;
+      okBtn.classList.remove("active");
+    }
+  });
+});
+
+okBtn.addEventListener("click", () => {
+  let data = {
+    name: nameInput.value,
+    protocol: protocolInput.value,
+    address: addressInput.value,
+    password: passwordInput.value
+  };
+
+  let user = localStorage.getItem("username");
+
+  localStorage.setItem("walletData_" + user, JSON.stringify(data));
+  localStorage.setItem("walletLocked_" + user, "true");
+
+  window.location.href = "wallet-view.html";
+});
+
+cancelBtn.addEventListener("click", () => {
+  window.history.back();
+});
+
+function togglePassword() {
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+  } else {
+    passwordInput.type = "password";
+  }
+}
+</script>
+
+</body>
+</html>

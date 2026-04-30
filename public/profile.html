@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <style>
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:#111517;
+      color:white;
+    }
+
+    .header{
+      text-align:center;
+      padding:15px;
+      font-size:28px;
+      font-weight:bold;
+      position:relative;
+      border-bottom:1px solid #2a2a2a;
+    }
+
+    .back{
+      position:absolute;
+      left:15px;
+      top:15px;
+      font-size:28px;
+      cursor:pointer;
+    }
+
+    .profile-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px;
+      border-bottom:1px solid #2a2a2a;
+    }
+
+    .profile-row span{
+      font-size:18px;
+      color:#ddd;
+    }
+
+    .avatar{
+      width:55px;
+      height:55px;
+      border-radius:50%;
+      object-fit:cover;
+      cursor:pointer;
+      border:2px solid #444;
+    }
+
+    #fileInput{
+      display:none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <span class="back" onclick="history.back()">&#8592;</span>
+  Profile
+</div>
+
+<div class="profile-row">
+  <span>Personal Avatar</span>
+  <img id="avatarPreview" class="avatar" src="default.png">
+</div>
+
+<input type="file" id="fileInput" accept="image/*">
+
+<script>
+const avatar = document.getElementById("avatarPreview");
+const fileInput = document.getElementById("fileInput");
+
+// current user
+let user = localStorage.getItem("username");
+
+// saved image load
+let savedImage = localStorage.getItem("userProfileImage_" + user);
+
+if(savedImage){
+  avatar.src = savedImage;
+}else{
+  avatar.src = "default.png";
+}
+
+// click avatar -> choose image
+avatar.addEventListener("click", () => {
+  fileInput.click();
+});
+
+// image save
+fileInput.addEventListener("change", function(){
+  const file = this.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const imageData = e.target.result;
+
+    // save image user wise
+    localStorage.setItem("userProfileImage_" + user, imageData);
+
+    // preview update
+    avatar.src = imageData;
+
+    alert("Profile image updated successfully");
+  };
+
+  reader.readAsDataURL(file);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deposit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+
+<h2 class="title">Deposit</h2>
+
+<div class="section">
+  <p>Payment method</p>
+  <div class="option active">USDT</div>
+</div>
+
+<div class="section">
+  <p>Select the protocol to use</p>
+  <div class="option active">TRC-20</div>
+</div>
+
+<div class="section">
+  <p>Currency selection</p>
+  <div class="option active">ALL</div>
+</div>
+
+<div class="section">
+  <p>Deposit amount</p>
+  <input type="number" id="amountInput" placeholder="Enter amount">
+  <p class="hint">Deposit amount must be greater than 0.1 USDT</p>
+</div>
+
+<div class="estimate">
+  Estimated payment: <span id="showAmount">0</span> USDT
+</div>
+
+<button id="depositBtn" disabled onclick="goNext()">
+  Deposit now
+</button>
+
+<script>
+const amountInput = document.getElementById("amountInput");
+const depositBtn = document.getElementById("depositBtn");
+const showAmount = document.getElementById("showAmount");
+
+amountInput.addEventListener("input", () => {
+  let amount = parseFloat(amountInput.value) || 0;
+
+  showAmount.innerText = amount;
+
+  if (amount >= 0.1) {
+    depositBtn.disabled = false;
+    depositBtn.classList.add("active");
+  } else {
+    depositBtn.disabled = true;
+    depositBtn.classList.remove("active");
+  }
+});
+
+async function goNext() {
+  let amount = parseFloat(amountInput.value) || 0;
+  const token = localStorage.getItem("token");
+
+  if (amount < 0.1) return;
+
+  const res = await fetch("/deposit-request", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ amount })
+  });
+
+  const data = await res.json();
+
+  if (data.pending) {
+    localStorage.setItem("depositAmount", data.amount);
+    localStorage.setItem("depositWarning", data.msg);
+    window.location.href = "payment.html";
+    return;
+  }
+
+  if (data.success) {
+    localStorage.setItem("depositAmount", amount);
+    localStorage.removeItem("depositWarning");
+    window.location.href = "payment.html";
+  } else {
+    alert(data.msg);
+  }
+}
+</script>
+
+</body>
+</html>

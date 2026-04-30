@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0b0f14;
+  color:#fff;
+}
+.container{
+  width:95%;
+  max-width:1200px;
+  margin:20px auto;
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.logout-btn{
+  padding:10px 18px;
+  background:red;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.card{
+  background:#141a20;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+.card h2{
+  color:#ffc107;
+}
+select,input,button,textarea{
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+  width:100%;
+  box-sizing:border-box;
+}
+button{
+  cursor:pointer;
+}
+.blue-btn{
+  background:#007bff;
+  color:#fff;
+}
+.green-btn{
+  background:green;
+  color:#fff;
+}
+.item{
+  background:#1a1f27;
+  padding:15px;
+  margin:10px 0;
+  border-radius:8px;
+}
+.status-box p{
+  margin:5px 0;
+}
+label{
+  display:block;
+  margin-top:12px;
+  color:#ddd;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Admin Dashboard</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="card">
+    <h2>User Control Panel</h2>
+
+    <select id="userSelect" onchange="loadUserStatus()">
+      <option value="">Select User</option>
+    </select>
+
+    <label>How many mixed orders? (1-5)</label>
+    <input type="number" id="mixedCount" placeholder="Example: 3">
+
+    <label>Mixed order positions</label>
+    <input type="text" id="mixedPositions" placeholder="Example: 7,19,23">
+
+    <label>Mixed order percentage by position</label>
+    <textarea id="mixedPositionPercent" rows="5" placeholder="Example:
+7:30-40
+19:50-70
+23:100-120"></textarea>
+
+    <button class="blue-btn" onclick="giveTasks()">Give 25 Tasks</button>
+
+    <label>Enter new balance</label>
+    <input type="number" id="newBalance" placeholder="Enter new balance">
+
+    <button class="green-btn" onclick="updateBalance()">Update Balance</button>
+
+    <div class="status-box" id="userStatus" style="margin-top:20px;">
+      <p>Today's Tasks: 0</p>
+      <p>Task Limit: 0</p>
+      <p>Today's Commission: 0 USDT</p>
+      <p>Yesterday's Commission: 0 USDT</p>
+      <p>Balance: 0 USDT</p>
+      <p>Mixed Positions: None</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Pending Deposits</h2>
+    <div id="depositList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Pending Withdraws</h2>
+    <div id="withdrawList"></div>
+  </div>
+
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

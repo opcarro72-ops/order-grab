@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mine</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#081a33;
+      color:white;
+    }
+
+    .profile-box{
+      margin:15px;
+      padding:18px;
+      border-radius:12px;
+      background:linear-gradient(90deg,#8b2e0f,#6b21a8);
+    }
+
+    .user-info{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .avatar{
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      object-fit:cover;
+    }
+
+    .user-info h3{
+      margin:0;
+      font-size:18px;
+    }
+
+    .user-info p{
+      margin:6px 0 0;
+      font-size:14px;
+    }
+
+    .vip{
+      background:#f59e0b;
+      padding:2px 6px;
+      border-radius:6px;
+      font-size:10px;
+    }
+
+    .action-box{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      text-align:center;
+      padding:15px 0;
+      background:#081a33;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+
+    .action-item{
+      font-size:14px;
+      cursor:pointer;
+    }
+
+    .menu-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      text-align:center;
+      padding:15px 0;
+      background:#081a33;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+
+    .menu-grid div{
+      font-size:14px;
+      cursor:pointer;
+    }
+
+    .menu-list{
+      margin:15px;
+      background:#111;
+      border-radius:10px;
+      overflow:hidden;
+    }
+
+    .menu-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px;
+      font-size:15px;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+      cursor:pointer;
+    }
+
+    .menu-item:last-child{
+      border-bottom:none;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      bottom:0;
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      text-align:center;
+      background:#111;
+      padding:10px 0;
+      font-size:12px;
+    }
+
+    .nav-item{
+      cursor:pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="profile-box">
+  <div class="user-info">
+    
+    <img id="profileImg" class="avatar">
+    
+    <div>
+      <h3 id="usernameDisplay">User <span class="vip">VIP0</span></h3>
+      <p>Invitation code: 422872</p>
+      <p id="balance">USDT 0</p>
+    </div>
+  </div>
+</div>
+
+<div class="action-box">
+  <div class="action-item" onclick="goPage('deposit.html')">
+    💼<br>Deposit
+  </div>
+
+  <div class="action-item" onclick="checkWithdrawPassword()">
+    💳<br>Withdrawal
+  </div>
+</div>
+
+<div class="menu-grid">
+  <div onclick="alert('Teams')">👥<br>Teams</div>
+  <div onclick="goPage('record.html')">📄<br>Record</div>
+  <div onclick="goPage('wallet.html')">📊<br>Wallet management</div>
+  <div onclick="alert('Invite')">📩<br>Invite friends</div>
+</div>
+
+<div class="menu-list">
+
+  <div class="menu-item" onclick="goPage('profile.html')">
+    <span>👤 <span data-lang="profile">Profile</span></span>
+    <span>›</span>
+  </div>
+
+  <div class="menu-item" onclick="goPage('deposit-record.html')">
+    <span>📄 <span data-lang="depositRecords">Deposit records</span></span>
+    <span>›</span>
+  </div>
+
+  <div class="menu-item" onclick="goPage('withdraw-record.html')">
+    <span>💳 <span data-lang="withdrawRecords">Withdrawal records</span></span>
+    <span>›</span>
+  </div>
+
+  <div class="menu-item" onclick="goPage('setting.html')">
+    <span>⚙ <span data-lang="settings">Settings</span></span>
+    <span>›</span>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item" onclick="goPage('home.html')">🏠<br>Home</div>
+  <div class="nav-item" onclick="goPage('service.html')">🎧<br>Service</div>
+  <div class="nav-item" onclick="goPage('menu.html')">👜<br>Menu</div>
+  <div class="nav-item" onclick="goPage('record.html')">📄<br>Record</div>
+  <div class="nav-item" onclick="goPage('mine.html')">👤<br>Mine</div>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+let user = localStorage.getItem("username");
+
+// profile image load
+const img = document.getElementById("profileImg");
+let saved = localStorage.getItem("userProfileImage_" + user);
+
+img.src = saved ? saved : "default.png";
+
+// withdraw password check
+function checkWithdrawPassword() {
+  let data = JSON.parse(localStorage.getItem("walletData_" + user));
+
+  if (!data) {
+    alert("Please add wallet first!");
+    return;
+  }
+
+  let inputPass = prompt("Enter withdrawal password:");
+
+  if (inputPass === null) return;
+
+  if (inputPass === data.password) {
+    window.location.href = "withdraw.html";
+  } else {
+    alert("Wrong password!");
+  }
+}
+
+const lang = localStorage.getItem("siteLanguage") || "en";
+
+const texts = {
+  en: {
+    profile: "Profile",
+    depositRecords: "Deposit records",
+    withdrawRecords: "Withdrawal records",
+    settings: "Settings"
+  },
+  bn: {
+    profile: "প্রোফাইল",
+    depositRecords: "ডিপোজিট রেকর্ড",
+    withdrawRecords: "উইথড্র রেকর্ড",
+    settings: "সেটিংস"
+  }
+};
+
+document.querySelectorAll("[data-lang]").forEach(el => {
+  const key = el.getAttribute("data-lang");
+  if(texts[lang][key]){
+    el.innerText = texts[lang][key];
+  }
+});
+</script>
+
+</body>
+</html>

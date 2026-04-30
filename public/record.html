@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#11161c;
+  color:#fff;
+}
+
+.popup-overlay {
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  background: none !important;
+}
+
+.order-popup {
+  max-width: 420px;
+  width: 100%;
+  margin: 20px auto;
+  max-height: 70vh;
+  overflow-y: auto;
+  border-radius: 15px;
+}
+
+.header{
+  text-align:center;
+  padding:15px;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.tabs{
+  display:flex;
+  justify-content:space-around;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.tab{
+  padding:12px;
+  cursor:pointer;
+  color:#aaa;
+}
+
+.tab.active{
+  color:#fff;
+  border-bottom:3px solid #ff7b7b;
+}
+
+.content{
+  padding:15px;
+  padding-bottom:80px;
+}
+
+.empty{
+  text-align:center;
+  color:#aaa;
+  margin-top:40px;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#0d1b2a;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item{
+  text-align:center;
+  color:#aaa;
+  font-size:13px;
+}
+
+.nav-item.active{
+  color:#00ffa6;
+}
+
+.nav-item span{
+  display:block;
+  font-size:12px;
+}
+</style>
+
+</head>
+
+<h2 style="text-align:center;">Record</h2>
+
+<body>
+
+<div class="tabs">
+  <div class="tab active" id="tabIncomplete" onclick="switchTab('incomplete')">Incomplete</div>
+  <div class="tab" id="tabComplete" onclick="switchTab('complete')">Complete</div>
+</div>
+
+<div class="content">
+  <div id="incompleteTab"></div>
+  <div id="completeTab" style="display:none;"></div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item" onclick="goPage('home.html')" id="nav-home">🏠<span>Home</span></div>
+  <div class="nav-item" onclick="goPage('service.html')" id="nav-service">🎧<span>Service</span></div>
+  <div class="nav-item" onclick="goPage('menu.html')" id="nav-menu">🔒<span>Menu</span></div>
+  <div class="nav-item active" onclick="goRecord()" id="nav-record">📄<span>Record</span></div>
+  <div class="nav-item" onclick="goPage('mine.html')" id="nav-mine">👤<span>Mine</span></div>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+function goPage(page){
+  window.location.href = page;
+}
+
+function goRecord(){
+  window.location.href = "record.html";
+}
+
+function setActiveNav(){
+  document.querySelectorAll(".nav-item").forEach(i=>i.classList.remove("active"));
+  document.getElementById("nav-record").classList.add("active");
+}
+setActiveNav();
+
+function switchTab(tab){
+
+  document.getElementById("incompleteTab").style.display =
+    tab === "incomplete" ? "block" : "none";
+
+  document.getElementById("completeTab").style.display =
+    tab === "complete" ? "block" : "none";
+
+  document.getElementById("tabIncomplete").classList.toggle("active", tab==="incomplete");
+  document.getElementById("tabComplete").classList.toggle("active", tab==="complete");
+}
+
+switchTab("incomplete");
+renderOrders();
+
+</script>
+
+</body>
+</html>

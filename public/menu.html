@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="menu-page">
+
+  <h2 class="page-title">Menu</h2>
+
+  <div class="menu-wrapper">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="filterCards('all', this)">All</button>
+      <button class="tab" onclick="filterCards('vip1', this)">VIP 1</button>
+      <button class="tab" onclick="filterCards('vip2', this)">VIP 2</button>
+      <button class="tab" onclick="filterCards('vip3', this)">VIP 3</button>
+    </div>
+
+    <!-- VIP 1 -->
+    <div class="menu-card" data-vip="vip1" onclick="goPage('amazon.html')">
+      <div class="vip-badge">VIP 1</div>
+      <img src="amazon.png" alt="Amazon" class="logo">
+      <div class="info">
+        <h3>Amazon</h3>
+        <p>Available balance: 20USDT - 498USDT</p>
+        <p class="commission">Commissions: 4%</p>
+      </div>
+    </div>
+
+    <!-- VIP 2 -->
+    <div class="menu-card" data-vip="vip2" onclick="goPage('alibaba.html')">
+      <div class="vip-badge">VIP 2</div>
+      <img src="alibaba.png" alt="Alibaba" class="logo">
+      <div class="info">
+        <h3>Alibaba</h3>
+        <p>Available balance: 499USDT - 899USDT</p>
+        <p class="commission">Commissions: 8%</p>
+      </div>
+    </div>
+
+    <!-- VIP 3 -->
+    <div class="menu-card" data-vip="vip3" onclick="goPage('aliexpress.html')">
+      <div class="vip-badge">VIP 3</div>
+      <img src="aliexpress.png" alt="AliExpress" class="logo">
+      <div class="info">
+        <h3>AliExpress</h3>
+        <p>Available balance: 899+ USDT</p>
+        <p class="commission">Commissions: 12%</p>
+      </div>
+    </div>
+
+    <div class="no-more">No more</div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+  <div class="nav-item" onclick="goPage('home.html')">🏠<br>Home</div>
+  <div class="nav-item" onclick="goPage('service.html')">🎧<br>Service</div>
+  <div class="nav-item" onclick="goPage('menu.html')">👜<br>Menu</div>
+  <div class="nav-item" onclick="goPage('record.html')">📄<br>Record</div>
+  <div class="nav-item" onclick="goPage('mine.html')">👤<br>Mine</div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
