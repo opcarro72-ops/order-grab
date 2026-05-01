@@ -4,12 +4,6 @@ body {
   padding-bottom: 80px;
 }
 
-.main-body {
-  min-height: 100vh;
-  padding-top: 70px;
-  padding-bottom: 80px;
-}
-
 .service-page {
   background: #ffffff;
   color: #000;
@@ -114,7 +108,15 @@ button.active {
   margin-bottom: 5px;
 }
 
-/* ---------------- PROFILE ---------------- */
+.site-header{
+  padding: 10px;
+}
+
+.site-logo{
+  width: 35px;
+  height: 35px;
+}
+
 .profile-box {
   padding: 15px;
   border-radius: 10px;
@@ -186,7 +188,7 @@ button.active {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 70px;
   background: #fff;
   display: flex;
   align-items: center;
@@ -626,4 +628,83 @@ button.active {
   background:#1b222c;
   border-radius:12px;
   padding:15px;
+}
+
+.top-header{
+  width:100%;
+  height:70px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  padding-left:15px;
+  border-bottom:1px solid #eee;
+}
+
+.top-logo{
+  width:40px;
+  height:40px;
+}
+
+body{
+  margin:0;
+}
+
+.live-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f5f5f5;
+  margin:10px;
+  padding:12px;
+  border-radius:8px;
+  font-size:14px;
+}
+
+.live-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.live-icon{
+  color:red;
+  font-size:18px;
+}
+
+.platform-title{
+  font-size:18px;
+  font-weight:bold;
+  margin:15px;
+}
+
+.platform-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:10px;
+}
+
+.platform-card{
+  background:#fff;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  cursor:pointer;
+}
+
+.platform-card img{
+  width:100%;
+  height:100px;
+  object-fit:cover;
+}
+
+.platform-card h4{
+  font-size:14px;
+  margin:8px;
+}
+
+.platform-card p{
+  font-size:12px;
+  color:#666;
+  margin:0 8px 10px;
 }

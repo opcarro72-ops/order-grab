@@ -2,74 +2,127 @@
 <html>
 <head>
   <title>Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="main-body">
 
+<!-- ===== LOGIN CHECK ===== -->
 <script>
   if (!localStorage.getItem("token")) {
     window.location.href = "login.html";
   }
 </script>
 
-<div class="top-menu">
-  <div class="menu-item" onclick="recharge()">
-    <span>📈</span>
-    <p>Recharge</p>
-  </div>
-
-  <div class="menu-item" onclick="withdraw()">
-    <span>💳</span>
-    <p>Withdraw</p>
-  </div>
-
-  <div class="menu-item" onclick="alert('Teams clicked')">
-    <span>👥</span>
-    <p>Teams</p>
-  </div>
-
-  <div class="menu-item" onclick="alert('Invite clicked')">
-    <span>➕</span>
-    <p>Invite</p>
-  </div>
+<div class="top-header">
+  <img src="logo.png" class="top-logo">
 </div>
 
-<div class="dashboard-box" style="margin-top:90px;">
+<!-- ===== LIVE BOX ===== -->
+<div class="live-box">
+  <div class="live-left">
+    <span class="live-icon">👤</span>
+    <span id="liveUser">b****2 successful</span>
+  </div>
+  <div id="liveAmount">108.85 USDT</div>
+</div>
 
-  <h2>Welcome Dashboard</h2>
+<!-- ===== PLATFORM TITLE ===== -->
+<div class="platform-title">Platform introduction</div>
+
+<!-- ===== PLATFORM GRID ===== -->
+<div class="platform-grid">
+
+  <div class="platform-card" onclick="openPage('profile-second.html')">
+    <img src="img1.jpg">
+    <h4>Platform profile</h4>
+    <p>MALL is an intelligent cloud global order matching...</p>
+  </div>
+
+  <div class="platform-card" onclick="openPage('rules.html')">
+    <img src="img2.jpg">
+    <h4>Platform rules</h4>
+    <p>About recharge: The platform will change...</p>
+  </div>
+
+  <div class="platform-card" onclick="openPage('cooperation.html')">
+    <img src="img3.jpg">
+    <h4>Win-win cooperation</h4>
+    <p>We carry out win-win cooperation...</p>
+  </div>
+
+  <div class="platform-card" onclick="openPage('instructions.html')">
+    <img src="img4.jpg">
+    <h4>Instructions for use</h4>
+    <p>To celebrate the membership...</p>
+  </div>
 
 </div>
 
+<!-- ===== BOTTOM NAV ===== -->
 <div class="bottom-nav">
 
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
+  <div class="nav-item active" onclick="goPage('home.html')">
     <span>🏠</span>
     Home
   </div>
 
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
+  <div class="nav-item" onclick="goPage('service.html')">
     <span>🎧</span>
     Service
   </div>
 
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">
+  <div class="nav-item" onclick="goPage('menu.html')">
     <span>👜</span>
     Menu
   </div>
 
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
+  <div class="nav-item" onclick="goPage('record.html')">
     <span>📄</span>
     Record
   </div>
 
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
+  <div class="nav-item" onclick="goPage('mine.html')">
     <span>👤</span>
     Mine
   </div>
 
 </div>
 
+<!-- ===== SCRIPT ===== -->
 <script src="script.js"></script>
+
+<script>
+/* ===== PAGE NAVIGATION ===== */
+function openPage(page){
+  window.location.href = page;
+}
+
+/* ===== LIVE AUTO CHANGE ===== */
+const users = [
+  "a******1","b****2","c******3",
+  "d****4","z****9","j*******7",
+  "p*****0","t******8","s********6"
+];
+
+const amounts = [
+  "120.50","18.20","250.00",
+  "76.30","20.00","40.50",
+  "80.00","100.30","35.00"
+];
+
+setInterval(() => {
+  const i = Math.floor(Math.random() * users.length);
+
+  document.getElementById("liveUser").innerText =
+    users[i] + " successful";
+
+  document.getElementById("liveAmount").innerText =
+    amounts[i] + " USDT";
+
+}, 2000);
+</script>
 
 </body>
 </html>
