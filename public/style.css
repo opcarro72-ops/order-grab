@@ -730,3 +730,9 @@ body{
   font-size:18px;
   font-weight:bold;
 }
+
+.second-content{
+  padding:15px;
+  font-size:14px;
+  line-height:1.6;
+}
