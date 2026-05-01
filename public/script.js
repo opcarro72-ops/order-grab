@@ -547,3 +547,13 @@ function renderOrders() {
     });
   }
 }
+
+function setActiveNav() {
+  const currentPage = window.location.pathname.split("/").pop();
+
+  document.querySelectorAll(".nav-item").forEach(item => {
+    if (item.getAttribute("data-page") === currentPage) {
+      item.classList.add("active");
+    }
+  });
+}

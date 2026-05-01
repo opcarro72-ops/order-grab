@@ -6,14 +6,16 @@
 </head>
 <body class="service-page">
 
-<h2 style="text-align:center;">Service</h2>
+<div class="main-body">
+  <h2 style="text-align:center;">Service</h2>
+</div>
 
 <div class="bottom-nav">
-  <div class="nav-item" onclick="goPage('home.html')">🏠<br>Home</div>
-  <div class="nav-item" onclick="goPage('service.html')">🎧<br>Service</div>
-  <div class="nav-item" onclick="goPage('menu.html')">👜<br>Menu</div>
-  <div class="nav-item" onclick="goPage('record.html')">📄<br>Record</div>
-  <div class="nav-item" onclick="goPage('mine.html')">👤<br>Mine</div>
+  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">🏠<br>Home</div>
+  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">🎧<br>Service</div>
+  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">👜<br>Menu</div>
+  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">📄<br>Record</div>
+  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">👤<br>Mine</div>
 </div>
 
 <script src="script.js"></script>

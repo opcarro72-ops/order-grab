@@ -1,9 +1,22 @@
-/* ---------------- GLOBAL ---------------- */
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #11161c;
-  color: white;
+  background: #ffffff;
+  color: #000;
+}
+
+.main-body {
+  min-height: 100vh;
+  padding-top: 70px;
+  padding-bottom: 80px;
+}
+
+.service-page {
+  background: #ffffff;
+  color: #000;
+}
+
+.nav-item.active {
+  color: #007bff;
+  font-weight: bold;
 }
 
 body.dark {
@@ -12,7 +25,6 @@ body.dark {
   padding: 10px;
 }
 
-/* ---------------- LOGIN ---------------- */
 .login-box {
   background: #1e293b;
   padding: 30px;
@@ -50,16 +62,9 @@ button.active {
   color: white;
 }
 
-/* ---------------- DASHBOARD ---------------- */
 .dashboard-box {
   text-align: center;
   margin-top: 100px;
-}
-
-.home-page {
-  background: #11161c;
-  min-height: 100vh;
-  color: white;
 }
 
 .menu {
@@ -68,6 +73,11 @@ button.active {
   gap: 20px;
   margin: 30px 0;
   justify-content: center;
+}
+
+.main-body {
+  min-height: 100vh;
+  padding-bottom: 80px;
 }
 
 .card {
@@ -83,29 +93,17 @@ button.active {
   transform: scale(1.05);
 }
 
-.service-page {
-  background: #11161c;
-  min-height: 100vh;
-  color: white;
-}
-
-.record-page {
-  background: #11161c;
-  min-height: 100vh;
-  color: white;
-}
-
-/* ---------------- TOP MENU ---------------- */
 .top-menu {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #111827;
+  background-color: #ffffff;
   padding: 15px 0;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
+  border-bottom: 1px solid #ddd;
 }
 
 .menu-item {
@@ -187,24 +185,22 @@ button.active {
   cursor: pointer;
 }
 
-/* ---------------- BOTTOM NAV ---------------- */
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
   height: 60px;
-  background: #0d1117;
+  background: #ffffff;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1px solid #333;
+  border-top: 1px solid #ddd;
 }
 
 .nav-item {
-  color: #aaa;
+  color: #666;
   text-align: center;
   font-size: 12px;
-  cursor: pointer;
 }
 
 .nav-item:hover {
@@ -212,7 +208,8 @@ button.active {
 }
 
 .active-nav {
-  color: #00ff99;
+  color: #007bff;
+  font-weight: bold;
 }
 
 /* ---------------- FORM ---------------- */
@@ -275,13 +272,6 @@ button.active {
 .cancel-btn {
   background: transparent;
   border: 1px solid #444;
-  color: white;
-}
-
-/* ---------------- MENU PAGE ---------------- */
-.menu-page {
-  background: #11161c;
-  min-height: 100vh;
   color: white;
 }
 
@@ -368,8 +358,6 @@ button.active {
   font-size: 16px;
 }
 
-/* ---------------- AMAZON TASK PAGE ---------------- */
-
 * {
   margin: 0;
   padding: 0;
@@ -377,13 +365,28 @@ button.active {
   font-family: Arial, sans-serif;
 }
 
-body {
-  background: linear-gradient(to bottom, #8a2113 0%, #831212 26%, #08111a 26%, #08111a 100%);
+.amazon-page,
+.alibaba-page,
+.aliexpress-page {
+  background: linear-gradient(
+    to bottom,
+    #8a2113 0%,
+    #831212 26%,
+    #d4dadf 26%,
+    #c9d1d9 100%
+  );
   min-height: 100vh;
   color: white;
 }
 
-/* Header */
+.amazon-page *,
+.alibaba-page *,
+.aliexpress-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .amazon-header {
   height: 180px;
   position: relative;
