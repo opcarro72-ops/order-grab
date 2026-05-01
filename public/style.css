@@ -343,20 +343,6 @@ button.active {
   font-weight: bold;
 }
 
-.amazon-page,
-.alibaba-page,
-.aliexpress-page {
-  background: linear-gradient(
-    to bottom,
-    #8a2113 0%,
-    #831212 26%,
-    #d4dadf 26%,
-    #c9d1d9 100%
-  );
-  min-height: 100vh;
-  color: white;
-}
-
 .amazon-page *,
 .alibaba-page *,
 .aliexpress-page * {
@@ -377,7 +363,7 @@ button.active {
 }
 
 .amazon-header {
-  height: 170px;
+  height: 175px;
   padding: 10px;
   color: white;
 }
@@ -393,6 +379,28 @@ button.active {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+}
+
+.alibaba-page {
+  background: linear-gradient(
+    to bottom,
+    #0b9d24 0%,
+    #11931e 25%,
+    #f5f5f5 25%,
+    #f5f5f5 100%
+  );
+  min-height: 100vh;
+}
+
+.aliexpress-page {
+  background: linear-gradient(
+    to bottom,
+    #0b9d24 0%,
+    #11931e 25%,
+    #f5f5f5 25%,
+    #f5f5f5 100%
+  );
+  min-height: 100vh;
 }
 
 .balance-box {
@@ -418,7 +426,7 @@ transform: translateX(-50%);
 
   background: #ffffff;
   border-radius: 20px;
-  padding: 50px;
+  padding: 40px;
   color: #333;
 }
 
@@ -433,13 +441,13 @@ transform: translateX(-50%);
 }
 
 .stat h4 {
-  font-size: 14px;
+  font-size: 12px;
   color: #333;
 }
 
 .stat p {
-  font-size: 9px;
-  color: #888;
+  font-size: 10px;
+  color: #000000;
 }
 
 .grab-btn {
@@ -448,7 +456,7 @@ transform: translateX(-50%);
   background: #0a9a14;
   padding: 14px;
   border-radius: 30px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .hint-box {
