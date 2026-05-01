@@ -28,7 +28,10 @@
       <div class="info">
         <h3>Amazon</h3>
         <p>Available balance: 20USDT - 498USDT</p>
-        <p class="commission">Commissions: 4%</p>
+        <p>
+  <span class="commission-label">Commissions:</span>
+  <span class="commission-value">4%</span>
+</p>
       </div>
     </div>
 
@@ -38,7 +41,10 @@
       <div class="info">
         <h3>Alibaba</h3>
         <p>Available balance: 499USDT - 899USDT</p>
-        <p class="commission">Commissions: 8%</p>
+        <p>
+  <span class="commission-label">Commissions:</span>
+  <span class="commission-value">8%</span>
+</p>
       </div>
     </div>
 
@@ -48,7 +54,10 @@
       <div class="info">
         <h3>AliExpress</h3>
         <p>Available balance: 899+ USDT</p>
-        <p class="commission">Commissions: 12%</p>
+        <p>
+  <span class="commission-label">Commissions:</span>
+  <span class="commission-value">12%</span>
+</p>
       </div>
     </div>
 
@@ -59,14 +68,58 @@
 </div>
 
 <div class="bottom-nav">
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">🏠<br>Home</div>
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">🎧<br>Service</div>
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">👜<br>Menu</div>
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">📄<br>Record</div>
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">👤<br>Mine</div>
+  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
+    <span>🏠</span>
+    <div>Home</div>
+  </div>
+
+  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
+    <span>🎧</span>
+    <div>Service</div>
+  </div>
+
+  <div class="nav-item active" data-page="menu.html">
+    <span>👜</span>
+    <div>Menu</div>
+  </div>
+
+  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
+    <span>📄</span>
+    <div>Record</div>
+  </div>
+
+  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
+    <span>👤</span>
+    <div>Mine</div>
+  </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+function goPage(page) {
+  window.location.href = page;
+}
+
+// Active nav highlight (same as home/service)
+const currentPage = window.location.pathname.split("/").pop();
+document.querySelectorAll(".nav-item").forEach(item => {
+  if (item.getAttribute("data-page") === currentPage) {
+    item.classList.add("active");
+  }
+});
+
+function filterCards(type, el) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+
+  document.querySelectorAll(".menu-card").forEach(card => {
+    if (type === "all" || card.dataset.vip === type) {
+      card.style.display = "flex";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+</script>
 
 </body>
 </html>

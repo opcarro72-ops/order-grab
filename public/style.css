@@ -62,46 +62,6 @@ button.active {
   margin-top: 100px;
 }
 
-.menu {
-  display: grid;
-  grid-template-columns: repeat(2, 150px);
-  gap: 20px;
-  margin: 30px 0;
-  justify-content: center;
-}
-
-.card {
-  background: #1e293b;
-  padding: 30px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.card:hover {
-  background: #334155;
-  transform: scale(1.05);
-}
-
-.top-menu {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 15px 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  border-bottom: 1px solid #ddd;
-}
-
-.menu-item {
-  text-align: center;
-  cursor: pointer;
-  font-size: 14px;
-}
-
 .menu-item span {
   display: block;
   font-size: 22px;
@@ -188,10 +148,9 @@ button.active {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 70px;
+  height: 65px;
   background: #fff;
   display: flex;
-  align-items: center;
   border-top: 1px solid #ddd;
   z-index: 999;
 }
@@ -205,7 +164,7 @@ button.active {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
 }
 
 .nav-item span {
@@ -280,10 +239,16 @@ button.active {
 .page-title {
   text-align: center;
   padding: 14px;
-  background: #001b44;
+  background: #f2f2f2;
+  color: #333;
   margin: 0;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-page {
+  background: #f5f5f5;
 }
 
 .menu-wrapper {
@@ -298,9 +263,9 @@ button.active {
 }
 
 .tab {
-  background: transparent;
+  background: #eee;
   border: none;
-  color: white;
+  color: #333;
   padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
@@ -309,6 +274,7 @@ button.active {
 
 .tab.active {
   background: #6b4d57;
+  color: #fff;
 }
 
 .menu-card {
@@ -316,8 +282,12 @@ button.active {
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-bottom: 38px;
+  margin-bottom: 20px;
   cursor: pointer;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .vip-badge {
@@ -346,11 +316,7 @@ button.active {
 .info p {
   margin: 6px 0;
   font-size: 13px;
-  color: #ddd;
-}
-
-.commission {
-  color: rgb(0, 255, 42);
+  color: #666;
 }
 
 .no-more {
@@ -365,6 +331,16 @@ button.active {
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
+}
+
+.commission-label {
+  color: green;
+  font-weight: 500;
+}
+
+.commission-value {
+  color: red;
+  font-weight: bold;
 }
 
 .amazon-page,
@@ -389,10 +365,21 @@ button.active {
   box-sizing: border-box;
 }
 
+.amazon-page {
+  background: linear-gradient(
+    to bottom,
+    #0b9d24 0%,
+    #11931e 25%,
+    #f5f5f5 25%,
+    #f5f5f5 100%
+  );
+  min-height: 100vh;
+}
+
 .amazon-header {
-  height: 180px;
-  position: relative;
-  padding: 15px 20px;
+  height: 160px;
+  padding: 10px;
+  color: white;
 }
 
 .back-btn {
@@ -421,22 +408,18 @@ button.active {
   margin-top: 6px;
 }
 
-/* Stats Card */
 .stats-card {
   position: relative;
   top: -35px;
 
-  margin: 0 auto;
-  width: 340px;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-left: 0;
+ width: 340px;
+left: 50%;
+transform: translateX(-50%);
 
-  min-height: 360px;
-  background: #05080d;
-  border-radius: 6px;
-  padding: 30px 20px;
-  z-index: 5;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 50px;
+  color: #333;
 }
 
 .stats-grid {
@@ -451,32 +434,28 @@ button.active {
 
 .stat h4 {
   font-size: 14px;
-  margin-bottom: 3px;
+  color: #333;
 }
 
 .stat p {
   font-size: 9px;
-  line-height: 1.2;
+  color: #888;
 }
 
 .grab-btn {
-  margin-top: 32px;
+  margin-top: 25px;
   width: 100%;
-  background: #73515f;
-  border: none;
-  color: white;
-  padding: 13px;
-  border-radius: 28px;
-  font-size: 12px;
-  cursor: pointer;
+  background: #0a9a14;
+  padding: 14px;
+  border-radius: 30px;
+  font-size: 16px;
 }
 
-/* Hint */
 .hint-box {
   padding: 18px 30px;
   font-size: 10px;
   line-height: 1.8;
-  color: #f2c66f;
+  color: #120c01;
 }
 
 /* Popup Overlay */
