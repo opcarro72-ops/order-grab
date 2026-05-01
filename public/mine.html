@@ -2,150 +2,63 @@
 <html>
 <head>
   <title>Mine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 
-  <style>
-    body{
-      margin:0;
-      font-family:Arial,sans-serif;
-      background:#081a33;
-      color:white;
-    }
-
-    .profile-box{
-      margin:15px;
-      padding:18px;
-      border-radius:12px;
-      background:linear-gradient(90deg,#8b2e0f,#6b21a8);
-    }
-
-    .user-info{
-      display:flex;
-      align-items:center;
-      gap:14px;
-    }
-
-    .avatar{
-      width:60px;
-      height:60px;
-      border-radius:50%;
-      object-fit:cover;
-    }
-
-    .user-info h3{
-      margin:0;
-      font-size:18px;
-    }
-
-    .user-info p{
-      margin:6px 0 0;
-      font-size:14px;
-    }
-
-    .vip{
-      background:#f59e0b;
-      padding:2px 6px;
-      border-radius:6px;
-      font-size:10px;
-    }
-
-    .action-box{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      text-align:center;
-      padding:15px 0;
-      background:#081a33;
-      border-bottom:1px solid rgba(255,255,255,0.05);
-    }
-
-    .action-item{
-      font-size:14px;
-      cursor:pointer;
-    }
-
-    .menu-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      text-align:center;
-      padding:15px 0;
-      background:#081a33;
-      border-bottom:1px solid rgba(255,255,255,0.05);
-    }
-
-    .menu-grid div{
-      font-size:14px;
-      cursor:pointer;
-    }
-
-    .menu-list{
-      margin:15px;
-      background:#111;
-      border-radius:10px;
-      overflow:hidden;
-    }
-
-    .menu-item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:16px;
-      font-size:15px;
-      border-bottom:1px solid rgba(255,255,255,0.05);
-      cursor:pointer;
-    }
-
-    .menu-item:last-child{
-      border-bottom:none;
-    }
-
-    .bottom-nav{
-      position:fixed;
-      bottom:0;
-      width:100%;
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      text-align:center;
-      background:#111;
-      padding:10px 0;
-      font-size:12px;
-    }
-
-    .nav-item{
-      cursor:pointer;
-    }
-  </style>
 </head>
 
 <body>
 
 <div class="profile-box">
   <div class="user-info">
-    
+
     <img id="profileImg" class="avatar">
-    
-    <div>
-      <h3 id="usernameDisplay">User <span class="vip">VIP0</span></h3>
+
+    <div class="user-text">
+      <h3 id="usernameDisplay">
+        jlwsry94 <span class="vip">VIP 0</span>
+      </h3>
       <p>Invitation code: 422872</p>
-      <p id="balance">USDT 0</p>
+    </div>
+
+  </div>
+
+  <div class="account-row">
+    <div>
+      <p>My Account</p>
+      <h2 id="balance">USDT 0</h2>
+    </div>
+
+    <div class="action-icons">
+      <div onclick="goPage('deposit.html')">
+        💳
+        <p>Deposit</p>
+      </div>
+
+      <div onclick="checkWithdrawPassword()">
+        💳
+        <p>Withdrawal</p>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="action-box">
-  <div class="action-item" onclick="goPage('deposit.html')">
-    💼<br>Deposit
-  </div>
-
-  <div class="action-item" onclick="checkWithdrawPassword()">
-    💳<br>Withdrawal
-  </div>
-</div>
-
 <div class="menu-grid">
-  <div onclick="alert('Teams')">👥<br>Teams</div>
-  <div onclick="goPage('record.html')">📄<br>Record</div>
-  <div onclick="goPage('wallet.html')">📊<br>Wallet management</div>
-  <div onclick="alert('Invite')">📩<br>Invite friends</div>
+  <div onclick="goPage('team.html')">
+    <span>👥</span>Teams
+  </div>
+
+  <div onclick="goPage('record.html')">
+    <span>📄</span>Record
+  </div>
+
+  <div onclick="goPage('wallet.html')">
+    <span>💳</span>Wallet
+  </div>
+
+  <div onclick="goPage('invite.html')">
+    <span>📩</span>Invite
+  </div>
 </div>
 
 <div class="menu-list">
@@ -173,11 +86,32 @@
 </div>
 
 <div class="bottom-nav">
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">🏠<br>Home</div>
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">🎧<br>Service</div>
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">👜<br>Menu</div>
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">📄<br>Record</div>
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">👤<br>Mine</div>
+
+  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
+    <span>🏠</span>
+    <div>Home</div>
+  </div>
+
+  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
+    <span>🎧</span>
+    <div>Service</div>
+  </div>
+
+  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">
+    <span>👜</span>
+    <div>Menu</div>
+  </div>
+
+  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
+    <span>📄</span>
+    <div>Record</div>
+  </div>
+
+  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
+    <span>👤</span>
+    <div>Mine</div>
+  </div>
+
 </div>
 
 <script src="script.js"></script>
@@ -185,13 +119,16 @@
 <script>
 let user = localStorage.getItem("username");
 
-// profile image load
+let balance = localStorage.getItem("balance_" + user) || 0;
+
+document.getElementById("balance").innerText =
+  "USDT " + parseFloat(balance).toFixed(2);
+
 const img = document.getElementById("profileImg");
 let saved = localStorage.getItem("userProfileImage_" + user);
 
 img.src = saved ? saved : "default.png";
 
-// withdraw password check
 function checkWithdrawPassword() {
   let data = JSON.parse(localStorage.getItem("walletData_" + user));
 
