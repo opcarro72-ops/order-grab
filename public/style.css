@@ -708,3 +708,25 @@ body{
   color:#666;
   margin:0 8px 10px;
 }
+
+.second-header{
+  position: relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:60px;
+  border-bottom:1px solid #eee;
+  background:#fff;
+}
+
+.second-back-btn{
+  position: absolute;
+  left: 15px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.header-title{
+  font-size:18px;
+  font-weight:bold;
+}
