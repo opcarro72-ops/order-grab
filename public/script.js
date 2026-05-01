@@ -230,8 +230,8 @@ function applyLanguage() {
   });
 }
 
-/* ---------------- ON LOAD ---------------- */
 window.addEventListener("load", function () {
+
   loadBalance();
   loadUsername();
   applyLanguage();
@@ -264,6 +264,11 @@ window.addEventListener("load", function () {
   if (document.getElementById("incompleteTab")) {
     renderOrders();
   }
+
+  if (typeof setActiveNav === "function") {
+    setActiveNav();
+  }
+
 });
 
 /* ---------------- VIP FILTER ---------------- */
