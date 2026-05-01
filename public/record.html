@@ -10,8 +10,15 @@
 body{
   margin:0;
   font-family:Arial, sans-serif;
-  background:#11161c;
-  color:#fff;
+  background:#f2f2f2;
+  color:#333;
+}
+
+h2{
+  margin:0;
+  padding:15px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
 }
 
 .popup-overlay {
@@ -20,6 +27,10 @@ body{
   height: auto !important;
   display: block !important;
   background: none !important;
+}
+
+html {
+  overflow-y: scroll;
 }
 
 .order-popup {
@@ -41,18 +52,19 @@ body{
 .tabs{
   display:flex;
   justify-content:space-around;
-  border-bottom:1px solid rgba(255,255,255,0.1);
+  background:#fff;
+  border-bottom:1px solid #ddd;
 }
 
 .tab{
   padding:12px;
   cursor:pointer;
-  color:#aaa;
+  color:#888;
 }
 
 .tab.active{
-  color:#fff;
-  border-bottom:3px solid #ff7b7b;
+  color:#b96b6b;
+  border-bottom:3px solid #b96b6b;
 }
 
 .content{
@@ -71,33 +83,33 @@ body{
   bottom:0;
   width:100%;
   height:65px;
-  background:#0d1b2a;
+  background:#fff;
   display:flex;
-  justify-content:space-around;
-  align-items:center;
+  border-top:1px solid #ddd;
 }
 
 .nav-item{
+  flex:1;
   text-align:center;
-  color:#aaa;
-  font-size:13px;
+  font-size:12px;
+  color:#666;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
 .nav-item.active{
-  color:#00ffa6;
-}
-
-.nav-item span{
-  display:block;
-  font-size:12px;
+  color:#007bff;
+  font-weight:bold;
 }
 </style>
 
 </head>
 
-<h2 style="text-align:center;">Record</h2>
-
 <body>
+
+  <h2 style="text-align:center;">Record</h2>
 
 <div class="tabs">
   <div class="tab active" id="tabIncomplete" onclick="switchTab('incomplete')">Incomplete</div>
@@ -110,11 +122,32 @@ body{
 </div>
 
 <div class="bottom-nav">
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">🏠<br>Home</div>
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">🎧<br>Service</div>
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">👜<br>Menu</div>
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">📄<br>Record</div>
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">👤<br>Mine</div>
+
+  <div class="nav-item" onclick="goPage('home.html')">
+    <span>🏠</span>
+    Home
+  </div>
+
+  <div class="nav-item" onclick="goPage('service.html')">
+    <span>🎧</span>
+    Service
+  </div>
+
+  <div class="nav-item" onclick="goPage('menu.html')">
+    <span>👜</span>
+    Menu
+  </div>
+
+  <div class="nav-item active" onclick="goPage('record.html')">
+    <span>📄</span>
+    Record
+  </div>
+
+  <div class="nav-item" onclick="goPage('mine.html')">
+    <span>👤</span>
+    Mine
+  </div>
+
 </div>
 
 <script src="script.js"></script>
@@ -128,12 +161,6 @@ function goPage(page){
 function goRecord(){
   window.location.href = "record.html";
 }
-
-function setActiveNav(){
-  document.querySelectorAll(".nav-item").forEach(i=>i.classList.remove("active"));
-  document.getElementById("nav-record").classList.add("active");
-}
-setActiveNav();
 
 function switchTab(tab){
 
