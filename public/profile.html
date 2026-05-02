@@ -2,42 +2,61 @@
 <html>
 <head>
   <title>Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body{
       margin:0;
       font-family:Arial, sans-serif;
-      background:#111517;
-      color:white;
+      background:#f2f2f2;
     }
 
+    /* HEADER */
     .header{
-      text-align:center;
-      padding:15px;
-      font-size:28px;
-      font-weight:bold;
-      position:relative;
-      border-bottom:1px solid #2a2a2a;
+      position: relative;
+      height: 55px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .header h2{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
     }
 
     .back{
-      position:absolute;
-      left:15px;
-      top:15px;
-      font-size:28px;
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
       cursor:pointer;
     }
 
-    .profile-row{
+    /* CONTAINER */
+    .container{
+      padding: 12px;
+    }
+
+    /* CARD */
+    .card{
+      background:#fff;
+      border-radius:12px;
+      padding:15px;
+      width:100%;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      padding:20px;
-      border-bottom:1px solid #2a2a2a;
     }
 
-    .profile-row span{
-      font-size:18px;
-      color:#ddd;
+    .card span{
+      font-size:16px;
+      color:#333;
     }
 
     .avatar{
@@ -46,24 +65,45 @@
       border-radius:50%;
       object-fit:cover;
       cursor:pointer;
-      border:2px solid #444;
+      border:2px solid #ddd;
     }
 
     #fileInput{
       display:none;
     }
+
+    /* DESKTOP */
+    @media (min-width:768px){
+
+      .container{
+        padding:20px 40px;
+      }
+
+      .card{
+        width:100%;
+        max-width:none; /* full width */
+      }
+    }
+
   </style>
 </head>
+
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <span class="back" onclick="history.back()">&#8592;</span>
-  Profile
+  <span class="back" onclick="window.location.href='mine.html'">❮</span>
+  <h2>Profile</h2>
 </div>
 
-<div class="profile-row">
-  <span>Personal Avatar</span>
-  <img id="avatarPreview" class="avatar" src="default.png">
+<!-- CONTENT -->
+<div class="container">
+
+  <div class="card">
+    <span>Personal Avatar</span>
+    <img id="avatarPreview" class="avatar" src="default.png">
+  </div>
+
 </div>
 
 <input type="file" id="fileInput" accept="image/*">
@@ -75,7 +115,7 @@ const fileInput = document.getElementById("fileInput");
 // current user
 let user = localStorage.getItem("username");
 
-// saved image load
+// load saved image
 let savedImage = localStorage.getItem("userProfileImage_" + user);
 
 if(savedImage){
@@ -84,12 +124,12 @@ if(savedImage){
   avatar.src = "default.png";
 }
 
-// click avatar -> choose image
+// click avatar
 avatar.addEventListener("click", () => {
   fileInput.click();
 });
 
-// image save
+// save image
 fileInput.addEventListener("change", function(){
   const file = this.files[0];
   if(!file) return;
@@ -99,10 +139,7 @@ fileInput.addEventListener("change", function(){
   reader.onload = function(e){
     const imageData = e.target.result;
 
-    // save image user wise
     localStorage.setItem("userProfileImage_" + user, imageData);
-
-    // preview update
     avatar.src = imageData;
 
     alert("Profile image updated successfully");
