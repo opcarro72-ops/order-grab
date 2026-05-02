@@ -15,9 +15,7 @@
     <img id="profileImg" class="avatar">
 
     <div class="user-text">
-      <h3 id="usernameDisplay">
-        jlwsry94 <span class="vip">VIP 0</span>
-      </h3>
+      <h3 id="usernameDisplay"></h3>
       <p>Invitation code: 422872</p>
     </div>
 
@@ -117,12 +115,7 @@
 <script src="script.js"></script>
 
 <script>
-let user = localStorage.getItem("username");
-
-let balance = localStorage.getItem("balance_" + user) || 0;
-
-document.getElementById("balance").innerText =
-  "USDT " + parseFloat(balance).toFixed(2);
+  let user = localStorage.getItem("username");
 
 const img = document.getElementById("profileImg");
 let saved = localStorage.getItem("userProfileImage_" + user);

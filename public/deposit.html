@@ -2,40 +2,47 @@
 <html>
 <head>
   <title>Deposit</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="deposit.css">
 </head>
-<body class="dark">
+<body>
 
-<h2 class="title">Deposit</h2>
-
-<div class="section">
-  <p>Payment method</p>
-  <div class="option active">USDT</div>
+<div class="deposit-header">
+  <span class="back-btn" onclick="goBack()">❮</span>
+  <h2>Deposit</h2>
 </div>
 
-<div class="section">
-  <p>Select the protocol to use</p>
-  <div class="option active">TRC-20</div>
+<div class="deposit-container">
+
+  <div class="card">
+    <p class="label">Payment method</p>
+    <div class="option-box active">USDT</div>
+  </div>
+
+  <div class="card">
+    <p class="label">Select the protocol to use</p>
+    <div class="option-box active">TRC-20</div>
+  </div>
+
+  <div class="card">
+    <p class="label">Currency selection</p>
+    <div class="option-box active">ALL</div>
+  </div>
+
+  <div class="card">
+    <p class="label">Deposit amount</p>
+    <input type="number" id="amountInput" placeholder="Enter amount">
+    <p class="hint">Deposit amount must be greater than 0.1 USDT</p>
+  </div>
+
+  <div class="estimate">
+    Estimated payment: <span id="showAmount">0</span> USDT
+  </div>
+
 </div>
 
-<div class="section">
-  <p>Currency selection</p>
-  <div class="option active">ALL</div>
+<div class="bottom-fixed">
+  <button id="depositBtn" disabled onclick="goNext()">Deposit now</button>
 </div>
-
-<div class="section">
-  <p>Deposit amount</p>
-  <input type="number" id="amountInput" placeholder="Enter amount">
-  <p class="hint">Deposit amount must be greater than 0.1 USDT</p>
-</div>
-
-<div class="estimate">
-  Estimated payment: <span id="showAmount">0</span> USDT
-</div>
-
-<button id="depositBtn" disabled onclick="goNext()">
-  Deposit now
-</button>
 
 <script>
 const amountInput = document.getElementById("amountInput");
@@ -87,6 +94,10 @@ async function goNext() {
   } else {
     alert(data.msg);
   }
+}
+
+function goBack() {
+  window.history.back();
 }
 </script>
 

@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f5f5f5;
+}
+
+.deposit-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 55px;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+}
+
+.deposit-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.back-btn {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.deposit-container {
+  padding: 12px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.option-box {
+  display: inline-block;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+  font-size: 14px;
+}
+
+.option-box.active {
+  border-color: #0aa737;
+  position: relative;
+}
+
+.option-box.active::after {
+  content: "✔";
+  position: absolute;
+  bottom: 5px;
+  right: 8px;
+  font-size: 10px;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+.card input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 6px;
+}
+
+.estimate {
+  padding: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.bottom-fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+.bottom-fixed button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #ddd;
+  font-size: 16px;
+}
+
+.bottom-fixed button.active {
+  background: #089d1a;
+  color: #fff;
+}
