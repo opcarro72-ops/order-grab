@@ -876,3 +876,103 @@ transform: translateX(-50%);
 .help-content p{
   margin-bottom:15px;
 }
+
+/* ===== PAYMENT MOBILE UI ===== */
+
+.payment-page {
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.pay-wrapper {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.pay-header {
+  height: 55px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid #eee;
+}
+
+.pay-header span {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.pay-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pay-card {
+  background: #fff;
+  margin: 15px;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.pay-card h1 {
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.network {
+  color: #666;
+  font-size: 14px;
+}
+
+.qr-box {
+  margin-top: 20px;
+}
+
+.qr-box img {
+  width: 200px;
+}
+
+.address-box {
+  display: flex;
+  margin-top: 15px;
+}
+
+.address-box input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.address-box button {
+  margin-left: 5px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #eee;
+}
+
+.status {
+  margin-top: 15px;
+}
+
+.tips {
+  margin-top: 20px;
+  font-size: 13px;
+  text-align: left;
+  color: #333;
+}
+
+@media (max-width: 480px) {
+  .pay-card {
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+}
