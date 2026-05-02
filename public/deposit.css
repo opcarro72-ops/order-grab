@@ -89,7 +89,7 @@ body {
 }
 
 .estimate {
-  padding: 15px;
+  padding: 5px;
   font-size: 14px;
   color: #555;
 }
@@ -115,4 +115,11 @@ body {
 .bottom-fixed button.active {
   background: #089d1a;
   color: #fff;
+}
+
+html, body {
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }

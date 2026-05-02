@@ -1,0 +1,113 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f2f2f2;
+}
+
+.withdraw-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f2f2f2;
+}
+
+.withdraw-header {
+    max-width: 140px;
+    margin: 20px auto 0;
+    border-radius: 12px 12px 0 0;
+  }
+
+
+.withdraw-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.back {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.withdraw-container {
+  padding: 20px;
+}
+
+.currency-box {
+  width: 90px;
+  text-align: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+.section-title {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.wallet-row {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.check {
+  color: red;
+}
+
+.amount-box {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.amount-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.amount-box input {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  outline: none;
+}
+
+.max {
+  color: #999;
+  font-size: 13px;
+}
+
+.ok-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #ccc;
+  color: #fff;
+  font-size: 18px;
+}
+
+.ok-btn.active {
+  background: #15b830;
+}
