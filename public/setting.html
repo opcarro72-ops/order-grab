@@ -2,88 +2,132 @@
 <html>
 <head>
   <title>Setting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body{
       margin:0;
+      background:#f2f2f2;
       font-family:Arial, sans-serif;
-      background:#111517;
-      color:white;
     }
 
     .header{
-      text-align:center;
-      padding:15px;
-      font-size:28px;
-      font-weight:bold;
-      position:relative;
-      border-bottom:1px solid #2a2a2a;
+      position: relative;
+      height: 55px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .header h2{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
     }
 
     .back{
-      position:absolute;
-      left:15px;
-      top:15px;
-      font-size:28px;
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
       cursor:pointer;
     }
 
+    .container{
+      padding:10px;
+    }
+
     .menu-item{
+      background:#fff;
+      padding:15px;
+      margin-bottom:12px;
+
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+
       display:flex;
       justify-content:space-between;
       align-items:center;
-      padding:20px 18px;
-      border-bottom:1px solid #2a2a2a;
-      font-size:18px;
+
+      font-size:14px;
+      color:#333;
       cursor:pointer;
     }
 
     .arrow{
-      color:#c89b6d;
-      font-size:22px;
-    }
-
-    .logout{
-      text-align:center;
-      color:red;
-      margin-top:40px;
-      font-size:20px;
-      cursor:pointer;
+      color:#999;
+      font-size:16px;
     }
 
     .language-select{
-      background:#1b1f22;
-      color:white;
-      border:1px solid #444;
-      padding:8px;
-      border-radius:6px;
-      font-size:16px;
-      margin-top:10px;
+      background:#fff;
+      border:1px solid #eee;
+      padding:10px;
+      border-radius:10px;
+      font-size:14px;
+
+      width:100%;
+      margin-bottom:12px;
       display:none;
-      width:90%;
-      margin-left:auto;
-      margin-right:auto;
     }
+
+    .logout{
+      background:#fff;
+      text-align:center;
+      padding:15px;
+      border-radius:12px;
+      color:#dc2626;
+      font-size:14px;
+      cursor:pointer;
+
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    @media (min-width:768px){
+
+      .container{
+        padding:20px;
+      }
+
+      .menu-item,
+      .logout,
+      .language-select{
+        max-width:900px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+    }
+
   </style>
 </head>
+
 <body>
 
 <div class="header">
-  <span class="back" onclick="history.back()">&#8592;</span>
-  Setting
+  <span class="back" onclick="history.back()">❮</span>
+  <h2>Setting</h2>
 </div>
 
-<div class="menu-item" onclick="toggleLanguage()">
-  <span id="langText">Language settings</span>
-  <span class="arrow">›</span>
-</div>
+<div class="container">
 
-<select id="languageSelect" class="language-select" onchange="changeLanguage()">
-  <option value="en">English</option>
-  <option value="bn">বাংলা</option>
-</select>
+  <div class="menu-item" onclick="toggleLanguage()">
+    <span id="langText">Language settings</span>
+    <span class="arrow">›</span>
+  </div>
 
-<div class="logout" onclick="logout()">
-  Logout
+  <select id="languageSelect" class="language-select" onchange="changeLanguage()">
+    <option value="en">English</option>
+    <option value="bn">বাংলা</option>
+  </select>
+
+  <div class="logout" onclick="logout()">
+    Logout
+  </div>
+
 </div>
 
 <script>

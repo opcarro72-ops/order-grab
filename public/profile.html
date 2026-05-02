@@ -11,7 +11,6 @@
       font-family:Arial, sans-serif;
     }
 
-    /* HEADER */
     .header{
       position: relative;
       height: 55px;
@@ -38,16 +37,14 @@
       cursor:pointer;
     }
 
-    /* CONTAINER */
     .container{
       padding:0;
     }
 
-    /* CARD */
     .card{
-      width:calc(100% - 15px); /* right side space */
-      margin-left:0;           /* stick to left */
-      margin-right:15px;       /* space only right */
+      width:calc(100% - 15px);
+      margin-left:0;
+      margin-right:15px;
 
       background:#fff;
       padding:15px;
@@ -79,7 +76,6 @@
       display:none;
     }
 
-    /* DESKTOP */
     @media (min-width:768px){
 
       .container{
@@ -87,7 +83,7 @@
       }
 
       .card{
-        width:calc(100% - 30px); /* more right space */
+        width:calc(100% - 30px);
         margin-right:30px;
       }
     }
@@ -117,10 +113,8 @@
 const avatar = document.getElementById("avatarPreview");
 const fileInput = document.getElementById("fileInput");
 
-// current user
 let user = localStorage.getItem("username");
 
-// load saved image
 let savedImage = localStorage.getItem("userProfileImage_" + user);
 
 if(savedImage){
@@ -129,12 +123,10 @@ if(savedImage){
   avatar.src = "default.png";
 }
 
-// click avatar
 avatar.addEventListener("click", () => {
   fileInput.click();
 });
 
-// save image
 fileInput.addEventListener("change", function(){
   const file = this.files[0];
   if(!file) return;
