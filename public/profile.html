@@ -7,8 +7,8 @@
   <style>
     body{
       margin:0;
-      font-family:Arial, sans-serif;
       background:#f2f2f2;
+      font-family:Arial, sans-serif;
     }
 
     /* HEADER */
@@ -34,28 +34,35 @@
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 22px;
+      font-size: 20px;
       cursor:pointer;
     }
 
     /* CONTAINER */
     .container{
-      padding: 12px;
+      padding:0;
     }
 
     /* CARD */
     .card{
+      width:calc(100% - 15px); /* right side space */
+      margin-left:0;           /* stick to left */
+      margin-right:15px;       /* space only right */
+
       background:#fff;
-      border-radius:12px;
       padding:15px;
-      width:100%;
+      margin-bottom:12px;
+
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+
       display:flex;
       justify-content:space-between;
       align-items:center;
     }
 
     .card span{
-      font-size:16px;
+      font-size:14px;
       color:#333;
     }
 
@@ -76,12 +83,12 @@
     @media (min-width:768px){
 
       .container{
-        padding:20px 40px;
+        padding:0;
       }
 
       .card{
-        width:100%;
-        max-width:none; /* full width */
+        width:calc(100% - 30px); /* more right space */
+        margin-right:30px;
       }
     }
 
@@ -90,13 +97,11 @@
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <span class="back" onclick="window.location.href='mine.html'">❮</span>
   <h2>Profile</h2>
 </div>
 
-<!-- CONTENT -->
 <div class="container">
 
   <div class="card">
