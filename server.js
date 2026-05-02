@@ -12,10 +12,9 @@ app.use(express.json());
 app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("DB Connected"))
-.catch(err => console.log("DB Error:", err));
+  .then(() => console.log("DB Connected"))
+  .catch(err => console.log("DB Error:", err));
 
-/* ---------------- USER MODEL ---------------- */
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
