@@ -2,46 +2,103 @@
 <html>
 <head>
   <title>Wallet Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
-      background:#0b1a2a;
-      color:white;
-      font-family:Arial;
-      padding:20px;
-    }
+  margin:0;
+  background:#f5f5f5;
+  font-family: Arial, sans-serif;
+}
 
-    input {
-      width:100%;
-      padding:10px;
-      margin:10px 0;
-      background:#12263a;
-      border:none;
-      color:white;
-    }
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 55px;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+}
 
-    button {
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border:none;
-      cursor:pointer;
-    }
+.header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
 
-    #okBtn {
-      background:gray;
-      color:white;
-    }
+.back {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-    #okBtn.active {
-      background:#8a3c3c;
-    }
+/* MAIN CONTAINER */
+.container {
+  padding: 12px;
+}
 
-    #cancelBtn {
-      background:transparent;
-      border:1px solid #555;
-      color:white;
-    }
+/* CARD STYLE (withdraw page er moto) */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* PASSWORD ICON */
+.password-box {
+  position: relative;
+}
+
+.password-box span {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* OK BUTTON */
+#okBtn {
+  background: #ddd;
+  color: #999;
+}
+
+#okBtn.active {
+  background: #16a34a;
+  color: white;
+}
+
+/* CANCEL BUTTON */
+#cancelBtn {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
   </style>
 </head>
 
@@ -55,23 +112,33 @@ if (localStorage.getItem("walletLocked_" + user) === "true") {
 }
 </script>
 
-<h2>Virtual Currency</h2>
+<div class="wrapper">
 
-<input id="name" placeholder="Wallet name" autocomplete="off">
-<input id="protocol" placeholder="Virtual currency protocol" autocomplete="off">
-<input id="address" placeholder="Wallet address" autocomplete="off">
+  <div class="header">
+    <span class="back" onclick="history.back()">❮</span>
+    <h2>Virtual Currency</h2>
+  </div>
 
-<div style="position:relative;">
-  <input id="password" placeholder="Withdrawal password" type="password" autocomplete="new-password" style="padding-right:40px;">
-  
-  <span onclick="togglePassword()" 
-        style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;">
-    👁️
-  </span>
+  <div class="container">
+
+    <div class="card">
+      <input id="name" placeholder="Wallet name" autocomplete="off">
+      <input id="protocol" placeholder="Virtual currency protocol" autocomplete="off">
+      <input id="address" placeholder="Wallet address" autocomplete="off">
+
+      <div class="password-box">
+        <input id="password" placeholder="Withdrawal password" type="password" autocomplete="new-password">
+        <span onclick="togglePassword()">👁️</span>
+      </div>
+    </div>
+
+    <button id="okBtn" class="btn" disabled>OK</button>
+    <button id="cancelBtn" class="btn">Cancel</button>
+
+  </div>
+
 </div>
 
-<button id="okBtn" disabled>OK</button>
-<button id="cancelBtn">Cancel</button>
 
 <script>
 const nameInput = document.getElementById("name");
