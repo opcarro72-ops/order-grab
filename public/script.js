@@ -79,7 +79,7 @@ async function loadBalance() {
 
     const el = document.getElementById("balance");
     if (el) {
-      el.innerText = (data.balance || 0) + " USDT";
+      el.innerText = parseFloat(data.balance || 0).toFixed(4) + " USDT";
     }
   } catch {
     console.log("Balance load failed");
