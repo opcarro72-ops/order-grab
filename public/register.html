@@ -2,21 +2,130 @@
 <html>
 <head>
   <title>Register</title>
-  <link rel="stylesheet" href="style.css">Register</h2>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:#f5f5f5;
+    }
+
+    .container{
+      padding:20px;
+      max-width:920px;
+      margin:auto;
+    }
+
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:10px;
+    }
+
+    .back{
+      font-size:22px;
+      cursor:pointer;
+    }
+
+    .lang{
+      border:1px solid #ddd;
+      padding:6px 10px;
+      border-radius:8px;
+      font-size:14px;
+      background:#fff;
+      cursor:pointer;
+    }
+
+    h1{
+      margin-top:30px;
+      font-size:22px;
+      color:#555;
+    }
+
+    h2{
+      margin-top:5px;
+      font-size:26px;
+      color:#333;
+    }
+
+    .input-box{
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:10px;
+      padding:12px;
+      margin-top:15px;
+      display:flex;
+      align-items:center;
+    }
+
+    .input-box input{
+      border:none;
+      outline:none;
+      width:100%;
+      font-size:16px;
+      background:transparent;
+    }
+
+    .register-btn{
+      margin-top:20px;
+      width:100%;
+      padding:14px;
+      background:#38b014;
+      color:white;
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    .login-link{
+      text-align:right;
+      margin-top:15px;
+      color:#b81818;
+      cursor:pointer;
+    }
+
+  </style>
+</head>
 
 <body>
 
-<div class="login-box">
-  <h2>Register</h2>
+<div class="container">
 
-  <input type="text" id="username" placeholder="Username"><br><br>
-  <input type="password" id="password" placeholder="Password"><br><br>
+  <div class="top">
+    <div class="back" onclick="history.back()">❮</div>
 
-  <button onclick="registerUser()">Register</button><br><br>
+    <select class="lang" onchange="changeLang(this.value)">
+      <option value="en">US</option>
+      <option value="bn">বাংলা</option>
+    </select>
+  </div>
 
-  <p onclick="window.location.href='login.html'" style="cursor:pointer;">
-    Back to Login
-  </p>
+  <h1 id="welcome">Hello,Welcome!</h1>
+  <h2 id="title">Register</h2>
+
+  <div class="input-box">
+    <input type="text" id="username" placeholder="6-16 letters or numbers">
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="password" placeholder="6-16 alphanumeric password">
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="confirmPassword" placeholder="Please enter the password again">
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="invite" placeholder="Invitation code (required)">
+  </div>
+
+  <button class="register-btn" onclick="registerUser()">Registration</button>
+
+  <div class="login-link" onclick="goLogin()">Back to Login</div>
+
 </div>
 
 <script>
@@ -53,6 +162,45 @@ async function registerUser() {
   } catch (err) {
     alert("Server error");
   }
+}
+
+function goLogin(){
+  window.location.href = "login.html";
+}
+
+function changeLang(lang){
+  localStorage.setItem("lang", lang);
+
+  if(lang === "bn"){
+    document.getElementById("welcome").innerText = "হ্যালো, স্বাগতম!";
+    document.getElementById("title").innerText = "রেজিস্ট্রেশন";
+
+    document.getElementById("username").placeholder = "৬-১৬ অক্ষর বা সংখ্যা";
+    document.getElementById("password").placeholder = "৬-১৬ অক্ষরের পাসওয়ার্ড";
+    document.getElementById("confirmPassword").placeholder = "পাসওয়ার্ড আবার লিখুন";
+    document.getElementById("invite").placeholder = "ইনভাইট কোড (প্রয়োজন)";
+
+    document.querySelector(".register-btn").innerText = "রেজিস্ট্রেশন";
+    document.querySelector(".login-link").innerText = "লগইন এ ফিরে যান";
+
+  }else{
+    document.getElementById("welcome").innerText = "Hello,Welcome!";
+    document.getElementById("title").innerText = "Register";
+
+    document.getElementById("username").placeholder = "6-16 letters or numbers";
+    document.getElementById("password").placeholder = "6-16 alphanumeric password";
+    document.getElementById("confirmPassword").placeholder = "Please enter the password again";
+    document.getElementById("invite").placeholder = "Invitation code (required)";
+
+    document.querySelector(".register-btn").innerText = "Registration";
+    document.querySelector(".login-link").innerText = "Back to Login";
+  }
+}
+
+window.onload = function(){
+  const lang = localStorage.getItem("lang") || "en";
+  document.querySelector(".lang").value = lang;
+  changeLang(lang);
 }
 </script>
 

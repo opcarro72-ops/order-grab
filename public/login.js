@@ -63,3 +63,9 @@ function changeLang(lang){
 function goRegister() {
   window.location.href = "/register.html";
 }
+
+window.onload = function(){
+  const lang = localStorage.getItem("lang") || "en";
+  document.querySelector(".lang").value = lang;
+  changeLang(lang);
+}
