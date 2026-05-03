@@ -11,7 +11,6 @@
       background:#f2f2f2;
     }
 
-    /* HEADER */
     .header{
       position: relative;
       height:55px;
@@ -37,77 +36,124 @@
       cursor:pointer;
     }
 
-    /* TOP GREEN SECTION */
-    .top-box{
+    .top{
       background:linear-gradient(135deg,#16a34a,#22c55e);
       color:#fff;
       padding:20px 15px 25px;
     }
 
-    .team-title{
+    .top h3{
+      margin:0;
       font-size:14px;
       opacity:0.9;
     }
 
-    .team-value{
-      font-size:36px;
-      font-weight:bold;
-      margin-top:5px;
+    .big{
+      font-size:32px;
+      margin:10px 0 20px;
     }
 
-    /* GRID */
     .grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      margin-top:20px;
-      gap:15px;
+      grid-template-columns: repeat(3,1fr);
+      gap:15px 0;
       text-align:center;
     }
 
-    .grid div{
-      font-size:13px;
-      opacity:0.95;
-    }
-
-    .grid strong{
-      display:block;
-      font-size:16px;
-      margin-bottom:3px;
-    }
-
-    /* LEVEL TABS */
-    .levels{
-      display:flex;
-      background:#fff;
-      margin-top:-10px;
-      border-radius:15px 15px 0 0;
-      overflow:hidden;
-    }
-
-    .level{
-      flex:1;
-      text-align:center;
-      padding:14px 0;
-      font-size:15px;
-      cursor:pointer;
-      color:#555;
+    .item{
       position:relative;
     }
 
-    .level.active{
-      color:#000;
-      font-weight:600;
+    .item span{
+      display:block;
+      font-size:14px;
+      margin-bottom:3px;
     }
 
-    .level.active::after{
+    .item small{
+      font-size:12px;
+      opacity:0.9;
+    }
+
+    .item:not(:nth-child(3n))::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:25%;
+      height:50%;
+      width:1px;
+      background:rgba(255,255,255,0.3);
+    }
+
+    .bottom-row{
+      display:flex;
+      justify-content:center;
+      margin-top:15px;
+      gap:40px;
+      text-align:center;
+    }
+
+    .bottom-item{
+      position:relative;
+    }
+
+    .bottom-item span{
+      display:block;
+      font-size:14px;
+    }
+
+    .bottom-item small{
+      font-size:12px;
+      opacity:0.9;
+    }
+
+    .bottom-item:first-child::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:25%;
+      height:50%;
+      width:1px;
+      background:rgba(255,255,255,0.3);
+    }
+
+    .tabs{
+      display:flex;
+      background:#fff;
+      border-radius:20px 20px 0 0;
+      margin-top:-10px;
+    }
+
+    .tab{
+      flex:1;
+      text-align:center;
+      padding:12px;
+      cursor:pointer;
+      color:#666;
+      font-weight:500;
+      position:relative;
+    }
+
+    .tab.active{
+      color:#16a34a;
+      font-weight:bold;
+    }
+
+    .tab.active::after{
       content:"";
       position:absolute;
       bottom:0;
-      left:30%;
-      width:40%;
+      left:25%;
+      width:50%;
       height:3px;
       background:#16a34a;
       border-radius:3px;
+    }
+
+    .content{
+      padding:20px;
+      text-align:center;
+      color:#999;
     }
 
   </style>
@@ -115,68 +161,60 @@
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <span class="back" onclick="history.back()">❮</span>
   <h2>Teams</h2>
 </div>
 
-<!-- TOP SECTION -->
-<div class="top-box">
-
-  <div class="team-title">Team amount</div>
-  <div class="team-value">0</div>
+<div class="top">
+  <h3>Team amount</h3>
+  <div class="big">0</div>
 
   <div class="grid">
-    <div>
-      <strong>0.0000</strong>
-      Agent Profit
+    <div class="item"><span>0.0000</span><small>Agent Profit</small></div>
+    <div class="item"><span>0.0000</span><small>Total recharge</small></div>
+    <div class="item"><span>0.0000</span><small>Total withdraw</small></div>
+
+    <div class="item"><span>0.0000</span><small>Order commission</small></div>
+    <div class="item"><span>0.0000</span><small>Newcomers</small></div>
+    <div class="item"><span>0.0000</span><small>Activities number</small></div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="bottom-item">
+      <span>0.0000</span>
+      <small>Team amount</small>
     </div>
 
-    <div>
-      <strong>0.0000</strong>
-      Total recharge
-    </div>
-
-    <div>
-      <strong>0.0000</strong>
-      Total withdraw
-    </div>
-
-    <div>
-      <strong>0.0000</strong>
-      Order commission
-    </div>
-
-    <div>
-      <strong>0.0000</strong>
-      Newcomers
-    </div>
-
-    <div>
-      <strong>0.0000</strong>
-      Activities number
-    </div>
-
-    <div>
-      <strong>0.0000</strong>
-      Team amount
-    </div>
-
-    <div>
-      <strong>0.0000</strong>
-      Team number
+    <div class="bottom-item">
+      <span>0.0000</span>
+      <small>Team number</small>
     </div>
   </div>
 
 </div>
 
-<!-- LEVELS -->
-<div class="levels">
-  <div class="level active">Level 1</div>
-  <div class="level">Level 2</div>
-  <div class="level">Level 3</div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(1)">Level 1</div>
+  <div class="tab" onclick="switchTab(2)">Level 2</div>
+  <div class="tab" onclick="switchTab(3)">Level 3</div>
 </div>
+
+<div class="content" id="tabContent">
+  No data
+</div>
+
+<script>
+function switchTab(level){
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
+
+  document.querySelectorAll(".tab")[level-1].classList.add("active");
+
+  document.getElementById("tabContent").innerText = "Level " + level + " data";
+}
+</script>
 
 </body>
 </html>
