@@ -135,7 +135,7 @@ async function loadDeposits() {
     box.innerHTML += `
       <div class="record-item">
         <div class="status ${statusClass}">${r.status}</div>
-        <p>Requested: ${r.amount} USDT</p>
+        <p>Amount: ${r.amount} USDT</p>
         <p>Time: ${new Date(r.time).toLocaleString()}</p>
       </div>
     `;

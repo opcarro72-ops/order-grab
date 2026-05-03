@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Teams</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:#f2f2f2;
+    }
+
+    /* HEADER */
+    .header{
+      position: relative;
+      height:55px;
+      background:#fff;
+      border-bottom:1px solid #eee;
+    }
+
+    .header h2{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      margin:0;
+      font-size:18px;
+    }
+
+    .back{
+      position:absolute;
+      left:15px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:20px;
+      cursor:pointer;
+    }
+
+    /* TOP GREEN SECTION */
+    .top-box{
+      background:linear-gradient(135deg,#16a34a,#22c55e);
+      color:#fff;
+      padding:20px 15px 25px;
+    }
+
+    .team-title{
+      font-size:14px;
+      opacity:0.9;
+    }
+
+    .team-value{
+      font-size:36px;
+      font-weight:bold;
+      margin-top:5px;
+    }
+
+    /* GRID */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      margin-top:20px;
+      gap:15px;
+      text-align:center;
+    }
+
+    .grid div{
+      font-size:13px;
+      opacity:0.95;
+    }
+
+    .grid strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:3px;
+    }
+
+    /* LEVEL TABS */
+    .levels{
+      display:flex;
+      background:#fff;
+      margin-top:-10px;
+      border-radius:15px 15px 0 0;
+      overflow:hidden;
+    }
+
+    .level{
+      flex:1;
+      text-align:center;
+      padding:14px 0;
+      font-size:15px;
+      cursor:pointer;
+      color:#555;
+      position:relative;
+    }
+
+    .level.active{
+      color:#000;
+      font-weight:600;
+    }
+
+    .level.active::after{
+      content:"";
+      position:absolute;
+      bottom:0;
+      left:30%;
+      width:40%;
+      height:3px;
+      background:#16a34a;
+      border-radius:3px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <span class="back" onclick="history.back()">❮</span>
+  <h2>Teams</h2>
+</div>
+
+<!-- TOP SECTION -->
+<div class="top-box">
+
+  <div class="team-title">Team amount</div>
+  <div class="team-value">0</div>
+
+  <div class="grid">
+    <div>
+      <strong>0.0000</strong>
+      Agent Profit
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Total recharge
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Total withdraw
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Order commission
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Newcomers
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Activities number
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Team amount
+    </div>
+
+    <div>
+      <strong>0.0000</strong>
+      Team number
+    </div>
+  </div>
+
+</div>
+
+<!-- LEVELS -->
+<div class="levels">
+  <div class="level active">Level 1</div>
+  <div class="level">Level 2</div>
+  <div class="level">Level 3</div>
+</div>
+
+</body>
+</html>
