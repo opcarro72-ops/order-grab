@@ -288,16 +288,19 @@ async function openPopup() {
       let subtotal = product.price * qty;
 
       if (
-        !isMixedOrder &&
-        totalAmount + subtotal > data.balance
-      ) {
+  !isMixedOrder &&
+  totalAmount + subtotal > data.balance
+) {
 
-        qty = Math.floor(
-          (data.balance - totalAmount) / product.price
-        );
+  qty = Math.max(
+    1,
+    Math.floor(
+      (data.balance - totalAmount) / product.price
+    )
+  );
 
-        subtotal = product.price * qty;
-      }
+  subtotal = product.price * qty;
+}
 
       totalAmount += subtotal;
 
