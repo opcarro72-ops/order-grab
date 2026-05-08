@@ -12,31 +12,26 @@
   <h3 style="text-align:center;">virtual currency</h3>
 </div>
 
-<!-- Wallet name -->
 <div class="section row">
   <span>Wallet name</span>
   <input id="walletName" placeholder="Please enter the wallet name" autocomplete="off">
 </div>
 
-<!-- Protocol -->
 <div class="section row" onclick="openProtocol()">
   <span>Virtual Currency Protocol</span>
   <span id="protocolText" class="right-text">Please select</span>
 </div>
 
-<!-- Address -->
 <div class="section row">
   <span>Wallet address</span>
   <input id="walletAddress" placeholder="Please enter the e-wallet address" autocomplete="off">
 </div>
 
-<!-- Names -->
 <div class="section row">
   <span>Names</span>
   <input id="names" placeholder="Names" autocomplete="off">
 </div>
 
-<!-- Password -->
 <div class="section row">
   <span>Withdrawal Password</span>
   <div class="password-box">
@@ -45,13 +40,11 @@
   </div>
 </div>
 
-<!-- Buttons -->
 <div class="bottom-btn">
   <button id="okBtn" disabled onclick="saveWallet()">OK</button>
   <button class="cancel-btn" onclick="history.back()">Cancel</button>
 </div>
 
-<!-- ✅ Protocol Popup -->
 <div id="protocolBox" class="popup">
   <p>Virtual Currency Protocol</p>
   <div class="option" onclick="selectProtocol()">TRC-20</div>

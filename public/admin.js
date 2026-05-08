@@ -4,7 +4,6 @@ if (!token) {
   window.location.href = "/admin-login.html";
 }
 
-/* ---------------- LOAD USERS ---------------- */
 async function loadUsers() {
   const res = await fetch("/admin/users", {
     headers: { Authorization: "Bearer " + token }
@@ -20,7 +19,6 @@ async function loadUsers() {
   });
 }
 
-/* ---------------- LOAD USER STATUS ---------------- */
 async function loadUserStatus() {
   const username = document.getElementById("userSelect").value;
   if (!username) return;
@@ -70,7 +68,6 @@ async function giveTasks() {
     return alert("Mixed positions count must match mixedCount");
   }
 
-  // ✅ ONLY this part keep
   const percentText = document.getElementById("mixedPositionPercent")?.value.trim();
 
   let mixedPercents = {};
@@ -112,7 +109,6 @@ async function giveTasks() {
   loadUserStatus();
 }
 
-/* ---------------- UPDATE BALANCE ---------------- */
 async function updateBalance() {
   const username = document.getElementById("userSelect").value;
   const balance = Number(document.getElementById("newBalance").value);
@@ -131,7 +127,6 @@ async function updateBalance() {
   loadUserStatus();
 }
 
-/* ---------------- LOAD DEPOSITS ---------------- */
 async function loadDeposits() {
   const res = await fetch("/admin/deposits", {
     headers: { Authorization: "Bearer " + token }
@@ -155,7 +150,6 @@ async function loadDeposits() {
     });
 }
 
-/* ---------------- APPROVE DEPOSIT ---------------- */
 async function approveDeposit(id) {
   const approvedAmount = document.getElementById("dep_" + id).value;
 
@@ -173,7 +167,6 @@ async function approveDeposit(id) {
   loadDeposits();
 }
 
-/* ---------------- LOAD WITHDRAWS ---------------- */
 async function loadWithdraws() {
   const res = await fetch("/admin/withdraws", {
     headers: { Authorization: "Bearer " + token }
@@ -197,7 +190,6 @@ async function loadWithdraws() {
     });
 }
 
-/* ---------------- APPROVE WITHDRAW ---------------- */
 async function approveWithdraw(id) {
   const approvedAmount = document.getElementById("wd_" + id).value;
 
@@ -215,13 +207,11 @@ async function approveWithdraw(id) {
   loadWithdraws();
 }
 
-/* ---------------- LOGOUT ---------------- */
 function logout() {
   localStorage.removeItem("adminToken");
   window.location.href = "/admin-login.html";
 }
 
-/* ---------------- INIT ---------------- */
 loadUsers();
 loadDeposits();
 loadWithdraws();
