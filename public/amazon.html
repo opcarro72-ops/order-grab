@@ -418,6 +418,8 @@ async function submitOrder() {
 
   const token = localStorage.getItem("token");
 
+  const username = localStorage.getItem("username");
+
   const userBalance = parseFloat(
     document.getElementById("balance")
     .innerText.replace(" USDT", "")
