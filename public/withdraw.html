@@ -48,13 +48,54 @@
 const amountInput = document.getElementById("amount");
 const okBtn = document.getElementById("okBtn");
 
-let user = localStorage.getItem("username");
-let walletData = JSON.parse(localStorage.getItem("walletData_" + user));
+const token = localStorage.getItem("token");
 
-if(walletData){
-  document.getElementById("walletName").innerText =
-    walletData.name + "(" + walletData.protocol + ")";
+async function loadWallet() {
+
+  if (sessionStorage.getItem("withdrawAccess") !== "true") {
+
+    alert("Access denied");
+
+    window.location.href = "mine.html";
+
+    return;
+  }
+
+  try {
+
+    const res = await fetch("/get-wallet", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+
+    if (
+      !data.success ||
+      !data.wallet ||
+      !data.wallet.locked
+    ) {
+
+      alert("Please add wallet first");
+
+      window.location.href = "wallet.html";
+
+      return;
+    }
+
+    window.walletData = data.wallet;
+
+    document.getElementById("walletName").innerText =
+      data.wallet.name + " (" + data.wallet.protocol + ")";
+
+  } catch (err) {
+
+    alert("Server error");
+  }
 }
+
+loadWallet();
 
 amountInput.addEventListener("input", () => {
   let amount = parseFloat(amountInput.value) || 0;
@@ -71,7 +112,7 @@ amountInput.addEventListener("input", () => {
 okBtn.addEventListener("click", async () => {
   let amount = parseFloat(amountInput.value);
 
-  if (!walletData) {
+  if (!window.walletData) {
     alert("Please add wallet first");
     return;
   }
@@ -112,6 +153,10 @@ okBtn.addEventListener("click", async () => {
     okBtn.disabled = false;
     okBtn.innerText = "OK";
   }
+});
+
+window.addEventListener("pagehide", () => {
+  sessionStorage.removeItem("withdrawAccess");
 });
 </script>
 

@@ -122,22 +122,48 @@ let saved = localStorage.getItem("userProfileImage_" + user);
 
 img.src = saved ? saved : "default.png";
 
-function checkWithdrawPassword() {
-  let data = JSON.parse(localStorage.getItem("walletData_" + user));
+async function checkWithdrawPassword() {
 
-  if (!data) {
-    alert("Please add wallet first!");
-    return;
-  }
+  const token = localStorage.getItem("token");
 
-  let inputPass = prompt("Enter withdrawal password:");
+  try {
 
-  if (inputPass === null) return;
+    const res = await fetch("/get-wallet", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
 
-  if (inputPass === data.password) {
-    window.location.href = "withdraw.html";
-  } else {
-    alert("Wrong password!");
+    const data = await res.json();
+
+    if (
+      !data.success ||
+      !data.wallet ||
+      !data.wallet.locked ||
+      !data.wallet.address
+    ) {
+      alert("Please add wallet first!");
+      return;
+    }
+
+    let inputPass = prompt("Enter withdrawal password:");
+
+    if (inputPass === null) return;
+
+    if (inputPass === data.wallet.password) {
+
+      sessionStorage.setItem("withdrawAccess", "true");
+
+      window.location.href = "withdraw.html";
+
+    } else {
+
+      alert("Wrong password!");
+    }
+
+  } catch (err) {
+
+    alert("Server error");
   }
 }
 

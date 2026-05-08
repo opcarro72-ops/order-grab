@@ -63,12 +63,14 @@ async function register() {
   }
 }
 
-/* ---------------- LOAD BALANCE ---------------- */
 async function loadBalance() {
+
   const token = localStorage.getItem("token");
+
   if (!token) return;
 
   try {
+
     const res = await fetch("/balance", {
       headers: {
         "Authorization": "Bearer " + token
@@ -77,44 +79,48 @@ async function loadBalance() {
 
     const data = await res.json();
 
-    const el = document.getElementById("balance");
+    const balanceEl = document.getElementById("balance");
 
-if (el) {
-  el.innerText =
-    parseFloat(data.balance || 0).toFixed(4) + " USDT";
-}
+    if (balanceEl) {
+      balanceEl.innerText =
+        parseFloat(data.balance || 0).toFixed(4) + " USDT";
+    }
 
-const cashGapEl = document.getElementById("cashGap");
+    const cashGapEl = document.getElementById("cashGap");
 
-if (cashGapEl) {
-  cashGapEl.innerText =
-    parseFloat(data.cashGap || 0).toFixed(4) + " USDT";
-}
+    if (cashGapEl) {
+      cashGapEl.innerText =
+        parseFloat(data.cashGap || 0).toFixed(4) + " USDT";
+    }
 
-const todayTimesEl = document.getElementById("todayTimes");
+    const todayTimesEl = document.getElementById("todayTimes");
 
-if (todayTimesEl) {
-  todayTimesEl.innerText = data.todayTasks || 0;
-}
+    if (todayTimesEl) {
+      todayTimesEl.innerText = data.todayTasks || 0;
+    }
 
-const todayCommissionEl =
-  document.getElementById("todayCommission");
+    const todayCommissionEl =
+      document.getElementById("todayCommission");
 
-if (todayCommissionEl) {
-  todayCommissionEl.innerText =
-    parseFloat(data.todayCommission || 0).toFixed(4) + " USDT";
-}
+    if (todayCommissionEl) {
+      todayCommissionEl.innerText =
+        parseFloat(data.todayCommission || 0).toFixed(4) + " USDT";
+    }
 
-const yesterdayCommissionEl =
-  document.getElementById("yesterdayCommission");
+    const yesterdayCommissionEl =
+      document.getElementById("yesterdayCommission");
 
-if (yesterdayCommissionEl) {
-  yesterdayCommissionEl.innerText =
-    parseFloat(data.yesterdayCommission || 0).toFixed(4) + " USDT";
-}
-  } catch {
-    console.log("Balance load failed");
+    if (yesterdayCommissionEl) {
+      yesterdayCommissionEl.innerText =
+        parseFloat(data.yesterdayCommission || 0).toFixed(4) + " USDT";
+    }
+
+  } catch (err) {
+
+    console.log("Balance load failed", err);
+
   }
+
 }
 
 /* ---------------- DEPOSIT REQUEST ---------------- */
