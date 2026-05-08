@@ -296,7 +296,7 @@ button.active {
 }
 
 .tab.active {
-  background: #6b4d57;
+  background: #30b811;
   color: #fff;
 }
 
@@ -317,7 +317,7 @@ button.active {
   position: absolute;
   top: -14px;
   left: 10px;
-  background: #d28a00;
+  background: #1cc225;
   color: white;
   font-size: 11px;
   padding: 3px 8px;
@@ -593,7 +593,7 @@ transform: translateX(-50%);
   padding: 16px;
   border: none;
   border-radius: 10px;
-  background: #765560;
+  background: #1fa31a;
   color: white;
   font-size: 20px;
   cursor: pointer;
