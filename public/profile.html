@@ -113,15 +113,37 @@
 const avatar = document.getElementById("avatarPreview");
 const fileInput = document.getElementById("fileInput");
 
-let user = localStorage.getItem("username");
+const token = localStorage.getItem("token");
 
-let savedImage = localStorage.getItem("userProfileImage_" + user);
-
-if(savedImage){
-  avatar.src = savedImage;
-}else{
-  avatar.src = "default.png";
+if (!token) {
+  window.location.href = "login.html";
 }
+
+async function loadProfileImage() {
+
+  try {
+
+    const res = await fetch("/get-profile-image", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.image) {
+      avatar.src = data.image;
+    } else {
+      avatar.src = "default.png";
+    }
+
+  } catch (err) {
+
+    avatar.src = "default.png";
+  }
+}
+
+loadProfileImage();
 
 avatar.addEventListener("click", () => {
   fileInput.click();
@@ -133,14 +155,45 @@ fileInput.addEventListener("change", function(){
 
   const reader = new FileReader();
 
-  reader.onload = function(e){
-    const imageData = e.target.result;
+  reader.onload = async function(e){
 
-    localStorage.setItem("userProfileImage_" + user, imageData);
-    avatar.src = imageData;
+  const imageData = e.target.result;
 
-    alert("Profile image updated successfully");
-  };
+  try {
+
+    const res = await fetch("/save-profile-image", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+
+      body: JSON.stringify({
+        image: imageData
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      avatar.src = imageData;
+
+      alert("Profile image updated successfully");
+
+    } else {
+
+      alert(data.msg);
+    }
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Server error: " + err.message);
+  }
+};
 
   reader.readAsDataURL(file);
 });

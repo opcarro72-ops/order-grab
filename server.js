@@ -5,10 +5,15 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cron = require("node-cron");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
 app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGO_URI)
@@ -37,6 +42,11 @@ const userSchema = new mongoose.Schema({
     },
 
   password: String,
+
+  profileImage: {
+    type: String,
+    default: "default.png"
+  },
 
   balance: {
     type: Number,
@@ -1141,6 +1151,64 @@ app.get("/get-wallet", verifyToken, async (req, res) => {
     res.json({
       success: true,
       wallet: user.wallet || {}
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
+app.post("/save-profile-image", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    user.profileImage = req.body.image;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      msg: "Profile image saved"
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
+app.get("/get-profile-image", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      image: user.profileImage || "default.png"
     });
 
   } catch (err) {

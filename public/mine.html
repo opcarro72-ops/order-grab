@@ -115,12 +115,42 @@
 <script src="script.js"></script>
 
 <script>
-  let user = localStorage.getItem("username");
+  const img = document.getElementById("profileImg");
 
-const img = document.getElementById("profileImg");
-let saved = localStorage.getItem("userProfileImage_" + user);
+const token = localStorage.getItem("token");
 
-img.src = saved ? saved : "default.png";
+if (!token) {
+  window.location.href = "login.html";
+}
+
+async function loadProfileImage() {
+
+  try {
+
+    const res = await fetch("/get-profile-image", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.image) {
+
+      img.src = data.image;
+
+    } else {
+
+      img.src = "default.png";
+    }
+
+  } catch (err) {
+
+    img.src = "default.png";
+  }
+}
+
+loadProfileImage();
 
 async function checkWithdrawPassword() {
 
