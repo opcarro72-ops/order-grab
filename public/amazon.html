@@ -8,8 +8,6 @@
 </head>
 <body class="amazon-page">
 
-<body>
-
   <!-- Header -->
   <div class="amazon-header">
     <div class="back-btn" onclick="history.back()">❮</div>
@@ -135,6 +133,11 @@ async function openPopup() {
       headers: { Authorization: "Bearer " + token }
     });
 
+    if (!res.ok) {
+  alert("Server response failed");
+  return;
+}
+
     const data = await res.json();
 
     if (!data.success) {
@@ -157,7 +160,9 @@ async function openPopup() {
       return;
     }
 
-    let usedProducts = JSON.parse(localStorage.getItem("usedProducts_amazon")) || [];
+    let usedProducts = JSON.parse(
+  localStorage.getItem(`usedProducts_amazon_${username}`)
+) || [];
 
     if (usedProducts.length >= 25) {
       usedProducts = [];
@@ -209,9 +214,9 @@ async function openPopup() {
     }
 
     localStorage.setItem(
-      "usedProducts_amazon",
-      JSON.stringify(usedProducts)
-    );
+  `usedProducts_amazon_${username}`,
+  JSON.stringify(usedProducts)
+);
 
     let targetOrderAmount = 0;
 
@@ -262,11 +267,11 @@ async function openPopup() {
       if (index === selectedProducts.length - 1) {
 
         qty = Math.max(
-          1,
-          Math.floor(
-            (targetOrderAmount - totalAmount) / product.price
-          )
-        );
+  1,
+  Math.floor(
+    Math.max(0, targetOrderAmount - totalAmount) / product.price
+  )
+);
 
       } else {
 
@@ -355,6 +360,8 @@ async function openPopup() {
       })
     });
 
+    localStorage.setItem(`cashGap_amazon_${username}`, gap);
+
     const orderNo = "AMZ" + Date.now();
 
     const trxTime = new Date().toLocaleString();
@@ -428,6 +435,8 @@ async function submitOrder() {
     return;
   }
 
+  try {
+
   const res = await fetch("/add-commission", {
 
     method: "POST",
@@ -476,6 +485,8 @@ async function submitOrder() {
     document.getElementById("cashGap").innerText =
       "0.0000 USDT";
 
+    localStorage.removeItem(`cashGap_amazon_${username}`);
+
     closePopup();
 
     alert("Order submitted successfully");
@@ -484,6 +495,13 @@ async function submitOrder() {
 
     alert(data.msg || "Submit failed");
   }
+
+} catch (err) {
+
+  console.log(err);
+
+  alert("Server error");
+}
 }
 
 function closePopup() {
@@ -509,7 +527,10 @@ async function loadUserStatus() {
     document.getElementById("balance").innerText =
       data.balance.toFixed(4) + " USDT";
 
-    const savedGap = localStorage.getItem("cashGap") || 0;
+    const username = localStorage.getItem("username");
+
+const savedGap =
+  localStorage.getItem(`cashGap_amazon_${username}`) || 0;
     document.getElementById("cashGap").innerText =
       Number(savedGap).toFixed(4) + " USDT";
   }

@@ -108,17 +108,32 @@ async function openPopup() {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
 
-  const pending = JSON.parse(localStorage.getItem(`pendingAliExpressOrder_${username}`));
-
-  if (pending) {
-    alert("You have an unpaid order, please complete that order first.");
-    return;
+  const pendingRes = await fetch("/my-orders", {
+  headers: {
+    Authorization: "Bearer " + token
   }
+});
+
+const pendingData = await pendingRes.json();
+
+const pending = pendingData.orders.find(
+  o => o.type === "AliExpress" && o.status === "pending"
+);
+
+if (pending) {
+  alert("You have an unpaid order, please complete that order first.");
+  return;
+}
 
   try {
     const res = await fetch("/task-status", {
       headers: { Authorization: "Bearer " + token }
     });
+
+    if (!res.ok) {
+  alert("Server response failed");
+  return;
+}
 
     const data = await res.json();
 
@@ -212,9 +227,11 @@ async function openPopup() {
 
       if (index === selectedProducts.length - 1) {
         qty = Math.max(
-          1,
-          Math.floor((targetOrderAmount - totalAmount) / product.price)
-        );
+  1,
+  Math.floor(
+    Math.max(0, targetOrderAmount - totalAmount) / product.price
+  )
+);
       } else {
         qty = Math.max(
           1,
@@ -259,7 +276,7 @@ async function openPopup() {
     document.getElementById("cashGap").innerText =
       gap.toFixed(4) + " USDT";
 
-    localStorage.setItem("cashGap_aliexpress", gap);
+    localStorage.setItem(`cashGap_aliexpress_${username}`, gap);
 
     const orderNo = "ALX" + Date.now();
     const trxTime = new Date().toLocaleString();
@@ -279,13 +296,24 @@ async function openPopup() {
     document.getElementById("productList").innerHTML = productHTML;
     document.getElementById("popup").style.display = "flex";
 
-    localStorage.setItem(`pendingAliExpressOrder_${username}`, JSON.stringify({
-      orderNo,
-      trxTime,
-      orderAmount: currentOrderAmount,
-      commission: currentCommission,
-      products: currentProducts
-    }));
+    await fetch("/save-order", {
+
+  method: "POST",
+
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
+
+  body: JSON.stringify({
+    type: "AliExpress",
+    orderNo,
+    trxTime,
+    orderAmount: currentOrderAmount,
+    commission: currentCommission,
+    products: currentProducts
+  })
+});
 
   } catch (err) {
     console.log(err);
@@ -328,15 +356,19 @@ async function submitOrder() {
 
     if (data.success) {
 
-      const pending = JSON.parse(localStorage.getItem(`pendingAliExpressOrder_${username}`));
-      let completeOrders = JSON.parse(localStorage.getItem(`completeOrders_aliexpress_${username}`)) || [];
+      await fetch("/complete-order", {
 
-      if (pending) {
-        completeOrders.unshift(pending);
-        localStorage.setItem(`completeOrders_aliexpress_${username}`, JSON.stringify(completeOrders));
-      }
+  method: "POST",
 
-      localStorage.removeItem(`pendingAliExpressOrder_${username}`);
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
+
+  body: JSON.stringify({
+    orderNo: document.getElementById("orderNo").innerText
+  })
+});
 
       document.getElementById("todayTimes").innerText = data.todayTasks;
       document.getElementById("todayCommission").innerText =
@@ -347,11 +379,9 @@ async function submitOrder() {
         data.balance.toFixed(4) + " USDT";
 
       document.getElementById("cashGap").innerText = "0.0000 USDT";
-      localStorage.removeItem("cashGap_aliexpress");
+      localStorage.removeItem(`cashGap_aliexpress_${username}`);
 
       closePopup();
-
-      localStorage.setItem("recordTab", "complete");
 
       alert("Order submitted successfully");
 
@@ -386,7 +416,10 @@ async function loadUserStatus() {
       document.getElementById("balance").innerText =
         data.balance.toFixed(4) + " USDT";
 
-      const savedGap = localStorage.getItem("cashGap_aliexpress") || 0;
+      const username = localStorage.getItem("username");
+
+const savedGap =
+  localStorage.getItem(`cashGap_aliexpress_${username}`) || 0;
       document.getElementById("cashGap").innerText =
         Number(savedGap).toFixed(4) + " USDT";
     }

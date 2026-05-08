@@ -7,9 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="alibaba-page">
-<body>
 
-  <!-- Header -->
   <div class="amazon-header">
     <div class="back-btn" onclick="history.back()">❮</div>
     <div class="amazon-title">Alibaba</div>
@@ -20,7 +18,6 @@
     </div>
   </div>
 
-  <!-- Stats Card -->
   <div class="stats-card">
     <div class="stats-grid">
       <div class="stat">
@@ -59,14 +56,12 @@
     </button>
   </div>
 
-  <!-- Hint -->
   <div class="hint-box">
     <p>Hint:</p>
     <p>1: 8% of the amount of completed transactions earned.</p>
     <p>2: The system sends tasks randomly. Complete them as soon as possible after matching them.</p>
   </div>
 
-  <!-- Popup -->
   <div class="popup-overlay" id="popup" style="display:none;">
     <div class="order-popup">
 
@@ -107,17 +102,32 @@ async function openPopup() {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
 
-  const pending = JSON.parse(localStorage.getItem(`pendingAlibabaOrder_${username}`));
-
-  if (pending) {
-    alert("You have an unpaid order, please complete that order first.");
-    return;
+  const pendingRes = await fetch("/my-orders", {
+  headers: {
+    Authorization: "Bearer " + token
   }
+});
+
+const pendingData = await pendingRes.json();
+
+const pending = pendingData.orders.find(
+  o => o.type === "Alibaba" && o.status === "pending"
+);
+
+if (pending) {
+  alert("You have an unpaid order, please complete that order first.");
+  return;
+}
 
   try {
     const res = await fetch("/task-status", {
       headers: { Authorization: "Bearer " + token }
     });
+
+    if (!res.ok) {
+  alert("Server response failed");
+  return;
+}
 
     const data = await res.json();
 
@@ -141,7 +151,9 @@ async function openPopup() {
       return;
     }
 
-    let usedProducts = JSON.parse(localStorage.getItem("usedProducts_alibaba")) || [];
+    let usedProducts = JSON.parse(
+  localStorage.getItem(`usedProducts_alibaba_${username}`)
+) || [];
     if (usedProducts.length >= 25) usedProducts = [];
 
     let availableProducts = products.filter(p => !usedProducts.includes(p.id));
@@ -173,7 +185,10 @@ async function openPopup() {
       usedProducts.push(product.id);
     }
 
-    localStorage.setItem("usedProducts_alibaba", JSON.stringify(usedProducts));
+    localStorage.setItem(
+  `usedProducts_alibaba_${username}`,
+  JSON.stringify(usedProducts)
+);
 
     let targetOrderAmount = 0;
 
@@ -216,9 +231,11 @@ async function openPopup() {
 
       if (index === selectedProducts.length - 1) {
         qty = Math.max(
-          1,
-          Math.floor((targetOrderAmount - totalAmount) / product.price)
-        );
+  1,
+  Math.floor(
+    Math.max(0, targetOrderAmount - totalAmount) / product.price
+  )
+);
       } else {
         qty = Math.max(
           1,
@@ -263,7 +280,7 @@ async function openPopup() {
     document.getElementById("cashGap").innerText =
       gap.toFixed(4) + " USDT";
 
-    localStorage.setItem("cashGap_alibaba", gap);
+    localStorage.setItem(`cashGap_alibaba_${username}`, gap);
 
     const orderNo = "ALI" + Date.now();
     const trxTime = new Date().toLocaleString();
@@ -283,13 +300,24 @@ async function openPopup() {
     document.getElementById("productList").innerHTML = productHTML;
     document.getElementById("popup").style.display = "flex";
 
-    localStorage.setItem(`pendingAlibabaOrder_${username}`, JSON.stringify({
-      orderNo,
-      trxTime,
-      orderAmount: currentOrderAmount,
-      commission: currentCommission,
-      products: currentProducts
-    }));
+    await fetch("/save-order", {
+
+  method: "POST",
+
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
+
+  body: JSON.stringify({
+    type: "Alibaba",
+    orderNo,
+    trxTime,
+    orderAmount: currentOrderAmount,
+    commission: currentCommission,
+    products: currentProducts
+  })
+});
 
   } catch (err) {
     console.log(err);
@@ -327,15 +355,19 @@ async function submitOrder() {
 
   if (data.success) {
 
-    const pending = JSON.parse(localStorage.getItem(`pendingAlibabaOrder_${username}`));
-    let completeOrders = JSON.parse(localStorage.getItem(`completeOrders_alibaba_${username}`)) || [];
+    await fetch("/complete-order", {
 
-    if (pending) {
-      completeOrders.unshift(pending);
-      localStorage.setItem(`completeOrders_alibaba_${username}`, JSON.stringify(completeOrders));
-    }
+  method: "POST",
 
-    localStorage.removeItem(`pendingAlibabaOrder_${username}`);
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
+
+  body: JSON.stringify({
+    orderNo: document.getElementById("orderNo").innerText
+  })
+});
 
     document.getElementById("todayTimes").innerText = data.todayTasks;
     document.getElementById("todayCommission").innerText =
@@ -346,7 +378,7 @@ async function submitOrder() {
       data.balance.toFixed(4) + " USDT";
 
     document.getElementById("cashGap").innerText = "0.0000 USDT";
-    localStorage.removeItem("cashGap_alibaba");
+    localStorage.removeItem(`cashGap_alibaba_${username}`);
 
     closePopup();
     alert("Order submitted successfully");
@@ -379,7 +411,10 @@ async function loadUserStatus() {
     document.getElementById("balance").innerText =
       data.balance.toFixed(4) + " USDT";
 
-    const savedGap = localStorage.getItem("cashGap_alibaba") || 0;
+    const username = localStorage.getItem("username");
+
+const savedGap =
+  localStorage.getItem(`cashGap_alibaba_${username}`) || 0;
     document.getElementById("cashGap").innerText =
       Number(savedGap).toFixed(4) + " USDT";
   }

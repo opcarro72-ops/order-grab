@@ -172,25 +172,14 @@ const withdrawSchema = new mongoose.Schema({
 });
 const Withdraw = mongoose.model("Withdraw", withdrawSchema);
 
-/* ---------------- ORDER MODEL ---------------- */
-
 const orderSchema = new mongoose.Schema({
 
   username: String,
 
   type: {
     type: String,
+    enum: ["Amazon", "Alibaba", "AliExpress"],
     default: "Amazon"
-  },
-
-  type: {
-    type: String,
-    default: "Alibaba"
-  },
-
-  type: {
-    type: String,
-    default: "AliExpress"
   },
 
   status: {

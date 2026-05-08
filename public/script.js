@@ -397,10 +397,7 @@ async function submitPendingOrder(orderNo) {
 
     if (data.success) {
 
-      let completeOrders;
-
-      if (pendingOrder.type === "Amazon") {
-        await fetch("/complete-order", {
+      await fetch("/complete-order", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -410,23 +407,6 @@ async function submitPendingOrder(orderNo) {
     orderNo: pendingOrder.orderNo
   })
 });
-      }
-
-      else if (pendingOrder.type === "Alibaba") {
-        completeOrders = JSON.parse(localStorage.getItem(`completeOrders_alibaba_${username}`)) || [];
-        completeOrders.unshift(pendingOrder);
-
-        localStorage.setItem(`completeOrders_alibaba_${username}`, JSON.stringify(completeOrders));
-        localStorage.removeItem(`pendingAlibabaOrder_${username}`);
-      }
-
-      else if (pendingOrder.type === "AliExpress") {
-        completeOrders = JSON.parse(localStorage.getItem(`completeOrders_aliexpress_${username}`)) || [];
-        completeOrders.unshift(pendingOrder);
-
-        localStorage.setItem(`completeOrders_aliexpress_${username}`, JSON.stringify(completeOrders));
-        localStorage.removeItem(`pendingAliExpressOrder_${username}`);
-      }
 
       renderOrders();
       localStorage.setItem("recordTab", "complete");
