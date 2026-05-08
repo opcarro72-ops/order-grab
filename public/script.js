@@ -78,9 +78,40 @@ async function loadBalance() {
     const data = await res.json();
 
     const el = document.getElementById("balance");
-    if (el) {
-      el.innerText = parseFloat(data.balance || 0).toFixed(4) + " USDT";
-    }
+
+if (el) {
+  el.innerText =
+    parseFloat(data.balance || 0).toFixed(4) + " USDT";
+}
+
+const cashGapEl = document.getElementById("cashGap");
+
+if (cashGapEl) {
+  cashGapEl.innerText =
+    parseFloat(data.cashGap || 0).toFixed(4) + " USDT";
+}
+
+const todayTimesEl = document.getElementById("todayTimes");
+
+if (todayTimesEl) {
+  todayTimesEl.innerText = data.todayTasks || 0;
+}
+
+const todayCommissionEl =
+  document.getElementById("todayCommission");
+
+if (todayCommissionEl) {
+  todayCommissionEl.innerText =
+    parseFloat(data.todayCommission || 0).toFixed(4) + " USDT";
+}
+
+const yesterdayCommissionEl =
+  document.getElementById("yesterdayCommission");
+
+if (yesterdayCommissionEl) {
+  yesterdayCommissionEl.innerText =
+    parseFloat(data.yesterdayCommission || 0).toFixed(4) + " USDT";
+}
   } catch {
     console.log("Balance load failed");
   }
@@ -236,10 +267,6 @@ window.addEventListener("load", function () {
   loadUsername();
   applyLanguage();
 
-  let times = parseInt(localStorage.getItem("todayTimes")) || 0;
-  let totalCommission = parseFloat(localStorage.getItem("todayCommission")) || 0;
-  let yesterdayCommission = parseFloat(localStorage.getItem("yesterdayCommission")) || 0;
-
   const todayTimesEl = document.getElementById("todayTimes");
   const todayCommissionEl = document.getElementById("todayCommission");
   const yesterdayCommissionEl = document.getElementById("yesterdayCommission");
@@ -294,22 +321,29 @@ function filterCards(vip, btn) {
   });
 }
 
-async function submitPendingOrder(tag) {
-  const token = localStorage.getItem("token");
-  const username = localStorage.getItem("username");
+async function submitPendingOrder(orderNo) {
 
-  const pendingAmazon = JSON.parse(localStorage.getItem(`pendingAmazonOrder_${username}`));
-  const pendingAlibaba = JSON.parse(localStorage.getItem(`pendingAlibabaOrder_${username}`));
-  const pendingAliExpress = JSON.parse(localStorage.getItem(`pendingAliExpressOrder_${username}`));
+  const token = localStorage.getItem("token");
 
   let pendingOrder = null;
 
-  if (tag === "Amazon") {
-    pendingOrder = pendingAmazon;
-  } else if (tag === "Alibaba") {
-    pendingOrder = pendingAlibaba;
-  } else if (tag === "AliExpress") {
-    pendingOrder = pendingAliExpress;
+  try {
+
+    const res = await fetch("/my-orders", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+
+    pendingOrder = data.orders.find(
+      o => o.orderNo === orderNo && o.status === "pending"
+    );
+
+  } catch (err) {
+    alert("Failed to load order");
+    return;
   }
 
   if (!pendingOrder) {
@@ -359,15 +393,20 @@ async function submitPendingOrder(tag) {
 
       let completeOrders;
 
-      if (tag === "Amazon") {
-        completeOrders = JSON.parse(localStorage.getItem(`completeOrders_${username}`)) || [];
-        completeOrders.unshift(pendingOrder);
-
-        localStorage.setItem(`completeOrders_${username}`, JSON.stringify(completeOrders));
-        localStorage.removeItem(`pendingAmazonOrder_${username}`);
+      if (pendingOrder.type === "Amazon") {
+        await fetch("/complete-order", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
+  body: JSON.stringify({
+    orderNo: pendingOrder.orderNo
+  })
+});
       }
 
-      else if (tag === "Alibaba") {
+      else if (pendingOrder.type === "Alibaba") {
         completeOrders = JSON.parse(localStorage.getItem(`completeOrders_alibaba_${username}`)) || [];
         completeOrders.unshift(pendingOrder);
 
@@ -375,7 +414,7 @@ async function submitPendingOrder(tag) {
         localStorage.removeItem(`pendingAlibabaOrder_${username}`);
       }
 
-      else if (tag === "AliExpress") {
+      else if (pendingOrder.type === "AliExpress") {
         completeOrders = JSON.parse(localStorage.getItem(`completeOrders_aliexpress_${username}`)) || [];
         completeOrders.unshift(pendingOrder);
 
@@ -401,18 +440,45 @@ async function submitPendingOrder(tag) {
 }
 
 
-function renderOrders() {
+async function renderOrders() {
 
   const username = localStorage.getItem("username");
 
-  const pendingAmazon = JSON.parse(localStorage.getItem(`pendingAmazonOrder_${username}`));
-  const pendingAlibaba = JSON.parse(localStorage.getItem(`pendingAlibabaOrder_${username}`));
-  const pendingAliExpress = JSON.parse(localStorage.getItem(`pendingAliExpressOrder_${username}`));
+  const token = localStorage.getItem("token");
 
-  const completeAmazon = JSON.parse(localStorage.getItem(`completeOrders_${username}`)) || [];
-  const completeAlibaba = JSON.parse(localStorage.getItem(`completeOrders_alibaba_${username}`)) || [];
-  const completeAliExpress = JSON.parse(localStorage.getItem(`completeOrders_aliexpress_${username}`)) || [];
+const res = await fetch("/my-orders", {
+  headers: {
+    Authorization: "Bearer " + token
+  }
+});
 
+const data = await res.json();
+
+const orders = data.orders || [];
+
+const pendingAmazon = orders.find(
+  o => o.type === "Amazon" && o.status === "pending"
+);
+
+const pendingAlibaba = orders.find(
+  o => o.type === "Alibaba" && o.status === "pending"
+);
+
+const pendingAliExpress = orders.find(
+  o => o.type === "AliExpress" && o.status === "pending"
+);
+
+const completeAmazon = orders.filter(
+  o => o.type === "Amazon" && o.status === "complete"
+);
+
+const completeAlibaba = orders.filter(
+  o => o.type === "Alibaba" && o.status === "complete"
+);
+
+const completeAliExpress = orders.filter(
+  o => o.type === "AliExpress" && o.status === "complete"
+);
   const incompleteTab = document.getElementById("incompleteTab");
   const completeTab = document.getElementById("completeTab");
 
@@ -464,7 +530,7 @@ function renderOrders() {
             </p>
           </div>
 
-          <button class="submit-btn" onclick="submitPendingOrder('${tag}')">
+          <button class="submit-btn" onclick="submitPendingOrder('${order.orderNo}')">
             Submit order
           </button>
 

@@ -58,6 +58,11 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
 
+  cashGap: {
+    type: Number,
+    default: 0
+  },
+
   yesterdayCommission: {
     type: Number,
     default: 0
@@ -166,6 +171,56 @@ const withdrawSchema = new mongoose.Schema({
   time: { type: Date, default: Date.now }
 });
 const Withdraw = mongoose.model("Withdraw", withdrawSchema);
+
+/* ---------------- ORDER MODEL ---------------- */
+
+const orderSchema = new mongoose.Schema({
+
+  username: String,
+
+  type: {
+    type: String,
+    default: "Amazon"
+  },
+
+  type: {
+    type: String,
+    default: "Alibaba"
+  },
+
+  type: {
+    type: String,
+    default: "AliExpress"
+  },
+
+  status: {
+    type: String,
+    enum: ["pending", "complete"],
+    default: "pending"
+  },
+
+  orderNo: String,
+
+  trxTime: String,
+
+  orderAmount: Number,
+
+  commission: Number,
+
+  products: [
+    {
+      name: String,
+      price: Number,
+      image: String,
+      qty: Number
+    }
+  ]
+
+}, {
+  timestamps: true
+});
+
+const Order = mongoose.model("Order", orderSchema);
 
 /* ---------------- TOKEN VERIFY ---------------- */
 function verifyToken(req, res, next) {
@@ -499,12 +554,43 @@ app.post("/admin/approve", verifyAdmin, async (req, res) => {
 
 /* ---------------- USER BALANCE ---------------- */
 app.get("/balance", verifyToken, async (req, res) => {
+
   try {
+
     const user = await User.findById(req.userId);
-    res.json({ balance: user.balance });
-  } catch {
-    res.json({ balance: 0 });
+
+    if (!user) {
+      return res.json({
+        balance: 0,
+        cashGap: 0,
+        todayTasks: 0,
+        todayCommission: 0,
+        yesterdayCommission: 0
+      });
+    }
+
+    res.json({
+      balance: user.balance || 0,
+      cashGap: user.cashGap || 0,
+      todayTasks: user.todayTasks || 0,
+      todayCommission: user.todayCommission || 0,
+      yesterdayCommission: user.yesterdayCommission || 0
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.json({
+      balance: 0,
+      cashGap: 0,
+      todayTasks: 0,
+      todayCommission: 0,
+      yesterdayCommission: 0
+    });
+
   }
+
 });
 
 /* ---------------- USER WITHDRAW REQUEST ---------------- */
@@ -675,26 +761,21 @@ app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
     res.json({
       success: true,
       user: {
-        // Task info
         todayTasks: user.todayTasks || 0,
         taskLimit: user.taskLimit || 0,
 
-        // Commission info
         todayCommission: user.todayCommission || 0,
         yesterdayCommission: user.yesterdayCommission || 0,
 
-        // Balance
         balance: user.balance || 0,
+        cashGap: user.cashGap || 0,
 
-        // Mixed order info
         mixedOrderCount: user.mixedOrderCount || 0,
         mixedOrderPositions: user.mixedOrderPositions || [],
 
-        // Normal commission range
         normalMinCommission: user.normalMinCommission || 1,
         normalMaxCommission: user.normalMaxCommission || 5,
 
-        // Mixed commission ranges
         mixedOrderPercentRanges: user.mixedOrderPercentRanges || {}
       }
     });
@@ -737,6 +818,161 @@ app.post("/admin/update-balance", verifyAdmin, async (req, res) => {
   }
 });
 
+/* ---------------- SAVE PENDING ORDER ---------------- */
+
+app.post("/save-order", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    const {
+      type,
+      orderNo,
+      trxTime,
+      orderAmount,
+      commission,
+      products
+    } = req.body;
+
+    await Order.deleteMany({
+      username: user.username,
+      type,
+      status: "pending"
+    });
+
+    const order = new Order({
+      username: user.username,
+      type,
+      status: "pending",
+      orderNo,
+      trxTime,
+      orderAmount,
+      commission,
+      products
+    });
+
+    await order.save();
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
+
+/* ---------------- GET ORDERS ---------------- */
+
+app.get("/my-orders", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    const orders = await Order.find({
+      username: user.username
+    }).sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      orders
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      orders: []
+    });
+  }
+});
+
+
+/* ---------------- COMPLETE ORDER ---------------- */
+
+app.post("/complete-order", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    const { orderNo } = req.body;
+
+    const order = await Order.findOne({
+      username: user.username,
+      orderNo
+    });
+
+    if (!order) {
+      return res.json({
+        success: false,
+        msg: "Order not found"
+      });
+    }
+
+    order.status = "complete";
+
+    await order.save();
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
+/* ---------------- SAVE CASH GAP ---------------- */
+
+app.post("/save-cashgap", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    user.cashGap = Number(req.body.cashGap || 0);
+
+    await user.save();
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
 /* ---------------- USER TASK STATUS ---------------- */
 app.get("/task-status", verifyToken, async (req, res) => {
   try {
@@ -752,22 +988,18 @@ app.get("/task-status", verifyToken, async (req, res) => {
     res.json({
       success: true,
 
-      // Task info
       todayTasks: user.todayTasks || 0,
       taskLimit: user.taskLimit || 0,
 
-      // Commission info
       todayCommission: user.todayCommission || 0,
       yesterdayCommission: user.yesterdayCommission || 0,
 
-      // Balance
       balance: user.balance || 0,
+      cashGap: user.cashGap || 0,
 
-      // Mixed order info
       mixedOrderCount: user.mixedOrderCount || 0,
       mixedOrderPositions: user.mixedOrderPositions || [],
 
-      // Normal commission range
       normalMinCommission: user.normalMinCommission || 1,
       normalMaxCommission: user.normalMaxCommission || 5,
 
@@ -784,7 +1016,6 @@ app.get("/task-status", verifyToken, async (req, res) => {
   }
 });
 
-// ✅ ADD THIS (FINAL)
 app.post("/add-commission", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -810,6 +1041,7 @@ app.post("/add-commission", verifyToken, async (req, res) => {
     
     user.todayCommission += commission;
     user.todayTasks += 1;
+    user.cashGap = 0;
 
     await user.save();
 
