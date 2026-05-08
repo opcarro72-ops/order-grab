@@ -16,7 +16,7 @@
 
     <div class="user-text">
       <h3 id="usernameDisplay"></h3>
-      <p>Invitation code: 422872</p>
+      <p>Invitation code: <span id="inviteCodeDisplay"></span></p>
     </div>
 
   </div>
@@ -140,6 +140,10 @@ function checkWithdrawPassword() {
     alert("Wrong password!");
   }
 }
+
+const inviteCode = localStorage.getItem("inviteCode");
+
+document.getElementById("inviteCodeDisplay").innerText = inviteCode || "";
 
 const lang = localStorage.getItem("siteLanguage") || "en";
 

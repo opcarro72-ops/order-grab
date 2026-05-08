@@ -20,6 +20,8 @@ async function login() {
 
     localStorage.setItem("username", data.username);
 
+    localStorage.setItem("inviteCode", data.inviteCode);
+
     alert("Login successful");
     window.location.href = "/home.html";
   } else {

@@ -21,6 +21,21 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
 
+  inviteCode: {
+    type: String,
+    unique: true
+  },
+
+    referredBy: {
+      type: String,
+      default: ""
+    },
+
+    invitedUsers: {
+      type: [String],
+      default: []
+    },
+
   password: String,
 
   balance: {
@@ -85,6 +100,25 @@ mixedOrderPercentRanges: {
 });
 
 const User = mongoose.model("User", userSchema);
+
+async function generateInviteCode() {
+
+  let code;
+  let exists = true;
+
+  while (exists) {
+
+    code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const user = await User.findOne({ inviteCode: code });
+
+    if (!user) {
+      exists = false;
+    }
+  }
+
+  return code;
+}
 
 /* ---------------- DEPOSIT MODEL ---------------- */
 const depositSchema = new mongoose.Schema({
@@ -166,32 +200,61 @@ function verifyAdmin(req, res, next) {
 
 /* ---------------- USER REGISTER ---------------- */
 app.post("/register", async (req, res) => {
-  try {
-    const { username, password } = req.body;
 
-    if (!username || !password) {
+  try {
+
+    const { username, password, inviteCode } = req.body;
+
+    if (!username || !password || !inviteCode) {
+
       return res.json({
         success: false,
-        msg: "Username and password required"
+        msg: "Username, password and invite code required"
       });
     }
 
     const existingUser = await User.findOne({ username });
 
     if (existingUser) {
+
       return res.json({
         success: false,
         msg: "Username already exists"
       });
     }
 
+    const inviter = await User.findOne({
+      inviteCode: inviteCode
+    });
+
+    if (!inviter) {
+
+      return res.json({
+        success: false,
+        msg: "Invalid invitation code"
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const newInviteCode = await generateInviteCode();
+
     const user = new User({
+
       username,
+
       password: hashedPassword,
+
+      inviteCode: newInviteCode,
+
+      referredBy: inviter.username,
+
       balance: 0
     });
+
+    inviter.invitedUsers.push(username);
+
+    await inviter.save();
 
     await user.save();
 
@@ -201,6 +264,7 @@ app.post("/register", async (req, res) => {
     });
 
   } catch (err) {
+
     res.json({
       success: false,
       msg: err.message
@@ -245,10 +309,11 @@ app.post("/login", async (req, res) => {
     );
 
     res.json({
-      success: true,
-      token,
-      username: user.username
-    });
+  success: true,
+  token,
+  username: user.username,
+  inviteCode: user.inviteCode
+});
 
   } catch (err) {
     res.status(500).json({

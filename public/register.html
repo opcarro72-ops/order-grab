@@ -130,36 +130,65 @@
 
 <script>
 async function registerUser() {
+
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const inviteCode = document.getElementById("invite").value.trim();
 
-  if (!username || !password) {
-    alert("Please enter username and password");
+  if (!username || !password || !confirmPassword || !inviteCode) {
+
+    alert("Please fill all fields");
+    return;
+  }
+
+  if (username.includes(" ")) {
+
+    alert("Username cannot contain spaces");
+    return;
+  }
+
+  if (password.includes(" ")) {
+
+    alert("Password cannot contain spaces");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+
+    alert("Passwords do not match");
     return;
   }
 
   try {
+
     const res = await fetch("/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        username,
-        password
-      })
+  username,
+  password,
+  inviteCode
+})
     });
 
     const data = await res.json();
 
     if (data.success) {
+
       alert("Registration successful");
+
       window.location.href = "login.html";
+
     } else {
+
       alert(data.msg || "Registration failed");
     }
 
   } catch (err) {
+
     alert("Server error");
   }
 }
