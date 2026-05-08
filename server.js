@@ -96,7 +96,34 @@ mixedOrderPercentRanges: {
   lastResetDate: {
     type: String,
     default: ""
+  },
+
+  wallet: {
+  name: {
+    type: String,
+    default: ""
+  },
+
+  protocol: {
+    type: String,
+    default: ""
+  },
+
+  address: {
+    type: String,
+    default: ""
+  },
+
+  password: {
+    type: String,
+    default: ""
+  },
+
+  locked: {
+    type: Boolean,
+    default: false
   }
+}
 });
 
 const User = mongoose.model("User", userSchema);
@@ -828,6 +855,80 @@ cron.schedule("0 0 * * *", async () => {
   }
 }, {
   timezone: "Europe/London"
+});
+
+/* ---------------- SAVE WALLET ---------------- */
+app.post("/save-wallet", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    const {
+      name,
+      protocol,
+      address,
+      password
+    } = req.body;
+
+    user.wallet = {
+      name,
+      protocol,
+      address,
+      password,
+      locked: true
+    };
+
+    await user.save();
+
+    res.json({
+      success: true,
+      msg: "Wallet saved"
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
+/* ---------------- GET WALLET ---------------- */
+app.get("/get-wallet", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      wallet: user.wallet || {}
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
 });
 
 app.get("/", (req, res) => {

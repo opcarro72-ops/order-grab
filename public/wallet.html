@@ -96,14 +96,6 @@ input {
 
 <body>
 
-<script>
-let user = localStorage.getItem("username");
-
-if (localStorage.getItem("walletLocked_" + user) === "true") {
-  window.location.href = "wallet-view.html";
-}
-</script>
-
 <div class="wrapper">
 
   <div class="header">
@@ -131,22 +123,56 @@ if (localStorage.getItem("walletLocked_" + user) === "true") {
 
 </div>
 
-
 <script>
+
+const token = localStorage.getItem("token");
+
 const nameInput = document.getElementById("name");
 const protocolInput = document.getElementById("protocol");
 const addressInput = document.getElementById("address");
 const passwordInput = document.getElementById("password");
 
-const inputs = [nameInput, protocolInput, addressInput, passwordInput];
+const inputs = [
+  nameInput,
+  protocolInput,
+  addressInput,
+  passwordInput
+];
 
 const okBtn = document.getElementById("okBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 
+
+async function checkWallet() {
+
+  try {
+
+    const res = await fetch("/get-wallet", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.wallet?.locked) {
+      window.location.href = "wallet-view.html";
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+checkWallet();
+
+
 inputs.forEach(input => {
+
   input.addEventListener("input", () => {
+
     let filled = inputs.every(i => i.value.trim() !== "");
-    
+
     if (filled) {
       okBtn.disabled = false;
       okBtn.classList.add("active");
@@ -157,33 +183,61 @@ inputs.forEach(input => {
   });
 });
 
-okBtn.addEventListener("click", () => {
-  let data = {
-    name: nameInput.value,
-    protocol: protocolInput.value,
-    address: addressInput.value,
-    password: passwordInput.value
-  };
 
-  let user = localStorage.getItem("username");
+okBtn.addEventListener("click", async () => {
 
-  localStorage.setItem("walletData_" + user, JSON.stringify(data));
-  localStorage.setItem("walletLocked_" + user, "true");
+  try {
 
-  window.location.href = "wallet-view.html";
+    const res = await fetch("/save-wallet", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+
+      body: JSON.stringify({
+
+        name: nameInput.value,
+        protocol: protocolInput.value,
+        address: addressInput.value,
+        password: passwordInput.value
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      alert("Wallet saved");
+
+      window.location.href = "wallet-view.html";
+
+    } else {
+
+      alert(data.msg || "Failed");
+    }
+
+  } catch (err) {
+
+    alert("Server error");
+  }
 });
 
 cancelBtn.addEventListener("click", () => {
-  window.history.back();
+  history.back();
 });
 
 function togglePassword() {
+
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
   } else {
     passwordInput.type = "password";
   }
 }
+
 </script>
 
 </body>

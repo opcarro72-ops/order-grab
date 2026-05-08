@@ -82,18 +82,47 @@
 </div>
 
 <script>
-let user = localStorage.getItem("username");
-let data = JSON.parse(localStorage.getItem("walletData_" + user));
 
-if (data) {
-  document.getElementById("walletName").innerText = data.name;
-  document.getElementById("walletProtocol").innerText = data.protocol;
-  document.getElementById("walletAddress").innerText = data.address;
+const token = localStorage.getItem("token");
+
+
+async function loadWallet() {
+
+  try {
+
+    const res = await fetch("/get-wallet", {
+
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.wallet) {
+
+      document.getElementById("walletName").innerText =
+        data.wallet.name || "";
+
+      document.getElementById("walletProtocol").innerText =
+        data.wallet.protocol || "";
+
+      document.getElementById("walletAddress").innerText =
+        data.wallet.address || "";
+    }
+
+  } catch (err) {
+
+    console.log(err);
+  }
 }
+
+loadWallet();
 
 function goBack() {
   window.location.href = "mine.html";
 }
+
 </script>
 
 </body>
