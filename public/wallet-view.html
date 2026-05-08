@@ -85,7 +85,6 @@
 
 const token = localStorage.getItem("token");
 
-
 async function loadWallet() {
 
   try {
@@ -99,7 +98,11 @@ async function loadWallet() {
 
     const data = await res.json();
 
-    if (data.success && data.wallet) {
+    if (
+      data.success &&
+      data.wallet &&
+      data.wallet.locked
+    ) {
 
       document.getElementById("walletName").innerText =
         data.wallet.name || "";
@@ -109,11 +112,17 @@ async function loadWallet() {
 
       document.getElementById("walletAddress").innerText =
         data.wallet.address || "";
+
+    } else {
+
+      window.location.replace("wallet.html");
     }
 
   } catch (err) {
 
     console.log(err);
+
+    window.location.replace("wallet.html");
   }
 }
 

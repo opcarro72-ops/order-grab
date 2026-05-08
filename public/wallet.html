@@ -142,12 +142,12 @@ const inputs = [
 const okBtn = document.getElementById("okBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 
-
 async function checkWallet() {
 
   try {
 
     const res = await fetch("/get-wallet", {
+
       headers: {
         Authorization: "Bearer " + token
       }
@@ -155,17 +155,22 @@ async function checkWallet() {
 
     const data = await res.json();
 
-    if (data.success && data.wallet?.locked) {
-      window.location.href = "wallet-view.html";
+    if (
+      data.success &&
+      data.wallet &&
+      data.wallet.locked
+    ) {
+
+      window.location.replace("wallet-view.html");
     }
 
   } catch (err) {
+
     console.log(err);
   }
 }
 
 checkWallet();
-
 
 inputs.forEach(input => {
 
@@ -212,7 +217,7 @@ okBtn.addEventListener("click", async () => {
 
       alert("Wallet saved");
 
-      window.location.href = "wallet-view.html";
+      window.location.replace("wallet-view.html");
 
     } else {
 
