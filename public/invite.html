@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invite Friends</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#f5f5f5;
+}
+
+.header{
+  width:100%;
+  height:60px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  border-bottom:1px solid #eee;
+}
+
+.back-btn{
+  position:absolute;
+  left:15px;
+  font-size:28px;
+  cursor:pointer;
+}
+
+.header h2{
+  font-size:20px;
+  font-weight:600;
+  color:#222;
+}
+
+.container{
+  width:100%;
+  padding:30px 20px;
+  text-align:center;
+}
+
+.code-text{
+  color:#999;
+  font-size:18px;
+  margin-top:20px;
+}
+
+.invite-code{
+  font-size:50px;
+  font-weight:bold;
+  color:#222;
+  margin-top:10px;
+}
+
+.qr-box{
+  margin-top:35px;
+}
+
+.qr-box img{
+  width:200px;
+  height:200px;
+  background:#fff;
+  padding:10px;
+}
+
+.qr-note{
+  margin-top:10px;
+  color:#ff8a3d;
+  font-size:14px;
+}
+
+.share-box{
+  width:100%;
+  background:#fff;
+  margin-top:40px;
+  border-radius:10px;
+  padding:20px;
+  text-align:left;
+}
+
+.share-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.share-top h3{
+  font-size:22px;
+  font-weight:500;
+  color:#333;
+}
+
+.copy-btn{
+  color:#ff8a3d;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.link-area{
+  width:100%;
+  background:#f7f7f7;
+  padding:20px;
+  border-radius:6px;
+  word-break:break-all;
+  color:#555;
+  font-size:18px;
+  line-height:1.6;
+}
+
+@media(max-width:480px){
+
+  .invite-code{
+    font-size:42px;
+  }
+
+  .qr-box img{
+    width:180px;
+    height:180px;
+  }
+
+  .share-top h3{
+    font-size:18px;
+  }
+
+  .copy-btn{
+    font-size:18px;
+  }
+
+  .link-area{
+    font-size:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+  <div class="back-btn" onclick="history.back()">
+    ❮
+  </div>
+
+  <h2>Invite friends</h2>
+
+</div>
+
+<div class="container">
+
+  <div class="code-text">
+    My invitation code
+  </div>
+
+  <div class="invite-code" id="inviteCode">
+    000000
+  </div>
+
+  <div class="qr-box">
+
+    <img id="qrImage"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=test">
+
+    <div class="qr-note">
+      Long press to save the QR code
+    </div>
+
+  </div>
+
+  <div class="share-box">
+
+    <div class="share-top">
+
+      <h3>Share link</h3>
+
+      <div class="copy-btn" onclick="copyLink()">
+        Copy
+      </div>
+
+    </div>
+
+    <div class="link-area" id="shareLink">
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const inviteCode =
+  localStorage.getItem("inviteCode") || "000000";
+
+document.getElementById("inviteCode").innerText =
+  inviteCode;
+
+const link =
+  window.location.origin +
+  "/register.html?code=" +
+  inviteCode;
+
+document.getElementById("shareLink").innerText =
+  link;
+
+document.getElementById("qrImage").src =
+  "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
+  + encodeURIComponent(link);
+
+function copyLink(){
+
+  navigator.clipboard.writeText(link);
+
+  alert("Invite link copied!");
+}
+</script>
+
+</body>
+</html>
