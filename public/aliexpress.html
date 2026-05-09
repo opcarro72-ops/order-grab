@@ -95,6 +95,8 @@
     </div>
   </div>
 
+  <div id="customAlert-inside-alexpress"></div>
+
   <script src="products.js"></script>
 
   <script>
@@ -118,7 +120,7 @@ const pending = pendingData.orders.find(
 );
 
 if (pending) {
-  alert("You have an unpaid order, please complete that order first.");
+  showMessage("You have an unpaid order, please complete that order first.");
   return;
 }
 
@@ -128,24 +130,24 @@ if (pending) {
     });
 
     if (!res.ok) {
-  alert("Server response failed");
+  showMessage("Server response failed");
   return;
 }
 
     const data = await res.json();
 
     if (!data.success) {
-      alert(data.msg || "Failed to load user status");
+      showMessage(data.msg || "Failed to load user status");
       return;
     }
 
     if (data.balance < 899) {
-      alert("You don't have sufficient balance in your account.");
+      showMessage("You don't have sufficient balance in your account.");
       return;
     }
 
     if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
-      alert("No order yet, please contact customer service to get the task orders.");
+      showMessage("No order yet, please contact customer service to get the task orders.");
       return;
     }
 
@@ -314,7 +316,7 @@ if (pending) {
 
   } catch (err) {
     console.log(err);
-    alert("Server error");
+    showMessage("Server error");
   }
 }
 
@@ -332,7 +334,7 @@ async function submitOrder() {
 
   if (userBalance < currentOrderAmount) {
     const shortage = (currentOrderAmount - userBalance).toFixed(4);
-    alert(`Your account balance is not enough, you need to recharge ${shortage} to complete this order`);
+    showMessage(`Your account balance is not enough, you need to recharge ${shortage} to complete this order.`);
     return;
   }
 
@@ -380,15 +382,15 @@ async function submitOrder() {
 
       closePopup();
 
-      alert("Order submitted successfully");
+      showMessage("Order submitted successfully");
 
     } else {
-      alert(data.msg || "Submit failed");
+      showMessage(data.msg || "Submit failed");
     }
 
   } catch (err) {
     console.log(err);
-    alert("Server error");
+    showMessage("Server error");
   }
 }
 
@@ -423,8 +425,21 @@ const savedGap =
 
   } catch (err) {
     console.log(err);
-    alert("Failed to load user status");
+    showMessage("Failed to load user status");
   }
+}
+
+function showMessage(text) {
+
+  const alertBox = document.getElementById("customAlert-inside-alexpress");
+
+  alertBox.innerText = text;
+
+  alertBox.style.display = "block";
+
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 3000);
 }
 
 window.onload = loadUserStatus;
