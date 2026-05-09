@@ -95,6 +95,8 @@
     </div>
   </div>
 
+  <div id="customAlert-inside-amazon"></div>
+
   <script src="products.js"></script>
 
   <script>
@@ -119,7 +121,7 @@ async function openPopup() {
   );
 
   if (pending) {
-    alert("You have an unpaid order, please complete that order first.");
+    showMessage("You have an unpaid order, please complete that order first.");
     return;
   }
 
@@ -130,29 +132,29 @@ async function openPopup() {
     });
 
     if (!res.ok) {
-  alert("Server response failed");
+  showMessage("Server response failed");
   return;
 }
 
     const data = await res.json();
 
     if (!data.success) {
-      alert(data.msg || "Failed to load user status");
+      showMessage(data.msg || "Failed to load user status");
       return;
     }
 
     if (data.balance < 20) {
-      alert("You don't have sufficient balance in your account.");
+      showMessage("You don't have sufficient balance in your account.");
       return;
     }
 
     if (data.balance > 498.99) {
-      alert("Amazon allows for up to 20 - 499 order tasks, so you've been upgraded.");
+      showMessage("Amazon allows for up to 20 - 499 order tasks, so you've been upgraded.");
       return;
     }
 
     if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
-      alert("No order yet, please contact customer service to get the task orders.");
+      showMessage("No order yet, please contact customer service to get the task orders.");
       return;
     }
 
@@ -409,7 +411,7 @@ async function openPopup() {
 
     console.log(err);
 
-    alert("Server error");
+    showMessage("Server error");
   }
 }
 
@@ -429,8 +431,8 @@ async function submitOrder() {
     const shortage =
       (currentOrderAmount - userBalance).toFixed(4);
 
-    alert(
-      `Your account balance is not enough, you need to recharge ${shortage} to complete this order`
+    showMessage(
+      `Your account balance is not enough, you need to recharge ${shortage} to complete this order.`
     );
 
     return;
@@ -490,18 +492,18 @@ async function submitOrder() {
 
     closePopup();
 
-    alert("Order submitted successfully");
+    showMessage("Order submitted successfully");
 
   } else {
 
-    alert(data.msg || "Submit failed");
+    showMessage(data.msg || "Submit failed");
   }
 
 } catch (err) {
 
   console.log(err);
 
-  alert("Server error");
+  showMessage("Server error");
 }
 }
 
@@ -535,6 +537,20 @@ const savedGap =
     document.getElementById("cashGap").innerText =
       Number(savedGap).toFixed(4) + " USDT";
   }
+}
+
+function showMessage(text){
+
+  const alertBox =
+    document.getElementById("customAlert-inside-amazon");
+
+  alertBox.innerText = text;
+
+  alertBox.style.display = "block";
+
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 3000);
 }
 
 window.onload = loadUserStatus;

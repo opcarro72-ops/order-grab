@@ -348,12 +348,12 @@ async function submitPendingOrder(orderNo) {
     );
 
   } catch (err) {
-    alert("Failed to load order");
+    showMessage("Failed to load order");
     return;
   }
 
   if (!pendingOrder) {
-    alert("No pending order found");
+    showMessage("No pending order found");
     return;
   }
 
@@ -370,13 +370,13 @@ async function submitPendingOrder(orderNo) {
     userBalance = data.balance || 0;
 
   } catch (err) {
-    alert("Balance load failed");
+    showMessage("Balance load failed");
     return;
   }
 
   if (userBalance < pendingOrder.orderAmount) {
     const shortage = (pendingOrder.orderAmount - userBalance).toFixed(4);
-    alert(`Your account balance is not enough, you need to recharge ${shortage} to complete this order`);
+    showMessage(`Your account balance is not enough, you need to recharge ${shortage} to complete this order.`);
     return;
   }
 
@@ -413,15 +413,15 @@ async function submitPendingOrder(orderNo) {
       switchTab("complete");
       loadBalance();
 
-      alert("Order submitted successfully");
+      showMessage("Order submitted successfully");
 
     } else {
-      alert(data.msg || "Submit failed");
+      showMessage(data.msg || "Submit failed");
     }
 
   } catch (err) {
     console.log(err);
-    alert("Server error");
+    showMessage("Server error");
   }
 }
 

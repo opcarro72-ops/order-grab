@@ -91,6 +91,21 @@ input {
   color: #333;
 }
 
+.custom-alert-inside-wallet{
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #130a06;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  z-index: 9999;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
   </style>
 </head>
 
@@ -123,6 +138,8 @@ input {
 
 </div>
 
+<div id="customAlert" class="custom-alert-inside-wallet"></div>
+
 <script>
 
 const token = localStorage.getItem("token");
@@ -141,6 +158,20 @@ const inputs = [
 
 const okBtn = document.getElementById("okBtn");
 const cancelBtn = document.getElementById("cancelBtn");
+
+function showMessage(text) {
+
+  const alertBox = document.getElementById("customAlert");
+
+  alertBox.innerText = text;
+
+  alertBox.style.display = "block";
+
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 3000);
+
+}
 
 async function checkWallet() {
 
@@ -215,18 +246,20 @@ okBtn.addEventListener("click", async () => {
 
     if (data.success) {
 
-      alert("Wallet saved");
+      showMessage("Wallet saved");
 
-      window.location.replace("wallet-view.html");
+      setTimeout(() => {
+        window.location.replace("wallet-view.html");
+      }, 3000);
 
     } else {
 
-      alert(data.msg || "Failed");
+      showMessage(data.msg || "Failed");
     }
 
   } catch (err) {
 
-    alert("Server error");
+    showMessage("Server error");
   }
 });
 
