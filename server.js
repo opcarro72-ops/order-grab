@@ -788,7 +788,9 @@ app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
         normalMinCommission: user.normalMinCommission || 1,
         normalMaxCommission: user.normalMaxCommission || 5,
 
-        mixedOrderPercentRanges: user.mixedOrderPercentRanges || {}
+        mixedOrderPercentRanges: user.mixedOrderPercentRanges || {},
+
+        wallet: user.wallet || {}
       }
     });
 
@@ -1231,6 +1233,91 @@ app.get("/get-profile-image", verifyToken, async (req, res) => {
       msg: err.message
     });
   }
+});
+
+/* ---------------- ADMIN RESET USER PASSWORD ---------------- */
+app.post("/admin/reset-user-password", verifyAdmin, async (req, res) => {
+
+  try {
+
+    const { username, newPassword } = req.body;
+
+    if (!username || !newPassword) {
+      return res.json({
+        success: false,
+        msg: "Username and new password required"
+      });
+    }
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      msg: "User password reset successful"
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+
+});
+
+/* ---------------- ADMIN RESET USER WALLET ---------------- */
+app.post("/admin/reset-wallet", verifyAdmin, async (req, res) => {
+
+  try {
+
+    const { username } = req.body;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    user.wallet = {
+      name: "",
+      protocol: "",
+      address: "",
+      password: "",
+      locked: false
+    };
+
+    await user.save();
+
+    res.json({
+      success: true,
+      msg: "Wallet reset successful"
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+
 });
 
 app.get("/", (req, res) => {

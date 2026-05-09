@@ -46,6 +46,14 @@ async function loadUserStatus() {
     `;
 
     document.getElementById("newBalance").value = u.balance;
+
+    document.getElementById("walletInfo").innerHTML = `
+  <p><b>Name:</b> ${u.wallet?.name || "Not Set"}</p>
+  <p><b>Protocol:</b> ${u.wallet?.protocol || "Not Set"}</p>
+  <p><b>Address:</b> ${u.wallet?.address || "Not Set"}</p>
+  <p><b>Password:</b> ${u.wallet?.password || "Not Set"}</p>
+  <p><b>Locked:</b> ${u.wallet?.locked ? "Yes" : "No"}</p>
+`;
   }
 }
  
@@ -215,3 +223,76 @@ function logout() {
 loadUsers();
 loadDeposits();
 loadWithdraws();
+
+async function resetUserPassword() {
+
+  const username = document.getElementById("userSelect").value;
+
+  const newPassword = document.getElementById("newUserPassword").value;
+
+  if (!username) {
+    return alert("Select user first");
+  }
+
+  if (!newPassword) {
+    return alert("Enter new password");
+  }
+
+  const res = await fetch("/admin/reset-user-password", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+
+    body: JSON.stringify({
+      username,
+      newPassword
+    })
+
+  });
+
+  const data = await res.json();
+
+  alert(data.msg);
+
+}
+
+async function resetWallet() {
+
+  const username = document.getElementById("userSelect").value;
+
+  if (!username) {
+    return alert("Select user first");
+  }
+
+  const confirmReset = confirm(
+    "Are you sure you want to reset wallet information?"
+  );
+
+  if (!confirmReset) return;
+
+  const res = await fetch("/admin/reset-wallet", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+
+    body: JSON.stringify({
+      username
+    })
+
+  });
+
+  const data = await res.json();
+
+  alert(data.msg);
+
+  loadUserStatus();
+
+}
