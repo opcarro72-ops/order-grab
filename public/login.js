@@ -22,10 +22,13 @@ async function login() {
 
     localStorage.setItem("inviteCode", data.inviteCode);
 
-    alert("Login successful");
-    window.location.href = "/home.html";
+    showMessage("Login successful");
+
+setTimeout(() => {
+  window.location.href = "/home.html";
+}, 3000);
   } else {
-    alert(data.msg || "Login failed");
+    showMessage(data.msg || "Login failed");
   }
 }
 
@@ -60,6 +63,20 @@ function changeLang(lang){
     document.querySelector(".login-btn").innerText = "Login";
     document.querySelector(".register").innerText = "Registration";
   }
+}
+
+function showMessage(text) {
+
+  const msg = document.getElementById("customMessage");
+
+  msg.innerText = text;
+
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 3000);
+
 }
 
 function goRegister() {

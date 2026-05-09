@@ -87,6 +87,20 @@
       cursor:pointer;
     }
 
+    .custom-message{
+  position:fixed;
+  top:30px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#25b915;
+  color:#fff;
+  padding:14px 24px;
+  border-radius:10px;
+  font-size:16px;
+  z-index:9999;
+  display:none;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
   </style>
 </head>
 
@@ -128,6 +142,8 @@
 
 </div>
 
+<div id="customMessage" class="custom-message"></div>
+
 <script>
 async function registerUser() {
 
@@ -138,25 +154,25 @@ async function registerUser() {
 
   if (!username || !password || !confirmPassword || !inviteCode) {
 
-    alert("Please fill all fields");
+    showMessage("Please fill all fields");
     return;
   }
 
   if (username.includes(" ")) {
 
-    alert("Username cannot contain spaces");
+    showMessage("Username cannot contain spaces");
     return;
   }
 
   if (password.includes(" ")) {
 
-    alert("Password cannot contain spaces");
+    showMessage("Password cannot contain spaces");
     return;
   }
 
   if (password !== confirmPassword) {
 
-    alert("Passwords do not match");
+    showMessage("Passwords do not match");
     return;
   }
 
@@ -178,19 +194,35 @@ async function registerUser() {
 
     if (data.success) {
 
-      alert("Registration successful");
+      showMessage("Registration successful");
 
-      window.location.href = "login.html";
+setTimeout(() => {
+  window.location.href = "login.html";
+}, 3000);
 
     } else {
 
-      alert(data.msg || "Registration failed");
+      showMessage(data.msg || "Registration failed");
     }
 
   } catch (err) {
 
-    alert("Server error");
+    showMessage("Server error");
   }
+}
+
+function showMessage(text) {
+
+  const msg = document.getElementById("customMessage");
+
+  msg.innerText = text;
+
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 3000);
+
 }
 
 function goLogin(){
