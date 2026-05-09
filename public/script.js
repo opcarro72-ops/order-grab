@@ -605,6 +605,20 @@ const completeAliExpress = orders.filter(
   }
 }
 
+function showMessage(text) {
+
+  const alertBox = document.getElementById("customAlert");
+
+  alertBox.innerText = text;
+
+  alertBox.style.display = "block";
+
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 3000);
+
+}
+
 function setActiveNav() {
   const currentPage = window.location.pathname.split("/").pop();
 

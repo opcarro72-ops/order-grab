@@ -44,17 +44,33 @@
   </div>
 </div>
 
+<div class="custom-alert-inside-withdraw" id="customAlert"></div>
+
 <script>
 const amountInput = document.getElementById("amount");
 const okBtn = document.getElementById("okBtn");
 
 const token = localStorage.getItem("token");
 
+function showMessage(text) {
+
+  const alertBox = document.getElementById("customAlert");
+
+  alertBox.innerText = text;
+
+  alertBox.style.display = "block";
+
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 3000);
+
+}
+
 async function loadWallet() {
 
   if (sessionStorage.getItem("withdrawAccess") !== "true") {
 
-    alert("Access denied");
+    showMessage("Access denied");
 
     window.location.href = "mine.html";
 
@@ -77,7 +93,7 @@ async function loadWallet() {
       !data.wallet.locked
     ) {
 
-      alert("Please add wallet first");
+      showMessage("Please add wallet first");
 
       window.location.href = "wallet.html";
 
@@ -91,7 +107,7 @@ async function loadWallet() {
 
   } catch (err) {
 
-    alert("Server error");
+    showMessage("Server error");
   }
 }
 
@@ -113,12 +129,12 @@ okBtn.addEventListener("click", async () => {
   let amount = parseFloat(amountInput.value);
 
   if (!window.walletData) {
-    alert("Please add wallet first");
+    showMessage("Please add wallet first");
     return;
   }
 
   if (amount < 10) {
-    alert("Minimum withdrawal is 10 USDT");
+    showMessage("Minimum withdrawal is 10 USDT");
     return;
   }
 
@@ -140,16 +156,21 @@ okBtn.addEventListener("click", async () => {
     const result = await res.json();
 
     if (result.success) {
-      alert("Withdrawal request submitted");
-      window.location.href = "mine.html";
+
+  showMessage("Withdrawal request submitted");
+
+  setTimeout(() => {
+    window.location.href = "mine.html";
+  }, 3000);
+
     } else {
-      alert(result.msg || "Withdrawal failed");
+      showMessage(result.msg || "Withdrawal failed");
       okBtn.disabled = false;
       okBtn.innerText = "OK";
     }
 
   } catch (err) {
-    alert("Server error");
+    showMessage("Server error");
     okBtn.disabled = false;
     okBtn.innerText = "OK";
   }

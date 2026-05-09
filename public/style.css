@@ -974,3 +974,137 @@ transform: translateX(-50%);
     min-height: 100vh;
   }
 }
+
+.withdraw-popup{
+  position:fixed;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+
+  background:rgba(0,0,0,0.45);
+
+  display:none;
+
+  justify-content:center;
+  align-items:center;
+
+  z-index:9999;
+}
+
+.withdraw-box{
+  width:85%;
+  max-width:350px;
+
+  background:#fff;
+
+  border-radius:18px;
+
+  padding:25px 20px;
+
+  animation:popupShow 0.25s ease;
+}
+
+.withdraw-box h3{
+  margin:0 0 18px;
+
+  text-align:center;
+
+  font-size:22px;
+  color:#222;
+}
+
+.withdraw-box input{
+  width:100%;
+  height:50px;
+
+  border:1px solid #ddd;
+  border-radius:12px;
+
+  padding:0 15px;
+
+  font-size:16px;
+
+  outline:none;
+
+  box-sizing:border-box;
+}
+
+.withdraw-box input:focus{
+  border-color:#14b83a;
+}
+
+.popup-buttons{
+  display:flex;
+
+  gap:12px;
+
+  margin-top:22px;
+}
+
+.popup-buttons button{
+  flex:1;
+
+  height:46px;
+
+  border:none;
+
+  border-radius:12px;
+
+  font-size:16px;
+
+  cursor:pointer;
+}
+
+.cancel-btn{
+  background:#ececec;
+  color:#333;
+}
+
+.ok-btn{
+  background:#14b83a;
+  color:#fff;
+}
+
+@keyframes popupShow{
+
+  from{
+    transform:scale(0.85);
+    opacity:0;
+  }
+
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+
+}
+
+.custom-alert-withdraw{
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 16px;
+  z-index: 99999;
+  display: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translate(-50%,-10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translate(-50%,0);
+  }
+}

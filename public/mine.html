@@ -112,6 +112,36 @@
 
 </div>
 
+<div class="withdraw-popup" id="withdrawPopup">
+
+  <div class="withdraw-box">
+
+    <h3>Withdrawal Password</h3>
+
+    <input
+      type="text"
+      id="withdrawPassword"
+      placeholder="Enter withdrawal password"
+    >
+
+    <div class="popup-buttons">
+
+      <button class="cancel-btn" onclick="closeWithdrawPopup()">
+        Cancel
+      </button>
+
+      <button class="ok-btn" onclick="submitWithdrawPassword()">
+        Confirm
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="custom-alert-withdraw" id="customAlert"></div>
+
 <script src="script.js"></script>
 
 <script>
@@ -172,28 +202,45 @@ async function checkWithdrawPassword() {
       !data.wallet.locked ||
       !data.wallet.address
     ) {
-      alert("Please add wallet first!");
+      showMessage("Please add wallet first!");
       return;
     }
 
-    let inputPass = prompt("Enter withdrawal password:");
+    window.walletPassword = data.wallet.password;
 
-    if (inputPass === null) return;
-
-    if (inputPass === data.wallet.password) {
-
-      sessionStorage.setItem("withdrawAccess", "true");
-
-      window.location.href = "withdraw.html";
-
-    } else {
-
-      alert("Wrong password!");
-    }
+document.getElementById("withdrawPopup").style.display = "flex";
 
   } catch (err) {
 
-    alert("Server error");
+    showMessage("Server error");
+  }
+}
+
+function closeWithdrawPopup() {
+
+  document.getElementById("withdrawPopup").style.display = "none";
+}
+
+function submitWithdrawPassword() {
+
+  const inputPass =
+    document.getElementById("withdrawPassword").value;
+
+  if (!inputPass) {
+
+    showMessage("Enter withdrawal password");
+    return;
+  }
+
+  if (inputPass === window.walletPassword) {
+
+    sessionStorage.setItem("withdrawAccess", "true");
+
+    window.location.href = "withdraw.html";
+
+  } else {
+
+    showMessage("Wrong password!");
   }
 }
 
