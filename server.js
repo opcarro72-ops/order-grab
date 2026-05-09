@@ -602,6 +602,19 @@ app.post("/withdraw", verifyToken, async (req, res) => {
     if (amount <= 0) return res.json({ success: false, msg: "Invalid withdraw amount" });
     if (user.balance < amount) return res.json({ success: false, msg: "Not enough balance" });
 
+if (user.taskLimit > 0) {
+
+  if (user.todayTasks < user.taskLimit) {
+
+    return res.json({
+      success: false,
+      msg: `You have not completed ${user.taskLimit} tasks yet, please complete ${user.taskLimit} tasks first.`
+    });
+
+  }
+
+}
+
     const pendingWithdraw = await Withdraw.findOne({
       username: user.username,
       status: "Processing"
