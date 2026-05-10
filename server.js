@@ -11,6 +11,32 @@ const fs = require("fs");
 
 const app = express();
 
+const depositWallets = [
+
+  {
+    address: "TSNXDp4jH45dfCMyRvZQzbxGnCB3n9b6oc",
+    qr: "qr111.png"
+  },
+
+  {
+    address: "TTRuYV2FTxzD8LNF9vdLBh5r2d6uLXaqLW",
+    qr: "qr222.png"
+  },
+
+  {
+    address: "TSeebSLQExiSRsaQMvgap8v7EZHKeQLcNe",
+    qr: "qr333.png"
+  },
+
+  {
+    address: "THCXPUpL9fjMSA4h3EQ3BQQjCWuFtN6mBH",
+    qr: "qr444.png"
+  }
+
+];
+
+let currentWalletIndex = 0;
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -166,6 +192,10 @@ async function generateInviteCode() {
 const depositSchema = new mongoose.Schema({
   username: String,
   amount: Number,
+
+  walletAddress: String,
+  walletQr: String,
+
   approvedAmount: { type: Number, default: 0 },
   status: { type: String, default: "Pending" },
   time: { type: Date, default: Date.now }
@@ -482,21 +512,46 @@ app.post("/deposit-request", verifyToken, async (req, res) => {
     });
 
     if (pendingDeposit) {
-      return res.json({
-        pending: true,
-        amount: pendingDeposit.amount,
-        msg: "Previous deposit is pending"
-      });
-    }
 
-    const deposit = new Deposit({
-      username: user.username,
-      amount
-    });
+  return res.json({
+    pending: true,
+
+    amount: pendingDeposit.amount,
+
+    address: pendingDeposit.walletAddress,
+
+    qr: pendingDeposit.walletQr,
+
+    msg: "Previous deposit is pending"
+  });
+
+}
+
+    const wallet = depositWallets[currentWalletIndex];
+
+currentWalletIndex++;
+
+if (currentWalletIndex >= depositWallets.length) {
+  currentWalletIndex = 0;
+}
+
+const deposit = new Deposit({
+  username: user.username,
+  amount,
+
+  walletAddress: wallet.address,
+  walletQr: wallet.qr
+});
 
     await deposit.save();
 
-    res.json({ success: true });
+    res.json({
+  success: true,
+
+  address: wallet.address,
+
+  qr: wallet.qr
+});
 
   } catch (err) {
     console.log(err);
@@ -1317,6 +1372,26 @@ app.post("/admin/reset-wallet", verifyAdmin, async (req, res) => {
       msg: err.message
     });
   }
+
+});
+
+/* ---------------- GET DEPOSIT WALLET ---------------- */
+
+app.get("/deposit-wallet", (req, res) => {
+
+  const wallet = depositWallets[currentWalletIndex];
+
+  currentWalletIndex++;
+
+  if (currentWalletIndex >= depositWallets.length) {
+    currentWalletIndex = 0;
+  }
+
+  res.json({
+    success: true,
+    address: wallet.address,
+    qr: wallet.qr
+  });
 
 });
 

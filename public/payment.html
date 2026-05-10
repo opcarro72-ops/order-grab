@@ -19,10 +19,11 @@
 
     <h1 id="amountText"></h1>
     <p class="network">Network - TRON(TRC-20)</p>
+    <p class="network">One Time Address)</p>
 
     <div class="qr-box">
       <p id="addressTitle">Address:</p>
-      <img src="qr.png">
+      <img id="qrImage" src="">
     </div>
 
     <div class="address-box">
@@ -35,15 +36,24 @@
     </p>
 
     <div class="tips">
-      <b>Tips:</b><br><br>
 
-      1. The minimum recharge amount is subject to the actual transfer amount, 
-      not less than <span style="color:red;">10 USDT</span>.<br><br>
+  <b>Tips:</b><br><br>
 
-      2. After recharging, it will take about 
-      <span style="color:red;">1 to 2 minutes</span> 
-      to confirm the payment. Please wait patiently.
-    </div>
+  1. The recharge address is a 
+  <span style="color:red;">one-time address</span>, 
+  please do not leave it or transfer it repeatedly.
+  <br><br>
+
+  2. The minimum recharge amount is subject to the actual transfer amount, 
+  not less than 
+  <span style="color:red;">10 USDT</span>.
+  <br><br>
+
+  3. After recharging, it will take about 
+  <span style="color:red;">1 to 2 minutes</span> 
+  to confirm the payment. Please wait patiently.
+
+</div>
 
   </div>
 
@@ -57,8 +67,37 @@ let warning = localStorage.getItem("depositWarning");
 
 document.getElementById("amountText").innerText = amount + " USDT";
 
-let address = "TSNXDp4jH45dfCMyRvZQzbxGnCB3n9b6oc";
-document.getElementById("address").value = address;
+let address = "";
+
+const token = localStorage.getItem("token");
+
+fetch("/deposit-request", {
+  method: "POST",
+
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + token
+  },
+
+  body: JSON.stringify({
+    amount
+  })
+
+})
+.then(res => res.json())
+.then(data => {
+
+  if (data.address) {
+
+    address = data.address;
+
+    document.getElementById("address").value = data.address;
+
+    document.getElementById("qrImage").src = data.qr;
+
+  }
+
+});
 
 if (warning && warning !== "null") {
   document.getElementById("addressTitle").innerHTML =
