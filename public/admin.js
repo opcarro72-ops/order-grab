@@ -100,8 +100,8 @@ async function giveTasks() {
 
   const mixedCount = Number(document.getElementById("mixedCount").value || 0);
 
-  if (mixedCount < 0 || mixedCount > 5) {
-    return showMessage("Mixed order count must be between 0 and 5");
+  if (mixedCount < 0 || mixedCount > 7) {
+    return showMessage("Mixed order count must be between 0 and 7");
   }
 
   const mixedPositions = document.getElementById("mixedPositions").value
