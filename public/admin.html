@@ -271,6 +271,19 @@ label{
 
 </div>
 
+<script>
+if ("serviceWorker" in navigator) {
+
+  navigator.serviceWorker
+    .register("/service-worker.js")
+
+    .then(() => {
+      console.log("Service Worker Registered");
+    });
+
+}
+</script>
+
 <script src="admin.js"></script>
 </body>
 </html>

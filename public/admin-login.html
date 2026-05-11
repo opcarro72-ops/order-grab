@@ -93,6 +93,19 @@ body{
   <div class="error" id="errorMsg"></div>
 </div>
 
+<script>
+if ("serviceWorker" in navigator) {
+
+  navigator.serviceWorker
+    .register("/service-worker.js")
+
+    .then(() => {
+      console.log("Service Worker Registered");
+    });
+
+}
+</script>
+
 <script src="admin-login.js"></script>
 </body>
 </html>
