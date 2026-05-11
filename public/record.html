@@ -5,11 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Record</title>
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#0b0f14">
-
-<link rel="apple-touch-icon" href="logo.png">
 
 <style>
 body{
@@ -187,19 +182,6 @@ function switchTab(tab){
 switchTab("incomplete");
 renderOrders();
 
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-
-  navigator.serviceWorker
-    .register("/service-worker.js")
-
-    .then(() => {
-      console.log("Service Worker Registered");
-    });
-
-}
 </script>
 
 </body>

@@ -4,11 +4,6 @@
   <title>Payment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#0b0f14">
-
-<link rel="apple-touch-icon" href="logo.png">
 </head>
 
 <body class="payment-page">
@@ -118,19 +113,6 @@ function copyAddress() {
 
 function goPage(page) {
   window.location.href = page;
-}
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-
-  navigator.serviceWorker
-    .register("/service-worker.js")
-
-    .then(() => {
-      console.log("Service Worker Registered");
-    });
-
 }
 </script>
 

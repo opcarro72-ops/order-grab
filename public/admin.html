@@ -74,6 +74,8 @@ label{
   color:#ddd;
 }
 
+/* Custom Message */
+
 .custom-message{
   position:fixed;
   top:20px;
@@ -93,6 +95,7 @@ label{
   margin:0;
   font-size:14px;
 }
+
 
 .confirm-overlay{
   position:fixed;
@@ -270,19 +273,6 @@ label{
   </div>
 
 </div>
-
-<script>
-if ("serviceWorker" in navigator) {
-
-  navigator.serviceWorker
-    .register("/service-worker.js")
-
-    .then(() => {
-      console.log("Service Worker Registered");
-    });
-
-}
-</script>
 
 <script src="admin.js"></script>
 </body>
