@@ -188,7 +188,6 @@ async function generateInviteCode() {
   return code;
 }
 
-/* ---------------- DEPOSIT MODEL ---------------- */
 const depositSchema = new mongoose.Schema({
   username: String,
   amount: Number,
@@ -202,7 +201,6 @@ const depositSchema = new mongoose.Schema({
 });
 const Deposit = mongoose.model("Deposit", depositSchema);
 
-/* ---------------- WITHDRAW MODEL ---------------- */
 const withdrawSchema = new mongoose.Schema({
   username: String,
   amount: Number,
@@ -251,7 +249,6 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model("Order", orderSchema);
 
-/* ---------------- TOKEN VERIFY ---------------- */
 function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
 
@@ -277,7 +274,6 @@ function verifyToken(req, res, next) {
   }
 }
 
-/* ---------------- ADMIN VERIFY ---------------- */
 function verifyAdmin(req, res, next) {
   const authHeader = req.headers["authorization"];
 
@@ -309,7 +305,6 @@ function verifyAdmin(req, res, next) {
   }
 }
 
-/* ---------------- USER REGISTER ---------------- */
 app.post("/register", async (req, res) => {
 
   try {
@@ -383,7 +378,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-/* ---------------- USER LOGIN ---------------- */
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -434,8 +428,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-/* ---------------- ADMIN MODEL ---------------- */
 const adminSchema = new mongoose.Schema({
   username: { type: String, unique: true },
   password: String
@@ -443,8 +435,6 @@ const adminSchema = new mongoose.Schema({
 
 const Admin = mongoose.model("Admin", adminSchema);
 
-
-/* ---------------- ADMIN LOGIN ---------------- */
 app.post("/admin-login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -496,7 +486,6 @@ app.post("/admin-login", async (req, res) => {
   }
 });
 
-/* ---------------- USER DEPOSIT REQUEST ---------------- */
 app.post("/deposit-request", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -559,7 +548,6 @@ const deposit = new Deposit({
   }
 });
 
-/* ---------------- USER DEPOSIT HISTORY ---------------- */
 app.get("/my-deposits", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -570,13 +558,11 @@ app.get("/my-deposits", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- ADMIN GET DEPOSITS ---------------- */
 app.get("/admin/deposits", verifyAdmin, async (req, res) => {
   const deposits = await Deposit.find().sort({ time: -1 });
   res.json(deposits);
 });
 
-/* ---------------- ADMIN APPROVE DEPOSIT ---------------- */
 app.post("/admin/approve", verifyAdmin, async (req, res) => {
   try {
     const { id, approvedAmount } = req.body;
@@ -606,7 +592,6 @@ app.post("/admin/approve", verifyAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- USER BALANCE ---------------- */
 app.get("/balance", verifyToken, async (req, res) => {
 
   try {
@@ -647,7 +632,6 @@ app.get("/balance", verifyToken, async (req, res) => {
 
 });
 
-/* ---------------- USER WITHDRAW REQUEST ---------------- */
 app.post("/withdraw", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -702,7 +686,6 @@ if (user.taskLimit > 0) {
   }
 });
 
-/* ---------------- USER WITHDRAW HISTORY ---------------- */
 app.get("/my-withdraws", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -713,13 +696,11 @@ app.get("/my-withdraws", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- ADMIN GET WITHDRAWS ---------------- */
 app.get("/admin/withdraws", verifyAdmin, async (req, res) => {
   const withdraws = await Withdraw.find().sort({ time: -1 });
   res.json(withdraws);
 });
 
-/* ---------------- ADMIN APPROVE WITHDRAW ---------------- */
 app.post("/admin/approve-withdraw", verifyAdmin, async (req, res) => {
   try {
     const { id, approvedAmount } = req.body;
@@ -803,7 +784,6 @@ app.post("/admin/allow-tasks", verifyAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- ADMIN GET USERS ---------------- */
 app.get("/admin/users", verifyAdmin, async (req, res) => {
   try {
     const users = await User.find({}, { username: 1, _id: 0 });
@@ -813,7 +793,6 @@ app.get("/admin/users", verifyAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- ADMIN USER STATUS ---------------- */
 app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
@@ -857,7 +836,6 @@ app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
   }
 });
 
-/* ---------------- ADMIN UPDATE BALANCE ---------------- */
 app.post("/admin/update-balance", verifyAdmin, async (req, res) => {
   try {
     const { username, balance } = req.body;
@@ -886,8 +864,6 @@ app.post("/admin/update-balance", verifyAdmin, async (req, res) => {
     });
   }
 });
-
-/* ---------------- SAVE PENDING ORDER ---------------- */
 
 app.post("/save-order", verifyToken, async (req, res) => {
 
@@ -943,9 +919,6 @@ app.post("/save-order", verifyToken, async (req, res) => {
   }
 });
 
-
-/* ---------------- GET ORDERS ---------------- */
-
 app.get("/my-orders", verifyToken, async (req, res) => {
 
   try {
@@ -969,9 +942,6 @@ app.get("/my-orders", verifyToken, async (req, res) => {
     });
   }
 });
-
-
-/* ---------------- COMPLETE ORDER ---------------- */
 
 app.post("/complete-order", verifyToken, async (req, res) => {
 
@@ -1010,8 +980,6 @@ app.post("/complete-order", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- SAVE CASH GAP ---------------- */
-
 app.post("/save-cashgap", verifyToken, async (req, res) => {
 
   try {
@@ -1042,7 +1010,6 @@ app.post("/save-cashgap", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- USER TASK STATUS ---------------- */
 app.get("/task-status", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -1127,7 +1094,6 @@ app.post("/add-commission", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- UK MIDNIGHT AUTO RESET ---------------- */
 cron.schedule("0 0 * * *", async () => {
   try {
     console.log("Running UK midnight reset...");
@@ -1158,7 +1124,6 @@ cron.schedule("0 0 * * *", async () => {
   timezone: "Europe/London"
 });
 
-/* ---------------- SAVE WALLET ---------------- */
 app.post("/save-wallet", verifyToken, async (req, res) => {
 
   try {
@@ -1203,7 +1168,6 @@ app.post("/save-wallet", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- GET WALLET ---------------- */
 app.get("/get-wallet", verifyToken, async (req, res) => {
 
   try {
@@ -1290,7 +1254,6 @@ app.get("/get-profile-image", verifyToken, async (req, res) => {
   }
 });
 
-/* ---------------- ADMIN RESET USER PASSWORD ---------------- */
 app.post("/admin/reset-user-password", verifyAdmin, async (req, res) => {
 
   try {
@@ -1334,7 +1297,6 @@ app.post("/admin/reset-user-password", verifyAdmin, async (req, res) => {
 
 });
 
-/* ---------------- ADMIN RESET USER WALLET ---------------- */
 app.post("/admin/reset-wallet", verifyAdmin, async (req, res) => {
 
   try {
@@ -1374,8 +1336,6 @@ app.post("/admin/reset-wallet", verifyAdmin, async (req, res) => {
   }
 
 });
-
-/* ---------------- GET DEPOSIT WALLET ---------------- */
 
 app.get("/deposit-wallet", (req, res) => {
 

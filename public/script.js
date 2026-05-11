@@ -1,68 +1,3 @@
-/* ---------------- LOGIN ---------------- */
-async function login() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) {
-    alert("Enter username & password");
-    return;
-  }
-
-  let data;
-
-  try {
-    const res = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username, password })
-    });
-
-    data = await res.json();
-
-  } catch (err) {
-    alert("Server error");
-    return;
-  }
-
-  if (data.token) {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("username", data.username);
-    window.location.href = "/home.html";
-  } else {
-    alert(data.msg || "Login failed");
-  }
-}
-
-/* ---------------- REGISTER ---------------- */
-async function register() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) {
-    alert("Enter username & password");
-    return;
-  }
-
-  const res = await fetch("/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ username, password })
-  });
-
-  const data = await res.json();
-
-  if (data.success) {
-    alert("Register success!");
-    window.location.href = "login.html";
-  } else {
-    alert(data.msg || "Register failed");
-  }
-}
-
 async function loadBalance() {
 
   const token = localStorage.getItem("token");
@@ -123,7 +58,6 @@ async function loadBalance() {
 
 }
 
-/* ---------------- DEPOSIT REQUEST ---------------- */
 async function goNext() {
   const amountInput = document.getElementById("amountInput");
   if (!amountInput) return;
@@ -156,7 +90,6 @@ async function goNext() {
   }
 }
 
-/* ---------------- WITHDRAW REQUEST ---------------- */
 async function withdraw() {
   const amount = prompt("Enter amount");
   if (!amount) return;
@@ -182,7 +115,6 @@ async function withdraw() {
   }
 }
 
-/* ---------------- USERNAME ---------------- */
 function loadUsername() {
   const name = localStorage.getItem("username");
 
@@ -192,14 +124,12 @@ function loadUsername() {
   }
 }
 
-/* ---------------- LOGOUT ---------------- */
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   window.location.href = "login.html";
 }
 
-/* ---------------- PAGE NAVIGATION ---------------- */
 function goPage(page) {
   window.location.href = page;
 }
@@ -208,7 +138,6 @@ function goRegister() {
   window.location.href = "register.html";
 }
 
-/* ---------------- DEPOSIT INPUT CHECK ---------------- */
 function checkAmount() {
   const amountInput = document.getElementById("amountInput");
   const btn = document.getElementById("depositBtn");
@@ -229,7 +158,6 @@ function checkAmount() {
   }
 }
 
-/* ---------------- LANGUAGE ---------------- */
 const translations = {
   en: {
     home: "Home",
@@ -304,20 +232,16 @@ window.addEventListener("load", function () {
 
 });
 
-/* ---------------- VIP FILTER ---------------- */
 function filterCards(vip, btn) {
   const cards = document.querySelectorAll(".menu-card");
   const tabs = document.querySelectorAll(".tab");
 
-  // সব tab থেকে active class remove
   tabs.forEach(tab => tab.classList.remove("active"));
 
-  // clicked tab active
   if (btn) {
     btn.classList.add("active");
   }
 
-  // card show/hide
   cards.forEach(card => {
     if (vip === "all" || card.dataset.vip === vip) {
       card.style.display = "flex";

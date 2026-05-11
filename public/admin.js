@@ -1,3 +1,40 @@
+function showMessage(message){
+
+  const msg = document.getElementById("customMessage");
+  const text = document.getElementById("messageText");
+
+  text.innerText = message;
+
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 3000);
+}
+
+function showConfirm(message){
+
+  return new Promise((resolve) => {
+
+    const box = document.getElementById("customConfirm");
+
+    document.getElementById("confirmText").innerText = message;
+
+    box.style.display = "flex";
+
+    document.getElementById("confirmYes").onclick = () => {
+      box.style.display = "none";
+      resolve(true);
+    };
+
+    document.getElementById("confirmNo").onclick = () => {
+      box.style.display = "none";
+      resolve(false);
+    };
+
+  });
+}
+
 const token = localStorage.getItem("adminToken");
 
 if (!token) {
@@ -59,12 +96,12 @@ async function loadUserStatus() {
  
 async function giveTasks() {
   const username = document.getElementById("userSelect").value;
-  if (!username) return alert("Select user first");
+  if (!username) return showMessage("Select user first");
 
   const mixedCount = Number(document.getElementById("mixedCount").value || 0);
 
   if (mixedCount < 0 || mixedCount > 5) {
-    return alert("Mixed order count must be between 0 and 5");
+    return showMessage("Mixed order count must be between 0 and 5");
   }
 
   const mixedPositions = document.getElementById("mixedPositions").value
@@ -73,7 +110,7 @@ async function giveTasks() {
     .filter(n => n > 0 && n <= 25);
 
   if (mixedCount > 0 && mixedPositions.length !== mixedCount) {
-    return alert("Mixed positions count must match mixedCount");
+    return showMessage("Mixed positions count must match mixedCount");
   }
 
   const percentText = document.getElementById("mixedPositionPercent")?.value.trim();
@@ -113,7 +150,7 @@ async function giveTasks() {
   });
 
   const data = await res.json();
-  alert(data.msg);
+  showMessage(data.msg);
   loadUserStatus();
 }
 
@@ -131,7 +168,7 @@ async function updateBalance() {
   });
 
   const data = await res.json();
-  alert(data.msg);
+  showMessage(data.msg);
   loadUserStatus();
 }
 
@@ -171,7 +208,7 @@ async function approveDeposit(id) {
   });
 
   const data = await res.json();
-  alert(data.message);
+  showMessage(data.message);
   loadDeposits();
 }
 
@@ -211,7 +248,7 @@ async function approveWithdraw(id) {
   });
 
   const data = await res.json();
-  alert(data.message);
+  showMessage(data.message);
   loadWithdraws();
 }
 
@@ -231,11 +268,11 @@ async function resetUserPassword() {
   const newPassword = document.getElementById("newUserPassword").value;
 
   if (!username) {
-    return alert("Select user first");
+    return showMessage("Select user first");
   }
 
   if (!newPassword) {
-    return alert("Enter new password");
+    return showMessage("Enter new password");
   }
 
   const res = await fetch("/admin/reset-user-password", {
@@ -256,7 +293,7 @@ async function resetUserPassword() {
 
   const data = await res.json();
 
-  alert(data.msg);
+  showMessage(data.msg);
 
 }
 
@@ -265,7 +302,7 @@ async function resetWallet() {
   const username = document.getElementById("userSelect").value;
 
   if (!username) {
-    return alert("Select user first");
+    return showMessage("Select user first");
   }
 
   const confirmReset = confirm(
@@ -291,7 +328,7 @@ async function resetWallet() {
 
   const data = await res.json();
 
-  alert(data.msg);
+  showMessage(data.msg);
 
   loadUserStatus();
 

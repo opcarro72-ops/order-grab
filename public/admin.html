@@ -73,6 +73,90 @@ label{
   margin-top:12px;
   color:#ddd;
 }
+
+.custom-message{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111;
+  color:#fff;
+  padding:14px 24px;
+  border-radius:10px;
+  display:none;
+  z-index:9999;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  animation:fadeIn .3s ease;
+}
+
+.message-box p{
+  margin:0;
+  font-size:14px;
+}
+
+.confirm-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+
+  display:none;
+
+  justify-content:center;
+  align-items:center;
+
+  z-index:99999;
+}
+
+.confirm-box{
+  width:320px;
+  background:#141a20;
+  padding:25px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.confirm-box p{
+  margin-bottom:20px;
+  font-size:15px;
+}
+
+.confirm-buttons{
+  display:flex;
+  gap:10px;
+}
+
+.confirm-buttons button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:#fff;
+}
+
+.yes-btn{
+  background:#28a745;
+}
+
+.no-btn{
+  background:#dc3545;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateX(-50%) translateY(-10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -162,6 +246,27 @@ label{
   <div class="card">
     <h2>Pending Withdraws</h2>
     <div id="withdrawList"></div>
+  </div>
+
+</div>
+
+<div id="customMessage" class="custom-message">
+  <div class="message-box">
+    <p id="messageText"></p>
+  </div>
+</div>
+
+<div id="customConfirm" class="confirm-overlay">
+
+  <div class="confirm-box">
+
+    <p id="confirmText"></p>
+
+    <div class="confirm-buttons">
+      <button class="yes-btn" id="confirmYes">Yes</button>
+      <button class="no-btn" id="confirmNo">No</button>
+    </div>
+
   </div>
 
 </div>

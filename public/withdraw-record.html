@@ -146,7 +146,6 @@ async function loadWithdrawRecords() {
       if (r.status === "Success") statusClass = "success";
       if (r.status === "Rejected") statusClass = "rejected";
 
-      // যদি approvedAmount থাকে সেটা দেখাবে, না থাকলে amount দেখাবে
       const displayAmount = r.approvedAmount > 0 ? r.approvedAmount : r.amount;
 
       box.innerHTML += `

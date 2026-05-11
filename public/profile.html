@@ -88,6 +88,36 @@
       }
     }
 
+    .custom-msg{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.7);
+  color:#fff;
+  padding:12px 20px;
+  border-radius:8px;
+  display:none;
+  z-index:9999;
+  animation:fadeIn 0.3s ease;
+}
+
+.msg-box p{
+  margin:0;
+  font-size:14px;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateX(-50%) translateY(-10px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+}
+
   </style>
 </head>
 
@@ -107,6 +137,12 @@
 
 </div>
 
+<div id="customMsg" class="custom-msg">
+  <div class="msg-box">
+    <p id="msgText"></p>
+  </div>
+</div>
+
 <input type="file" id="fileInput" accept="image/*">
 
 <script>
@@ -117,6 +153,20 @@ const token = localStorage.getItem("token");
 
 if (!token) {
   window.location.href = "login.html";
+}
+
+function showMessage(message){
+
+  const msg = document.getElementById("customMsg");
+  const text = document.getElementById("msgText");
+
+  text.innerText = message;
+
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 3000);
 }
 
 async function loadProfileImage() {
@@ -180,18 +230,18 @@ fileInput.addEventListener("change", function(){
 
       avatar.src = imageData;
 
-      alert("Profile image updated successfully");
+      showMessage("Profile image updated successfully");
 
     } else {
 
-      alert(data.msg);
+      showMessage(data.msg);
     }
 
   } catch (err) {
 
     console.log(err);
 
-    alert("Server error: " + err.message);
+    showMessage("Server error: " + err.message);
   }
 };
 
