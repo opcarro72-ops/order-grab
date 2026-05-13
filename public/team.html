@@ -201,20 +201,112 @@
   <div class="tab" onclick="switchTab(3)">Level 3</div>
 </div>
 
-<div class="content" id="tabContent">
-  No data
-</div>
+<div class="content" id="tabContent"></div>
 
 <script>
+
+let teamData = {
+  level1: [],
+  level2: [],
+  level3: []
+};
+
+async function loadTeamData() {
+
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("/team-data", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    return;
+  }
+
+  teamData.level1 = data.level1;
+  teamData.level2 = data.level2;
+  teamData.level3 = data.level3;
+
+  document.querySelector(".big").innerText =
+    data.level1.length +
+    data.level2.length +
+    data.level3.length;
+
+  showLevel(1);
+}
+
 function switchTab(level){
+
   document.querySelectorAll(".tab").forEach(tab=>{
     tab.classList.remove("active");
   });
 
-  document.querySelectorAll(".tab")[level-1].classList.add("active");
+  document.querySelectorAll(".tab")[level-1]
+    .classList.add("active");
 
-  document.getElementById("tabContent").innerText = "Level " + level + " data";
+  showLevel(level);
 }
+
+function showLevel(level){
+
+  const container = document.getElementById("tabContent");
+
+  let users = [];
+
+  if(level === 1){
+    users = teamData.level1;
+  }
+
+  if(level === 2){
+    users = teamData.level2;
+  }
+
+  if(level === 3){
+    users = teamData.level3;
+  }
+
+  if(users.length === 0){
+
+    container.innerHTML = "No data";
+    return;
+  }
+
+  let html = "";
+
+  users.forEach(user => {
+
+    html += `
+      <div style="
+        background:#fff;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        text-align:left;
+      ">
+
+        <div><b>${user.username}</b></div>
+
+        <div style="
+          font-size:13px;
+          color:#666;
+          margin-top:5px;
+        ">
+          Invite Code: ${user.inviteCode}
+        </div>
+
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+loadTeamData();
+
 </script>
 
 </body>

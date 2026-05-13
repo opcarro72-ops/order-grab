@@ -1355,6 +1355,51 @@ app.get("/deposit-wallet", (req, res) => {
 
 });
 
+app.get("/team-data", verifyToken, async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    // Level 1
+    const level1 = await User.find({
+      referredBy: user.username
+    });
+
+    // Level 2
+    const level2Users = await User.find({
+      referredBy: { $in: level1.map(u => u.username) }
+    });
+
+    // Level 3
+    const level3Users = await User.find({
+      referredBy: { $in: level2Users.map(u => u.username) }
+    });
+
+    res.json({
+      success: true,
+
+      level1,
+      level2: level2Users,
+      level3: level3Users
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+  }
+});
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/login.html");
 });
