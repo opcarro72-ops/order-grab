@@ -1368,17 +1368,14 @@ app.get("/team-data", verifyToken, async (req, res) => {
       });
     }
 
-    // Level 1
     const level1 = await User.find({
       referredBy: user.username
     });
 
-    // Level 2
     const level2Users = await User.find({
       referredBy: { $in: level1.map(u => u.username) }
     });
 
-    // Level 3
     const level3Users = await User.find({
       referredBy: { $in: level2Users.map(u => u.username) }
     });

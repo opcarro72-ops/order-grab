@@ -280,26 +280,66 @@ function showLevel(level){
   users.forEach(user => {
 
     html += `
+  <div style="
+    background:#fff;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  ">
+
+    <div>
+
       <div style="
-        background:#fff;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        text-align:left;
+        font-size:18px;
+        font-weight:bold;
+        color:#666;
       ">
-
-        <div><b>${user.username}</b></div>
-
-        <div style="
-          font-size:13px;
-          color:#666;
-          margin-top:5px;
-        ">
-          Invite Code: ${user.inviteCode}
-        </div>
-
+        ${user.username}
       </div>
-    `;
+
+      <div style="
+        font-size:13px;
+        color:#666;
+        margin-top:5px;
+      ">
+        Invite Code: ${user.inviteCode}
+      </div>
+
+    </div>
+
+    <div style="
+      width:140px;
+      height:70px;
+      border-radius:10px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+
+      font-size:13px;
+      color:#666;
+    ">
+
+      <div>Referred by</div>
+
+      <div style="
+        margin-top:5px;
+        font-weight:bold;
+        color:#16a34a;
+        font-size:15px;
+      ">
+        ${user.referredBy || "N/A"}
+      </div>
+
+    </div>
+
+  </div>
+`;
   });
 
   container.innerHTML = html;
