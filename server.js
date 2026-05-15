@@ -165,6 +165,8 @@ mixedOrderPercentRanges: {
     default: false
   }
 }
+}, {
+  timestamps: true
 });
 
 const User = mongoose.model("User", userSchema);
@@ -1368,24 +1370,81 @@ app.get("/team-data", verifyToken, async (req, res) => {
       });
     }
 
-    const level1 = await User.find({
+    async function buildUsers(users){
+
+      const finalUsers = [];
+
+      for(const u of users){
+
+        const deposits = await Deposit.find({
+          username: u.username,
+          status: "Success"
+        });
+
+        let totalRecharge = 0;
+
+        deposits.forEach(d=>{
+          totalRecharge += d.approvedAmount || 0;
+        });
+
+        const withdraws = await Withdraw.find({
+          username: u.username,
+          status: "Success"
+        });
+
+        let totalWithdraw = 0;
+
+        withdraws.forEach(w=>{
+          totalWithdraw += w.approvedAmount || 0;
+        });
+
+        finalUsers.push({
+          username: u.username,
+
+          referredBy: u.referredBy,
+
+          createdAt: u.createdAt,
+
+          recharge: totalRecharge,
+
+          withdraw: totalWithdraw,
+
+          recommendedQuantity: u.invitedUsers
+            ? u.invitedUsers.length
+            : 0
+        });
+      }
+
+      return finalUsers;
+    }
+
+    const rawLevel1 = await User.find({
       referredBy: user.username
     });
 
-    const level2Users = await User.find({
-      referredBy: { $in: level1.map(u => u.username) }
+    const rawLevel2 = await User.find({
+      referredBy: {
+        $in: rawLevel1.map(u => u.username)
+      }
     });
 
-    const level3Users = await User.find({
-      referredBy: { $in: level2Users.map(u => u.username) }
+    const rawLevel3 = await User.find({
+      referredBy: {
+        $in: rawLevel2.map(u => u.username)
+      }
     });
+
+    const level1 = await buildUsers(rawLevel1);
+
+    const level2 = await buildUsers(rawLevel2);
+
+    const level3 = await buildUsers(rawLevel3);
 
     res.json({
       success: true,
-
       level1,
-      level2: level2Users,
-      level3: level3Users
+      level2,
+      level3
     });
 
   } catch (err) {
