@@ -287,15 +287,25 @@ function showLevel(level){
 
   users.forEach(user => {
 
-const regDate = new Date(user.createdAt);
+    let formattedDate = "N/A";
 
-const formattedDate =
-  regDate.getFullYear() + "-" +
-  String(regDate.getMonth() + 1).padStart(2, "0") + "-" +
-  String(regDate.getDate()).padStart(2, "0") + " " +
-  String(regDate.getHours()).padStart(2, "0") + ":" +
-  String(regDate.getMinutes()).padStart(2, "0") + ":" +
-  String(regDate.getSeconds()).padStart(2, "0");
+    if(user.createdAt){
+
+      const regDate = new Date(user.createdAt);
+
+      if(!isNaN(regDate.getTime())){
+
+        formattedDate =
+          regDate.getFullYear() + "-" +
+          String(regDate.getMonth() + 1).padStart(2, "0") + "-" +
+          String(regDate.getDate()).padStart(2, "0") + " " +
+          String(regDate.getHours()).padStart(2, "0") + ":" +
+          String(regDate.getMinutes()).padStart(2, "0") + ":" +
+          String(regDate.getSeconds()).padStart(2, "0");
+
+      }
+
+    }
 
 html += `
 
@@ -373,7 +383,7 @@ html += `
 
 `;
 
-});
+  });
 
   container.innerHTML = html;
 }

@@ -1403,7 +1403,7 @@ app.get("/team-data", verifyToken, async (req, res) => {
 
           referredBy: u.referredBy,
 
-          createdAt: u.createdAt,
+          createdAt: u.createdAt || new Date(),
 
           recharge: totalRecharge,
 
