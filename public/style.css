@@ -108,7 +108,7 @@ button.active {
 .action-icons {
   margin-left: auto;
   display: flex;
-  gap: 35px;
+  gap: 15px;
 }
 
 .action-icons div {
@@ -169,7 +169,8 @@ button.active {
 }
 
 #balance {
-  font-size: 16px;
+  font-size: 13px;
+  line-height: 1.2;
   word-break: break-all;
 }
 
