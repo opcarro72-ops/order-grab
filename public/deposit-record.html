@@ -137,6 +137,7 @@ async function loadDeposits() {
       <div class="record-item">
         <div class="status ${statusClass}">${r.status}</div>
         <p>Amount: ${r.amount} USDT</p>
+        <p>Deposited: ${r.approvedAmount || 0} USDT</p>
         <p>Time: ${new Date(r.time).toLocaleString()}</p>
       </div>
     `;
