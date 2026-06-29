@@ -41,19 +41,83 @@ if (!token) {
   window.location.href = "/admin-login.html";
 }
 
+let userSelectTom = null;
+
 async function loadUsers() {
-  const res = await fetch("/admin/users", {
-    headers: { Authorization: "Bearer " + token }
-  });
 
-  const users = await res.json();
-  const select = document.getElementById("userSelect");
+  try {
 
-  select.innerHTML = '<option value="">Select User</option>';
+    const res = await fetch("/admin/users", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
 
-  users.forEach(user => {
-    select.innerHTML += `<option value="${user.username}">${user.username}</option>`;
-  });
+    const users = await res.json();
+
+    const select = document.getElementById("userSelect");
+
+    select.innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select User";
+    select.appendChild(defaultOption);
+
+    users.forEach(user => {
+
+      const option = document.createElement("option");
+
+      option.value = user.username;
+      option.textContent = user.username;
+
+      select.appendChild(option);
+
+    });
+
+    if (userSelectTom) {
+      userSelectTom.destroy();
+    }
+
+    userSelectTom = new TomSelect("#userSelect", {
+
+      create: false,
+
+      maxOptions: 1000,
+
+      valueField: "value",
+
+      labelField: "text",
+
+      searchField: ["text"],
+
+      sortField: [
+        {
+          field: "text",
+          direction: "asc"
+        }
+      ],
+
+      placeholder: "Search Username..."
+
+    });
+
+    userSelectTom.on("change", function(value) {
+
+      if (value) {
+        loadUserStatus();
+      }
+
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    showMessage("Failed to load users");
+
+  }
+
 }
 
 async function loadUserStatus() {
@@ -185,7 +249,7 @@ async function loadDeposits() {
     .filter(d => d.status === "Pending")
     .forEach(dep => {
       box.innerHTML += `
-        <div class="item">
+        <div class="admin-item">
           <p>User: ${dep.username}</p>
           <p>Requested Deposit: ${dep.amount}</p>
           <input type="number" id="dep_${dep._id}" value="${dep.amount}">
@@ -225,7 +289,7 @@ async function loadWithdraws() {
     .filter(w => w.status === "Processing")
     .forEach(wd => {
       box.innerHTML += `
-        <div class="item">
+        <div class="admin-item">
           <p>User: ${wd.username}</p>
           <p>Requested Withdraw: ${wd.amount}</p>
           <input type="number" id="wd_${wd._id}" value="${wd.amount}">

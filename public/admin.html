@@ -5,90 +5,142 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard</title>
 <link rel="icon" type="image/png" href="logo.png">
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 
 <style>
+:root{
+  color-scheme: light dark;
+}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#0b0f14;
-  color:#fff;
+  background:#f5f5f5;
+  color:#111;
 }
+
 .container{
   width:95%;
   max-width:1200px;
   margin:20px auto;
 }
+
 .header{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-start;
   margin-bottom:20px;
 }
+
 .logout-btn{
-  padding:10px 18px;
-  background:red;
+  width:auto;
+  padding:8px 16px;
+  background:#ff0000;
   color:#fff;
   border:none;
   border-radius:6px;
   cursor:pointer;
+  font-size:14px;
 }
+
+.header-right{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+}
+
+.menu{
+  display:flex;
+  gap:30px;
+  align-items:center;
+}
+
+.menu-item{
+  font-size:30px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#111;
+}
+
+.menu-item:hover{
+  color:#ffc107;
+}
+
+.menu-item.active{
+  color:#ffc107;
+  border-bottom:3px solid #ffc107;
+  padding-bottom:5px;
+}
+
 .card{
-  background:#141a20;
+  background:#ffffff;
   padding:20px;
   border-radius:10px;
   margin-bottom:20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
 }
+
 .card h2{
   color:#ffc107;
 }
-select,input,button,textarea{
+
+select,
+input,
+button,
+textarea{
   padding:10px;
   margin-top:10px;
-  border:none;
+  border:1px solid #ddd;
   border-radius:6px;
   width:100%;
   box-sizing:border-box;
 }
+
 button{
   cursor:pointer;
 }
+
 .blue-btn{
   background:#007bff;
   color:#fff;
+  border:none;
 }
+
 .green-btn{
   background:green;
   color:#fff;
+  border:none;
 }
-.item{
-  background:#1a1f27;
+
+.admin-item{
+  background:#f1f1f1;
   padding:15px;
   margin:10px 0;
   border-radius:8px;
 }
+
 .status-box p{
   margin:5px 0;
 }
+
 label{
   display:block;
   margin-top:12px;
-  color:#ddd;
+  color:#444;
 }
-
-/* Custom Message */
 
 .custom-message{
   position:fixed;
   top:20px;
   left:50%;
   transform:translateX(-50%);
-  background:#111;
-  color:#fff;
+  background:#fff;
+  color:#111;
   padding:14px 24px;
   border-radius:10px;
   display:none;
   z-index:9999;
-  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  box-shadow:0 4px 15px rgba(0,0,0,.3);
   animation:fadeIn .3s ease;
 }
 
@@ -97,26 +149,23 @@ label{
   font-size:14px;
 }
 
-
 .confirm-overlay{
   position:fixed;
   top:0;
   left:0;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.6);
-
+  background:rgba(0,0,0,.6);
   display:none;
-
   justify-content:center;
   align-items:center;
-
   z-index:99999;
 }
 
 .confirm-box{
   width:320px;
-  background:#141a20;
+  background:#fff;
+  color:#111;
   padding:25px;
   border-radius:12px;
   text-align:center;
@@ -161,6 +210,116 @@ label{
   }
 }
 
+@media (prefers-color-scheme: dark){
+
+  body{
+    background:#0b0f14;
+    color:#fff;
+  }
+
+  .menu-item{
+    color:#fff;
+  }
+
+  .card{
+    background:#141a20;
+    box-shadow:none;
+  }
+
+  .admin-item{
+    background:#1a1f27;
+}
+
+  label{
+    color:#ddd;
+  }
+
+  select,
+  input,
+  textarea{
+    background:#1a1f27;
+    color:#fff;
+    border:1px solid #333;
+  }
+
+  .custom-message{
+    background:#111;
+    color:#fff;
+  }
+
+  .confirm-box{
+    background:#141a20;
+    color:#fff;
+  }
+
+  #walletInfo{
+    background:#1a1f27 !important;
+    color:#fff;
+  }
+
+}
+
+.ts-wrapper{
+    width:100%;
+}
+
+.ts-control{
+    background:#fff !important;
+    color:#111 !important;
+    border:1px solid #ddd !important;
+    min-height:44px;
+}
+
+.ts-control input{
+    color:#111 !important;
+}
+
+.ts-control .item{
+    color:#111 !important;
+    background:transparent !important;
+}
+
+.ts-dropdown{
+    background:#fff !important;
+}
+
+.ts-dropdown .option{
+    color:#111 !important;
+}
+
+@media(prefers-color-scheme:dark){
+
+.ts-control{
+    background:#1a1f27 !important;
+    color:#fff !important;
+    border:1px solid #333 !important;
+}
+
+.ts-control input{
+    color:#fff !important;
+}
+
+.ts-control .item{
+    color:#fff !important;
+    background:transparent !important;
+}
+
+.ts-dropdown{
+    background:#1a1f27 !important;
+    border:1px solid #333 !important;
+}
+
+.ts-dropdown .option{
+    color:#fff !important;
+}
+
+.ts-dropdown .active{
+    background:#0d6efd !important;
+    color:#fff !important;
+}
+
+}
+
 </style>
 </head>
 <body>
@@ -168,10 +327,34 @@ label{
 <div class="container">
 
   <div class="header">
-    <h1>Admin Dashboard</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
 
+    <div class="menu">
+
+        <span class="menu-item active"
+              id="dashboardTab"
+              onclick="showDashboard()">
+            Admin Dashboard
+        </span>
+
+        <span class="menu-item"
+              id="fundTab"
+              onclick="showFunds()">
+            Funds Management
+        </span>
+
+    </div>
+
+    <div class="header-right">
+
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+  <div id="dashboardSection">
   <div class="card">
     <h2>User Control Panel</h2>
 
@@ -240,7 +423,12 @@ label{
   </button>
 
 </div>
-  </div>
+
+</div>
+
+</div>
+
+<div id="fundSection" style="display:none;">
 
   <div class="card">
     <h2>Pending Deposits</h2>
@@ -251,6 +439,8 @@ label{
     <h2>Pending Withdraws</h2>
     <div id="withdrawList"></div>
   </div>
+
+</div>
 
 </div>
 
@@ -274,6 +464,38 @@ label{
   </div>
 
 </div>
+
+<script>
+
+function showDashboard(){
+
+    document.getElementById("dashboardSection").style.display="block";
+
+    document.getElementById("fundSection").style.display="none";
+
+    document.getElementById("dashboardTab").classList.add("active");
+
+    document.getElementById("fundTab").classList.remove("active");
+
+}
+
+function showFunds(){
+
+    document.getElementById("dashboardSection").style.display="none";
+
+    document.getElementById("fundSection").style.display="block";
+
+    document.getElementById("fundTab").classList.add("active");
+
+    document.getElementById("dashboardTab").classList.remove("active");
+
+}
+
+showDashboard();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
 <script src="admin.js"></script>
 </body>
