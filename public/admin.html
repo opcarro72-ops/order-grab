@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Admin Dashboard</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
@@ -41,6 +41,13 @@ body{
   border-radius:6px;
   cursor:pointer;
   font-size:14px;
+}
+
+.bottom-logout{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    font-size:16px;
 }
 
 .header-right{
@@ -94,6 +101,7 @@ textarea{
   border-radius:6px;
   width:100%;
   box-sizing:border-box;
+  font-size:16px;
 }
 
 button{
@@ -276,6 +284,7 @@ label{
     color:#111 !important;
     border:1px solid #ddd !important;
     min-height:44px;
+    font-size:16px;
 }
 
 .ts-control input{
@@ -349,14 +358,6 @@ label{
               onclick="showFunds()">
             Funds Management
         </span>
-
-    </div>
-
-    <div class="header-right">
-
-        <button class="logout-btn" onclick="logout()">
-            Logout
-        </button>
 
     </div>
 
@@ -441,6 +442,15 @@ label{
     <h2>Pending Withdraws</h2>
     <div id="withdrawList"></div>
   </div>
+
+</div>
+
+<div class="card">
+
+    <button class="logout-btn bottom-logout"
+            onclick="logout()">
+        Logout
+    </button>
 
 </div>
 
