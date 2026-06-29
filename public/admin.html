@@ -119,6 +119,14 @@ button{
   border-radius:8px;
 }
 
+.wallet-info{
+  background:#f1f1f1;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:10px;
+  line-height:30px;
+}
+
 .status-box p{
   margin:5px 0;
 }
@@ -252,10 +260,10 @@ label{
     color:#fff;
   }
 
-  #walletInfo{
-    background:#1a1f27 !important;
+  .wallet-info{
+    background:#1a1f27;
     color:#fff;
-  }
+}
 
 }
 
@@ -406,17 +414,11 @@ label{
 
   <h3 style="color:#ffc107;">User Wallet Information</h3>
 
-  <div id="walletInfo" style="
-    background:#1a1f27;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:10px;
-    line-height:30px;
-  ">
+  <div id="walletInfo" class="wallet-info">
 
     No wallet information
 
-  </div>
+</div>
 
   <button class="green-btn" onclick="resetWallet()">
     Reset Wallet Information
