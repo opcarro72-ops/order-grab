@@ -741,11 +741,14 @@ app.post("/admin/approve-withdraw", verifyAdmin, async (req, res) => {
 app.post("/admin/allow-tasks", verifyAdmin, async (req, res) => {
   try {
     const {
-      username,
-      mixedCount,
-      mixedPositions,
-      mixedPercentRanges
-    } = req.body;
+
+username,
+mixedCount,
+mixedPositions,
+mixedPercentRanges,
+mixedCommissionRanges
+
+}=req.body;
 
     const user = await User.findOne({ username });
 
@@ -770,6 +773,7 @@ app.post("/admin/allow-tasks", verifyAdmin, async (req, res) => {
     user.mixedOrderPositions = mixedPositions || [];
 
     user.mixedOrderPercentRanges = mixedPercentRanges || {};
+    user.mixedCommissionRanges = mixedCommissionRanges || {};
 
     await user.save();
 
@@ -825,6 +829,7 @@ app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
         normalMaxCommission: user.normalMaxCommission || 5,
 
         mixedOrderPercentRanges: user.mixedOrderPercentRanges || {},
+        mixedCommissionRanges: user.mixedCommissionRanges || {},
 
         wallet: user.wallet || {}
       }

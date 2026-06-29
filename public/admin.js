@@ -159,10 +159,14 @@ async function loadUserStatus() {
 }
  
 async function giveTasks() {
+
   const username = document.getElementById("userSelect").value;
+
   if (!username) return showMessage("Select user first");
 
-  const mixedCount = Number(document.getElementById("mixedCount").value || 0);
+  const mixedCount = Number(
+    document.getElementById("mixedCount").value || 0
+  );
 
   if (mixedCount < 0 || mixedCount > 7) {
     return showMessage("Mixed order count must be between 0 and 7");
@@ -177,45 +181,95 @@ async function giveTasks() {
     return showMessage("Mixed positions count must match mixedCount");
   }
 
-  const percentText = document.getElementById("mixedPositionPercent")?.value.trim();
+  const percentText = document
+    .getElementById("mixedPositionPercent")
+    .value
+    .trim();
 
   let mixedPercents = {};
 
   if (percentText) {
+
     percentText.split("\n").forEach(line => {
+
       const parts = line.split(":");
 
       if (parts.length === 2) {
+
         const position = Number(parts[0].trim());
+
         const rangeParts = parts[1].trim().split("-");
 
         if (rangeParts.length === 2) {
+
           mixedPercents[position] = {
             min: Number(rangeParts[0]),
             max: Number(rangeParts[1])
           };
+
         }
+
       }
+
     });
+
+  }
+
+  const commissionText = document
+    .getElementById("mixedCommission")
+    .value
+    .trim();
+
+  let mixedCommissions = {};
+
+  if (commissionText) {
+
+    commissionText.split("\n").forEach(line => {
+
+      const parts = line.split(":");
+
+      if (parts.length === 2) {
+
+        mixedCommissions[
+          Number(parts[0].trim())
+        ] = Number(parts[1].trim());
+
+      }
+
+    });
+
   }
 
   const res = await fetch("/admin/allow-tasks", {
+
     method: "POST",
+
     headers: {
+
       "Content-Type": "application/json",
+
       Authorization: "Bearer " + token
+
     },
+
     body: JSON.stringify({
+
       username,
       mixedCount,
       mixedPositions,
-      mixedPercentRanges: mixedPercents
+      mixedPercentRanges: mixedPercents,
+      mixedCommissionRanges: mixedCommissions
+
     })
+
   });
 
   const data = await res.json();
+
   showMessage(data.msg);
+
   loadUserStatus();
+
 }
 
 async function updateBalance() {

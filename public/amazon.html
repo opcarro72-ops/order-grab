@@ -337,8 +337,29 @@ async function openPopup() {
     currentOrderAmount =
       Number(totalAmount.toFixed(2));
 
+    if(
+
+    isMixedOrder &&
+
+    data.mixedCommissionRanges &&
+
+    data.mixedCommissionRanges[currentPosition]
+
+){
+
     currentCommission =
-      Number((currentOrderAmount * 0.04).toFixed(4));
+Number(
+data.mixedCommissionRanges[currentPosition]
+);
+
+}else{
+
+    currentCommission =
+Number(
+(currentOrderAmount*0.04).toFixed(4)
+);
+
+}
 
     const userBalance = data.balance;
 

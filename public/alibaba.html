@@ -271,7 +271,32 @@ if (pending) {
     });
 
     currentOrderAmount = Number(totalAmount.toFixed(2));
-    currentCommission = Number((currentOrderAmount * 0.08).toFixed(4));
+
+if (
+
+    isMixedOrder &&
+
+    data.mixedCommissionRanges &&
+
+    data.mixedCommissionRanges[currentPosition]
+
+) {
+
+    currentCommission = Number(
+
+        data.mixedCommissionRanges[currentPosition]
+
+    );
+
+} else {
+
+    currentCommission = Number(
+
+        (currentOrderAmount * 0.08).toFixed(4)
+
+    );
+
+}
 
     const userBalance = data.balance;
     let gap = 0;
