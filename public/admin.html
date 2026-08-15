@@ -331,6 +331,19 @@ label{
 
 }
 
+#freezeStatus{
+  background:#f1f1f1;
+}
+
+@media(prefers-color-scheme:dark){
+
+  #freezeStatus{
+    background:#1a1f27 !important;
+    color:#fff;
+  }
+
+}
+
 </style>
 </head>
 <body>
@@ -390,6 +403,42 @@ label{
     <input type="number" id="newBalance" placeholder="Enter new balance">
 
     <button class="green-btn" onclick="updateBalance()">Update Balance</button>
+
+<div style="margin-top:25px;">
+
+  <h3 style="color:#ffc107;">Balance Freeze Control</h3>
+
+  <div id="freezeStatus"
+       style="
+         padding:12px;
+         background:#f1f1f1;
+         border-radius:8px;
+         margin-bottom:10px;
+       ">
+    Balance Status: Not Frozen
+  </div>
+
+  <label>Freeze Reason</label>
+
+  <textarea
+    id="freezeReason"
+    rows="4"
+    placeholder="Write the reason for freezing this user's balance..."
+  ></textarea>
+
+  <button
+    class="blue-btn"
+    onclick="freezeBalance()">
+    Freeze Balance
+  </button>
+
+  <button
+    class="green-btn"
+    onclick="unfreezeBalance()">
+    Unfreeze Balance
+  </button>
+
+</div>
 
     <div class="status-box" id="userStatus" style="margin-top:20px;">
       <p>Today's Tasks: 0</p>

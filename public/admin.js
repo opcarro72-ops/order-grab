@@ -148,6 +148,31 @@ async function loadUserStatus() {
 
     document.getElementById("newBalance").value = u.balance;
 
+    const freezeStatus = document.getElementById("freezeStatus");
+const freezeReason = document.getElementById("freezeReason");
+
+if (u.balanceFrozen) {
+
+  freezeStatus.innerText =
+    "Balance Status: FROZEN";
+
+  freezeStatus.style.background = "#dc3545";
+  freezeStatus.style.color = "#fff";
+
+  freezeReason.value = u.freezeReason || "";
+
+} else {
+
+  freezeStatus.innerText =
+    "Balance Status: NOT FROZEN";
+
+  freezeStatus.style.background = "#28a745";
+  freezeStatus.style.color = "#fff";
+
+  freezeReason.value = "";
+
+}
+
     document.getElementById("walletInfo").innerHTML = `
   <p><b>Name:</b> ${u.wallet?.name || "Not Set"}</p>
   <p><b>Protocol:</b> ${u.wallet?.protocol || "Not Set"}</p>
@@ -449,5 +474,110 @@ async function resetWallet() {
   showMessage(data.msg);
 
   loadUserStatus();
+
+}
+
+async function freezeBalance() {
+
+  const username = document.getElementById("userSelect").value;
+
+  const reason =
+    document.getElementById("freezeReason").value.trim();
+
+  if (!username) {
+    return showMessage("Select user first");
+  }
+
+  if (!reason) {
+    return showMessage("Please enter freeze reason");
+  }
+
+  const confirmFreeze = await showConfirm(
+    "Are you sure you want to freeze this user's balance?"
+  );
+
+  if (!confirmFreeze) return;
+
+  try {
+
+    const res = await fetch("/admin/freeze-balance", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+
+      body: JSON.stringify({
+        username,
+        frozen: true,
+        reason
+      })
+
+    });
+
+    const data = await res.json();
+
+    showMessage(data.msg);
+
+    if (data.success) {
+      loadUserStatus();
+    }
+
+  } catch (err) {
+
+    showMessage("Server error");
+
+  }
+
+}
+
+async function unfreezeBalance() {
+
+  const username = document.getElementById("userSelect").value;
+
+  if (!username) {
+    return showMessage("Select user first");
+  }
+
+  const confirmUnfreeze = await showConfirm(
+    "Are you sure you want to unfreeze this user's balance?"
+  );
+
+  if (!confirmUnfreeze) return;
+
+  try {
+
+    const res = await fetch("/admin/freeze-balance", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+
+      body: JSON.stringify({
+        username,
+        frozen: false,
+        reason: ""
+      })
+
+    });
+
+    const data = await res.json();
+
+    showMessage(data.msg);
+
+    if (data.success) {
+      loadUserStatus();
+    }
+
+  } catch (err) {
+
+    showMessage("Server error");
+
+  }
 
 }

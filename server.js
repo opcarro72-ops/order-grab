@@ -79,6 +79,16 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
 
+  balanceFrozen: {
+  type: Boolean,
+  default: false
+  },
+
+  freezeReason: {
+  type: String,
+  default: ""
+  },
+
   todayTasks: {
     type: Number,
     default: 0
@@ -641,6 +651,7 @@ app.post("/withdraw", verifyToken, async (req, res) => {
 
     if (!user) return res.json({ success: false, msg: "User not found" });
     if (amount <= 0) return res.json({ success: false, msg: "Invalid withdraw amount" });
+    if (user.balanceFrozen === true) { return res.json({ success: false,msg: user.freezeReason ? `Withdrawal frozen: ${user.freezeReason}` : "Withdrawal is currently frozen" });}
     if (user.balance < amount) return res.json({ success: false, msg: "Not enough balance" });
 
 if (user.taskLimit > 0) {
@@ -821,6 +832,9 @@ app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
 
         balance: user.balance || 0,
         cashGap: user.cashGap || 0,
+
+        balanceFrozen: user.balanceFrozen || false,
+        freezeReason: user.freezeReason || "",
 
         mixedOrderCount: user.mixedOrderCount || 0,
         mixedOrderPositions: user.mixedOrderPositions || [],
@@ -1340,6 +1354,69 @@ app.post("/admin/reset-wallet", verifyAdmin, async (req, res) => {
       success: false,
       msg: err.message
     });
+  }
+
+});
+
+app.post("/admin/freeze-balance", verifyAdmin, async (req, res) => {
+
+  try {
+
+    const { username, frozen, reason } = req.body;
+
+    if (!username) {
+      return res.json({
+        success: false,
+        msg: "Username required"
+      });
+    }
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    if (frozen === true) {
+
+      if (!reason || !reason.trim()) {
+        return res.json({
+          success: false,
+          msg: "Please enter freeze reason"
+        });
+      }
+
+      user.balanceFrozen = true;
+      user.freezeReason = reason.trim();
+
+    }
+
+    else {
+
+      user.balanceFrozen = false;
+      user.freezeReason = "";
+
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      msg: frozen
+        ? "User balance frozen successfully"
+        : "User balance unfrozen successfully"
+    });
+
+  } catch (err) {
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
+
   }
 
 });
