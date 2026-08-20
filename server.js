@@ -531,7 +531,7 @@ app.post("/deposit-request", verifyToken, async (req, res) => {
         amount: pendingDeposit.amount,
         address: pendingDeposit.walletAddress,
         qr: pendingDeposit.walletQr,
-        msg: "Previous deposit is pending"
+        msg: "Previous deposit is pending."
       });
     }
 
