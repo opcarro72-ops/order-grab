@@ -35,8 +35,6 @@ const depositWallets = [
 
 ];
 
-let currentWalletIndex = 0;
-
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -174,7 +172,18 @@ mixedOrderPercentRanges: {
     type: Boolean,
     default: false
   }
+},
+
+depositWalletIndex: {
+  type: Number,
+  default: 0
+},
+
+usedDepositWallets: {
+  type: [String],
+  default: []
 }
+
 }, {
   timestamps: true
 });
@@ -500,11 +509,15 @@ app.post("/admin-login", async (req, res) => {
 
 app.post("/deposit-request", verifyToken, async (req, res) => {
   try {
+
     const user = await User.findById(req.userId);
     const amount = Number(req.body.amount);
 
     if (!user || amount <= 0) {
-      return res.json({ success: false, msg: "Invalid request" });
+      return res.json({
+        success: false,
+        msg: "Invalid request"
+      });
     }
 
     const pendingDeposit = await Deposit.findOne({
@@ -513,50 +526,55 @@ app.post("/deposit-request", verifyToken, async (req, res) => {
     });
 
     if (pendingDeposit) {
+      return res.json({
+        pending: true,
+        amount: pendingDeposit.amount,
+        address: pendingDeposit.walletAddress,
+        qr: pendingDeposit.walletQr,
+        msg: "Previous deposit is pending"
+      });
+    }
 
-  return res.json({
-    pending: true,
+    let walletIndex = user.depositWalletIndex || 0;
 
-    amount: pendingDeposit.amount,
+    if (walletIndex >= depositWallets.length) {
+      walletIndex = 0;
+    }
 
-    address: pendingDeposit.walletAddress,
+    const wallet = depositWallets[walletIndex];
 
-    qr: pendingDeposit.walletQr,
+    user.depositWalletIndex =
+      (walletIndex + 1) % depositWallets.length;
 
-    msg: "Previous deposit is pending"
-  });
+    if (!user.usedDepositWallets.includes(wallet.address)) {
+      user.usedDepositWallets.push(wallet.address);
+    }
 
-}
+    await user.save();
 
-    const wallet = depositWallets[currentWalletIndex];
-
-currentWalletIndex++;
-
-if (currentWalletIndex >= depositWallets.length) {
-  currentWalletIndex = 0;
-}
-
-const deposit = new Deposit({
-  username: user.username,
-  amount,
-
-  walletAddress: wallet.address,
-  walletQr: wallet.qr
-});
+    const deposit = new Deposit({
+      username: user.username,
+      amount,
+      walletAddress: wallet.address,
+      walletQr: wallet.qr
+    });
 
     await deposit.save();
 
     res.json({
-  success: true,
-
-  address: wallet.address,
-
-  qr: wallet.qr
-});
+      success: true,
+      address: wallet.address,
+      qr: wallet.qr
+    });
 
   } catch (err) {
+
     console.log(err);
-    res.json({ success: false, msg: err.message });
+
+    res.json({
+      success: false,
+      msg: err.message
+    });
   }
 });
 
