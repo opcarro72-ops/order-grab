@@ -14,7 +14,7 @@
     <div class="amazon-title">Amazon</div>
 
     <div class="balance-box">
-      <p>Account Balance:</p>
+      <p id="accountBalanceText">Account Balance:</p>
       <h2 id="balance">0 USDT</h2>
     </div>
   </div>
@@ -23,75 +23,100 @@
     <div class="stats-grid">
 
       <div class="stat">
-        <h4 id="todayTimes">0</h4>
-        <p>Today's Times</p>
-      </div>
+  <h4 id="todayTimes">0</h4>
+  <p id="todayTimesText">Today's Times</p>
+</div>
 
-      <div class="stat">
-        <h4 id="todayCommission">0.0000 USDT</h4>
-        <p>Today's commission</p>
-      </div>
+<div class="stat">
+  <h4 id="todayCommission">0.0000 USDT</h4>
+  <p id="todayCommissionText">Today's commission</p>
+</div>
 
-      <div class="stat">
-        <h4 id="cashGap">0.0000 USDT</h4>
-        <p>Cash gap between tasks</p>
-      </div>
+<div class="stat">
+  <h4 id="cashGap">0.0000 USDT</h4>
+  <p id="cashGapText">Cash gap between tasks</p>
+</div>
 
-      <div class="stat">
-        <h4 id="yesterdayCommission">0.0000 USDT</h4>
-        <p>Yesterday's buy commission</p>
-      </div>
+<div class="stat">
+  <h4 id="yesterdayCommission">0.0000 USDT</h4>
+  <p id="yesterdayCommissionText">Yesterday's buy commission</p>
+</div>
 
-      <div class="stat">
-        <h4>0 USDT</h4>
-        <p>Yesterday's team commission</p>
-      </div>
+<div class="stat">
+  <h4>0 USDT</h4>
+  <p id="yesterdayTeamCommissionText">
+    Yesterday's team commission
+  </p>
+</div>
 
-      <div class="stat">
-        <h4>0 USDT</h4>
-        <p>Money frozen in accounts</p>
-      </div>
+<div class="stat">
+  <h4>0 USDT</h4>
+  <p id="moneyFrozenText">
+    Money frozen in accounts
+  </p>
+</div>
 
     </div>
 
     <button class="grab-btn" onclick="openPopup()">
-      Grab the order immediately
-    </button>
+  <span id="grabOrderText">Grab the order immediately</span>
+</button>
   </div>
 
   <div class="hint-box">
-    <p>Hint:</p>
-    <p>1: 4% of the amount of completed transactions earned.</p>
-    <p>2: The system sends tasks randomly. Complete them as soon as possible after matching them.</p>
-  </div>
+  <p id="hintTitle">Hint:</p>
+
+  <p id="hint1">
+    1: 4% of the amount of completed transactions earned.
+  </p>
+
+  <p id="hint2">
+    2: The system sends tasks randomly. Complete them as soon as possible after matching them.
+  </p>
+</div>
 
   <div class="popup-overlay" id="popup" style="display:none;">
     <div class="order-popup">
 
       <div class="popup-header">
-        <span>Successful order</span>
-        <span class="close-btn" onclick="closePopup()">×</span>
+       <span id="successfulOrderText">Successful order</span>
+       <span class="close-btn" onclick="closePopup()">×</span>
       </div>
 
       <div class="order-number">
-        Order Nos: <span id="orderNo"></span>
+       <span id="orderNosText">Order Nos:</span>
+  <span id="orderNo"></span>
       </div>
 
       <div id="productList"></div>
 
       <div class="order-info">
-        <p><span>Transaction time</span><span id="trxTime"></span></p>
-        <p><span>Order amount</span><span id="orderAmount">0 USDT</span></p>
-        <p><span>Commissions</span><span id="commissionAmount">0 USDT</span></p>
-        <p class="income-row">
-          <span>Expected income</span>
-          <span class="income" id="expectedIncome">0 USDT</span>
-        </p>
-      </div>
 
-      <button class="submit-btn" onclick="submitOrder()">
-        Submit order
-      </button>
+  <p>
+    <span id="transactionTimeText">Transaction time</span>
+    <span id="trxTime"></span>
+  </p>
+
+  <p>
+    <span id="orderAmountText">Order amount</span>
+    <span id="orderAmount">0 USDT</span>
+  </p>
+
+  <p>
+    <span id="commissionsText">Commissions</span>
+    <span id="commissionAmount">0 USDT</span>
+  </p>
+
+  <p class="income-row">
+    <span id="expectedIncomeText">Expected income</span>
+    <span class="income" id="expectedIncome">0 USDT</span>
+  </p>
+
+</div>
+
+<button class="submit-btn" onclick="submitOrder()">
+  <span id="submitOrderText">Submit order</span>
+</button>
 
     </div>
   </div>
@@ -101,6 +126,602 @@
   <script src="products.js"></script>
 
   <script>
+
+const amazonTranslations = {
+
+  en: {
+    accountBalance: "Account Balance:",
+    todayTimes: "Today's Times",
+    todayCommission: "Today's commission",
+    cashGap: "Cash gap between tasks",
+    yesterdayCommission: "Yesterday's buy commission",
+    yesterdayTeamCommission: "Yesterday's team commission",
+    moneyFrozen: "Money frozen in accounts",
+    grabOrder: "Grab the order immediately",
+    hint: "Hint:",
+    hint1: "1: 4% of the amount of completed transactions earned.",
+    hint2: "2: The system sends tasks randomly. Complete them as soon as possible after matching them.",
+    successfulOrder: "Successful order",
+    orderNos: "Order Nos:",
+    transactionTime: "Transaction time",
+    orderAmount: "Order amount",
+    commissions: "Commissions",
+    expectedIncome: "Expected income",
+    submitOrder: "Submit order",
+
+    unpaidOrder: "You have an unpaid order, please complete that order first.",
+    serverResponseFailed: "Server response failed",
+    failedLoadStatus: "Failed to load user status",
+    insufficientBalance: "You don't have sufficient balance in your account.",
+    amazonUpgrade: "Amazon allows for up to 20 - 499 order tasks, so you've been upgraded.",
+    noOrder: "No order yet, please contact customer service to get the task orders.",
+    serverError: "Server error",
+    notEnoughBalance: "Your account balance is not enough, you need to recharge {amount} to complete this order.",
+    orderSubmitted: "Order submitted successfully",
+    submitFailed: "Submit failed"
+  },
+
+  zh: {
+    accountBalance: "账户余额:",
+    todayTimes: "今日次数",
+    todayCommission: "今日佣金",
+    cashGap: "任务资金差额",
+    yesterdayCommission: "昨日购买佣金",
+    yesterdayTeamCommission: "昨日团队佣金",
+    moneyFrozen: "账户冻结资金",
+    grabOrder: "立即抢单",
+    hint: "提示:",
+    hint1: "1：完成交易金额的4%为收益。",
+    hint2: "2：系统随机发送任务，匹配后请尽快完成。",
+    successfulOrder: "订单成功",
+    orderNos: "订单编号:",
+    transactionTime: "交易时间",
+    orderAmount: "订单金额",
+    commissions: "佣金",
+    expectedIncome: "预计收入",
+    submitOrder: "提交订单",
+
+    unpaidOrder: "您有未支付的订单，请先完成该订单。",
+    serverResponseFailed: "服务器响应失败",
+    failedLoadStatus: "加载用户状态失败",
+    insufficientBalance: "您的账户余额不足。",
+    amazonUpgrade: "Amazon订单任务范围为20 - 499，您的等级已升级。",
+    noOrder: "暂无订单，请联系客服获取任务订单。",
+    serverError: "服务器错误",
+    notEnoughBalance: "您的账户余额不足，需要充值 {amount} 才能完成此订单。",
+    orderSubmitted: "订单提交成功",
+    submitFailed: "提交失败"
+  },
+
+  hi: {
+    accountBalance: "खाता बैलेंस:",
+    todayTimes: "आज की संख्या",
+    todayCommission: "आज का कमीशन",
+    cashGap: "कार्य के बीच नकद अंतर",
+    yesterdayCommission: "कल का खरीद कमीशन",
+    yesterdayTeamCommission: "कल का टीम कमीशन",
+    moneyFrozen: "खातों में जमा राशि",
+    grabOrder: "तुरंत ऑर्डर प्राप्त करें",
+    hint: "संकेत:",
+    hint1: "1: पूर्ण किए गए लेनदेन की राशि का 4% कमाई है।",
+    hint2: "2: सिस्टम कार्य यादृच्छिक रूप से भेजता है। मिलान के बाद उन्हें जल्द से जल्द पूरा करें।",
+    successfulOrder: "ऑर्डर सफल",
+    orderNos: "ऑर्डर नंबर:",
+    transactionTime: "लेनदेन का समय",
+    orderAmount: "ऑर्डर राशि",
+    commissions: "कमीशन",
+    expectedIncome: "अपेक्षित आय",
+    submitOrder: "ऑर्डर जमा करें",
+
+    unpaidOrder: "आपका एक अवैतनिक ऑर्डर है, कृपया पहले उस ऑर्डर को पूरा करें।",
+    serverResponseFailed: "सर्वर प्रतिक्रिया विफल",
+    failedLoadStatus: "उपयोगकर्ता स्थिति लोड करने में विफल",
+    insufficientBalance: "आपके खाते में पर्याप्त बैलेंस नहीं है।",
+    amazonUpgrade: "Amazon 20 - 499 तक के ऑर्डर कार्यों की अनुमति देता है, इसलिए आपका स्तर अपग्रेड कर दिया गया है।",
+    noOrder: "अभी कोई ऑर्डर नहीं है, कार्य ऑर्डर प्राप्त करने के लिए ग्राहक सेवा से संपर्क करें।",
+    serverError: "सर्वर त्रुटि",
+    notEnoughBalance: "आपके खाते का बैलेंस पर्याप्त नहीं है, इस ऑर्डर को पूरा करने के लिए {amount} रिचार्ज करें।",
+    orderSubmitted: "ऑर्डर सफलतापूर्वक जमा किया गया",
+    submitFailed: "जमा करना विफल"
+  },
+
+  es: {
+    accountBalance: "Saldo de la cuenta:",
+    todayTimes: "Veces de hoy",
+    todayCommission: "Comisión de hoy",
+    cashGap: "Diferencia de efectivo entre tareas",
+    yesterdayCommission: "Comisión de compra de ayer",
+    yesterdayTeamCommission: "Comisión del equipo de ayer",
+    moneyFrozen: "Dinero congelado en cuentas",
+    grabOrder: "Obtener el pedido inmediatamente",
+    hint: "Aviso:",
+    hint1: "1: Se obtiene el 4% del importe de las transacciones completadas.",
+    hint2: "2: El sistema envía tareas aleatoriamente. Complételas lo antes posible después de asignarlas.",
+    successfulOrder: "Pedido exitoso",
+    orderNos: "N.º de pedido:",
+    transactionTime: "Hora de transacción",
+    orderAmount: "Importe del pedido",
+    commissions: "Comisiones",
+    expectedIncome: "Ingresos esperados",
+    submitOrder: "Enviar pedido",
+
+    unpaidOrder: "Tienes un pedido pendiente de pago, complétalo primero.",
+    serverResponseFailed: "Error en la respuesta del servidor",
+    failedLoadStatus: "No se pudo cargar el estado del usuario",
+    insufficientBalance: "No tienes saldo suficiente en tu cuenta.",
+    amazonUpgrade: "Amazon permite tareas de pedido de 20 a 499, por lo que has sido actualizado.",
+    noOrder: "No hay pedidos, contacta con atención al cliente para obtener tareas.",
+    serverError: "Error del servidor",
+    notEnoughBalance: "El saldo de tu cuenta no es suficiente, necesitas recargar {amount} para completar este pedido.",
+    orderSubmitted: "Pedido enviado correctamente",
+    submitFailed: "Error al enviar"
+  },
+
+  fr: {
+    accountBalance: "Solde du compte :",
+    todayTimes: "Nombre de fois aujourd'hui",
+    todayCommission: "Commission du jour",
+    cashGap: "Écart de trésorerie entre les tâches",
+    yesterdayCommission: "Commission d'achat d'hier",
+    yesterdayTeamCommission: "Commission d'équipe d'hier",
+    moneyFrozen: "Argent bloqué sur les comptes",
+    grabOrder: "Obtenir la commande immédiatement",
+    hint: "Astuce :",
+    hint1: "1 : 4 % du montant des transactions terminées sont gagnés.",
+    hint2: "2 : Le système envoie les tâches aléatoirement. Terminez-les dès que possible après leur attribution.",
+    successfulOrder: "Commande réussie",
+    orderNos: "N° de commande :",
+    transactionTime: "Heure de transaction",
+    orderAmount: "Montant de la commande",
+    commissions: "Commissions",
+    expectedIncome: "Revenu attendu",
+    submitOrder: "Soumettre la commande",
+
+    unpaidOrder: "Vous avez une commande impayée, veuillez d'abord la terminer.",
+    serverResponseFailed: "Échec de la réponse du serveur",
+    failedLoadStatus: "Échec du chargement du statut utilisateur",
+    insufficientBalance: "Votre solde est insuffisant.",
+    amazonUpgrade: "Amazon autorise jusqu'à 20 - 499 tâches de commande, votre niveau a donc été amélioré.",
+    noOrder: "Aucune commande, contactez le service client pour obtenir des tâches.",
+    serverError: "Erreur du serveur",
+    notEnoughBalance: "Votre solde est insuffisant, vous devez recharger {amount} pour terminer cette commande.",
+    orderSubmitted: "Commande soumise avec succès",
+    submitFailed: "Échec de l'envoi"
+  },
+
+  ar: {
+    accountBalance: "رصيد الحساب:",
+    todayTimes: "مرات اليوم",
+    todayCommission: "عمولة اليوم",
+    cashGap: "الفجوة النقدية بين المهام",
+    yesterdayCommission: "عمولة شراء الأمس",
+    yesterdayTeamCommission: "عمولة فريق الأمس",
+    moneyFrozen: "الأموال المجمدة في الحسابات",
+    grabOrder: "احصل على الطلب فورًا",
+    hint: "تلميح:",
+    hint1: "1: يتم كسب 4% من قيمة المعاملات المكتملة.",
+    hint2: "2: يرسل النظام المهام عشوائيًا. أكملها في أسرع وقت ممكن بعد مطابقتها.",
+    successfulOrder: "طلب ناجح",
+    orderNos: "رقم الطلب:",
+    transactionTime: "وقت المعاملة",
+    orderAmount: "مبلغ الطلب",
+    commissions: "العمولات",
+    expectedIncome: "الدخل المتوقع",
+    submitOrder: "إرسال الطلب",
+
+    unpaidOrder: "لديك طلب غير مدفوع، يرجى إكمال هذا الطلب أولاً.",
+    serverResponseFailed: "فشل استجابة الخادم",
+    failedLoadStatus: "فشل تحميل حالة المستخدم",
+    insufficientBalance: "رصيد حسابك غير كافٍ.",
+    amazonUpgrade: "يسمح Amazon بمهام طلبات من 20 إلى 499، لذلك تمت ترقيتك.",
+    noOrder: "لا يوجد طلب حاليًا، يرجى الاتصال بخدمة العملاء للحصول على المهام.",
+    serverError: "خطأ في الخادم",
+    notEnoughBalance: "رصيد حسابك غير كافٍ، تحتاج إلى شحن {amount} لإكمال هذا الطلب.",
+    orderSubmitted: "تم إرسال الطلب بنجاح",
+    submitFailed: "فشل الإرسال"
+  },
+
+  bn: {
+    accountBalance: "অ্যাকাউন্ট ব্যালেন্স:",
+    todayTimes: "আজকের সংখ্যা",
+    todayCommission: "আজকের কমিশন",
+    cashGap: "টাস্কের মধ্যকার নগদ ঘাটতি",
+    yesterdayCommission: "গতকালের ক্রয় কমিশন",
+    yesterdayTeamCommission: "গতকালের টিম কমিশন",
+    moneyFrozen: "অ্যাকাউন্টে জমাকৃত অর্থ",
+    grabOrder: "তাৎক্ষণিক অর্ডার নিন",
+    hint: "নির্দেশনা:",
+    hint1: "১: সম্পন্ন লেনদেনের পরিমাণের ৪% আয় হিসেবে পাওয়া যায়।",
+    hint2: "২: সিস্টেম এলোমেলোভাবে টাস্ক পাঠায়। ম্যাচ হওয়ার পর যত দ্রুত সম্ভব সম্পন্ন করুন।",
+    successfulOrder: "অর্ডার সফল",
+    orderNos: "অর্ডার নম্বর:",
+    transactionTime: "লেনদেনের সময়",
+    orderAmount: "অর্ডারের পরিমাণ",
+    commissions: "কমিশন",
+    expectedIncome: "প্রত্যাশিত আয়",
+    submitOrder: "অর্ডার জমা দিন",
+
+    unpaidOrder: "আপনার একটি অসম্পূর্ণ পেমেন্টের অর্ডার আছে, আগে সেই অর্ডারটি সম্পন্ন করুন।",
+    serverResponseFailed: "সার্ভার থেকে সাড়া পাওয়া যায়নি",
+    failedLoadStatus: "ইউজার স্ট্যাটাস লোড করতে ব্যর্থ",
+    insufficientBalance: "আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।",
+    amazonUpgrade: "Amazon ২০ - ৪৯৯ পর্যন্ত অর্ডার টাস্কের অনুমতি দেয়, তাই আপনার লেভেল আপগ্রেড করা হয়েছে।",
+    noOrder: "কোনো অর্ডার নেই, টাস্ক অর্ডার পেতে কাস্টমার সার্ভিসে যোগাযোগ করুন।",
+    serverError: "সার্ভার সমস্যা হয়েছে",
+    notEnoughBalance: "আপনার অ্যাকাউন্ট ব্যালেন্স যথেষ্ট নয়, এই অর্ডার সম্পন্ন করতে {amount} রিচার্জ করতে হবে।",
+    orderSubmitted: "অর্ডার সফলভাবে জমা হয়েছে",
+    submitFailed: "জমা দেওয়া ব্যর্থ হয়েছে"
+  },
+
+  pt: {
+    accountBalance: "Saldo da conta:",
+    todayTimes: "Vezes de hoje",
+    todayCommission: "Comissão de hoje",
+    cashGap: "Diferença de caixa entre tarefas",
+    yesterdayCommission: "Comissão de compra de ontem",
+    yesterdayTeamCommission: "Comissão da equipe de ontem",
+    moneyFrozen: "Dinheiro congelado nas contas",
+    grabOrder: "Obter pedido imediatamente",
+    hint: "Dica:",
+    hint1: "1: 4% do valor das transações concluídas é ganho.",
+    hint2: "2: O sistema envia tarefas aleatoriamente. Conclua-as o mais rápido possível após a correspondência.",
+    successfulOrder: "Pedido realizado com sucesso",
+    orderNos: "Nº do pedido:",
+    transactionTime: "Hora da transação",
+    orderAmount: "Valor do pedido",
+    commissions: "Comissões",
+    expectedIncome: "Renda esperada",
+    submitOrder: "Enviar pedido",
+
+    unpaidOrder: "Você tem um pedido não pago, conclua esse pedido primeiro.",
+    serverResponseFailed: "Falha na resposta do servidor",
+    failedLoadStatus: "Falha ao carregar o status do usuário",
+    insufficientBalance: "Seu saldo é insuficiente.",
+    amazonUpgrade: "A Amazon permite até 20 - 499 tarefas de pedido, então seu nível foi atualizado.",
+    noOrder: "Nenhum pedido, entre em contato com o atendimento ao cliente para obter tarefas.",
+    serverError: "Erro do servidor",
+    notEnoughBalance: "Seu saldo não é suficiente, você precisa recarregar {amount} para concluir este pedido.",
+    orderSubmitted: "Pedido enviado com sucesso",
+    submitFailed: "Falha ao enviar"
+  },
+
+  ru: {
+    accountBalance: "Баланс счета:",
+    todayTimes: "Количество сегодня",
+    todayCommission: "Комиссия за сегодня",
+    cashGap: "Денежный разрыв между заданиями",
+    yesterdayCommission: "Комиссия за покупки вчера",
+    yesterdayTeamCommission: "Комиссия команды за вчера",
+    moneyFrozen: "Замороженные средства",
+    grabOrder: "Получить заказ сейчас",
+    hint: "Подсказка:",
+    hint1: "1: Вы получаете 4% от суммы выполненных транзакций.",
+    hint2: "2: Система случайным образом отправляет задания. Выполняйте их как можно скорее после получения.",
+    successfulOrder: "Заказ выполнен успешно",
+    orderNos: "Номер заказа:",
+    transactionTime: "Время транзакции",
+    orderAmount: "Сумма заказа",
+    commissions: "Комиссии",
+    expectedIncome: "Ожидаемый доход",
+    submitOrder: "Отправить заказ",
+
+    unpaidOrder: "У вас есть неоплаченный заказ, сначала завершите его.",
+    serverResponseFailed: "Ошибка ответа сервера",
+    failedLoadStatus: "Не удалось загрузить статус пользователя",
+    insufficientBalance: "Недостаточно средств на вашем счете.",
+    amazonUpgrade: "Amazon поддерживает от 20 до 499 заданий, поэтому ваш уровень был повышен.",
+    noOrder: "Заказов пока нет, обратитесь в службу поддержки для получения заданий.",
+    serverError: "Ошибка сервера",
+    notEnoughBalance: "Недостаточно средств, пополните {amount}, чтобы завершить этот заказ.",
+    orderSubmitted: "Заказ успешно отправлен",
+    submitFailed: "Не удалось отправить"
+  },
+
+  ur: {
+    accountBalance: "اکاؤنٹ بیلنس:",
+    todayTimes: "آج کی تعداد",
+    todayCommission: "آج کا کمیشن",
+    cashGap: "ٹاسکس کے درمیان نقد فرق",
+    yesterdayCommission: "کل کا خرید کمیشن",
+    yesterdayTeamCommission: "کل کا ٹیم کمیشن",
+    moneyFrozen: "اکاؤنٹس میں منجمد رقم",
+    grabOrder: "فوراً آرڈر حاصل کریں",
+    hint: "اشارہ:",
+    hint1: "1: مکمل شدہ لین دین کی رقم کا 4% کمائی ہے۔",
+    hint2: "2: سسٹم کام تصادفی طور پر بھیجتا ہے۔ میچ ہونے کے بعد انہیں جلد از جلد مکمل کریں۔",
+    successfulOrder: "آرڈر کامیاب",
+    orderNos: "آرڈر نمبر:",
+    transactionTime: "لین دین کا وقت",
+    orderAmount: "آرڈر کی رقم",
+    commissions: "کمیشن",
+    expectedIncome: "متوقع آمدنی",
+    submitOrder: "آرڈر جمع کریں",
+
+    unpaidOrder: "آپ کا ایک غیر ادا شدہ آرڈر ہے، پہلے اسے مکمل کریں۔",
+    serverResponseFailed: "سرور کا جواب ناکام ہوگیا",
+    failedLoadStatus: "صارف کی حیثیت لوڈ نہیں ہوسکی",
+    insufficientBalance: "آپ کے اکاؤنٹ میں کافی بیلنس نہیں ہے۔",
+    amazonUpgrade: "Amazon 20 - 499 آرڈر ٹاسکس کی اجازت دیتا ہے، اس لیے آپ کا لیول اپ گریڈ کردیا گیا ہے۔",
+    noOrder: "ابھی کوئی آرڈر نہیں، ٹاسک آرڈر حاصل کرنے کے لیے کسٹمر سروس سے رابطہ کریں۔",
+    serverError: "سرور کی خرابی",
+    notEnoughBalance: "آپ کا بیلنس کافی نہیں ہے، اس آرڈر کو مکمل کرنے کے لیے {amount} ریچارج کریں۔",
+    orderSubmitted: "آرڈر کامیابی سے جمع ہوگیا",
+    submitFailed: "جمع کرنا ناکام ہوگیا"
+  },
+
+  id: {
+    accountBalance: "Saldo Akun:",
+    todayTimes: "Jumlah Hari Ini",
+    todayCommission: "Komisi Hari Ini",
+    cashGap: "Selisih dana antar tugas",
+    yesterdayCommission: "Komisi pembelian kemarin",
+    yesterdayTeamCommission: "Komisi tim kemarin",
+    moneyFrozen: "Dana yang dibekukan",
+    grabOrder: "Ambil pesanan segera",
+    hint: "Petunjuk:",
+    hint1: "1: 4% dari jumlah transaksi yang selesai menjadi penghasilan.",
+    hint2: "2: Sistem mengirim tugas secara acak. Selesaikan sesegera mungkin setelah mendapatkannya.",
+    successfulOrder: "Pesanan berhasil",
+    orderNos: "Nomor Pesanan:",
+    transactionTime: "Waktu transaksi",
+    orderAmount: "Jumlah pesanan",
+    commissions: "Komisi",
+    expectedIncome: "Pendapatan yang diharapkan",
+    submitOrder: "Kirim pesanan",
+
+    unpaidOrder: "Anda memiliki pesanan yang belum dibayar, selesaikan pesanan tersebut terlebih dahulu.",
+    serverResponseFailed: "Respons server gagal",
+    failedLoadStatus: "Gagal memuat status pengguna",
+    insufficientBalance: "Saldo akun Anda tidak cukup.",
+    amazonUpgrade: "Amazon mengizinkan hingga 20 - 499 tugas pesanan, sehingga level Anda telah ditingkatkan.",
+    noOrder: "Belum ada pesanan, hubungi layanan pelanggan untuk mendapatkan tugas.",
+    serverError: "Kesalahan server",
+    notEnoughBalance: "Saldo Anda tidak cukup, Anda perlu mengisi ulang {amount} untuk menyelesaikan pesanan ini.",
+    orderSubmitted: "Pesanan berhasil dikirim",
+    submitFailed: "Gagal mengirim"
+  },
+
+  de: {
+    accountBalance: "Kontostand:",
+    todayTimes: "Heutige Anzahl",
+    todayCommission: "Heutige Provision",
+    cashGap: "Geldlücke zwischen Aufgaben",
+    yesterdayCommission: "Kaufprovision von gestern",
+    yesterdayTeamCommission: "Teamprovision von gestern",
+    moneyFrozen: "Eingefrorenes Geld",
+    grabOrder: "Bestellung sofort erhalten",
+    hint: "Hinweis:",
+    hint1: "1: 4 % des Betrags abgeschlossener Transaktionen werden verdient.",
+    hint2: "2: Das System sendet Aufgaben zufällig. Erledigen Sie sie nach der Zuordnung so schnell wie möglich.",
+    successfulOrder: "Bestellung erfolgreich",
+    orderNos: "Bestellnummer:",
+    transactionTime: "Transaktionszeit",
+    orderAmount: "Bestellbetrag",
+    commissions: "Provisionen",
+    expectedIncome: "Erwartetes Einkommen",
+    submitOrder: "Bestellung absenden",
+
+    unpaidOrder: "Sie haben eine unbezahlte Bestellung. Bitte schließen Sie diese zuerst ab.",
+    serverResponseFailed: "Serverantwort fehlgeschlagen",
+    failedLoadStatus: "Benutzerstatus konnte nicht geladen werden",
+    insufficientBalance: "Ihr Kontostand ist nicht ausreichend.",
+    amazonUpgrade: "Amazon erlaubt 20 - 499 Bestellaufgaben, daher wurde Ihr Level erhöht.",
+    noOrder: "Keine Bestellung vorhanden. Kontaktieren Sie den Kundenservice, um Aufgaben zu erhalten.",
+    serverError: "Serverfehler",
+    notEnoughBalance: "Ihr Kontostand reicht nicht aus. Sie müssen {amount} aufladen, um diese Bestellung abzuschließen.",
+    orderSubmitted: "Bestellung erfolgreich übermittelt",
+    submitFailed: "Übermittlung fehlgeschlagen"
+  },
+
+  ja: {
+    accountBalance: "アカウント残高:",
+    todayTimes: "今日の回数",
+    todayCommission: "今日のコミッション",
+    cashGap: "タスク間の資金差額",
+    yesterdayCommission: "昨日の購入コミッション",
+    yesterdayTeamCommission: "昨日のチームコミッション",
+    moneyFrozen: "口座凍結資金",
+    grabOrder: "今すぐ注文を取得",
+    hint: "ヒント:",
+    hint1: "1: 完了した取引金額の4%が収益になります。",
+    hint2: "2: システムはランダムにタスクを送信します。マッチング後、できるだけ早く完了してください。",
+    successfulOrder: "注文成功",
+    orderNos: "注文番号:",
+    transactionTime: "取引時間",
+    orderAmount: "注文金額",
+    commissions: "コミッション",
+    expectedIncome: "予想収入",
+    submitOrder: "注文を送信",
+
+    unpaidOrder: "未払いの注文があります。先にその注文を完了してください。",
+    serverResponseFailed: "サーバー応答に失敗しました",
+    failedLoadStatus: "ユーザーステータスの読み込みに失敗しました",
+    insufficientBalance: "アカウント残高が不足しています。",
+    amazonUpgrade: "Amazonでは20～499件の注文タスクが許可されているため、レベルがアップグレードされました。",
+    noOrder: "注文はありません。タスクを取得するにはカスタマーサービスにお問い合わせください。",
+    serverError: "サーバーエラー",
+    notEnoughBalance: "残高が不足しています。この注文を完了するには{amount}をチャージしてください。",
+    orderSubmitted: "注文が正常に送信されました",
+    submitFailed: "送信に失敗しました"
+  },
+
+  it: {
+    accountBalance: "Saldo del conto:",
+    todayTimes: "Volte di oggi",
+    todayCommission: "Commissione di oggi",
+    cashGap: "Differenza di cassa tra le attività",
+    yesterdayCommission: "Commissione acquisti di ieri",
+    yesterdayTeamCommission: "Commissione del team di ieri",
+    moneyFrozen: "Denaro congelato nei conti",
+    grabOrder: "Ottieni subito l'ordine",
+    hint: "Suggerimento:",
+    hint1: "1: Il 4% dell'importo delle transazioni completate viene guadagnato.",
+    hint2: "2: Il sistema invia attività casualmente. Completale il prima possibile dopo l'abbinamento.",
+    successfulOrder: "Ordine completato",
+    orderNos: "Numero ordine:",
+    transactionTime: "Ora della transazione",
+    orderAmount: "Importo ordine",
+    commissions: "Commissioni",
+    expectedIncome: "Entrate previste",
+    submitOrder: "Invia ordine",
+
+    unpaidOrder: "Hai un ordine non pagato, completa prima quell'ordine.",
+    serverResponseFailed: "Risposta del server non riuscita",
+    failedLoadStatus: "Impossibile caricare lo stato dell'utente",
+    insufficientBalance: "Il saldo del tuo conto non è sufficiente.",
+    amazonUpgrade: "Amazon consente da 20 a 499 attività d'ordine, quindi il tuo livello è stato aggiornato.",
+    noOrder: "Nessun ordine, contatta il servizio clienti per ricevere le attività.",
+    serverError: "Errore del server",
+    notEnoughBalance: "Il saldo non è sufficiente, devi ricaricare {amount} per completare questo ordine.",
+    orderSubmitted: "Ordine inviato con successo",
+    submitFailed: "Invio non riuscito"
+  },
+
+  tr: {
+    accountBalance: "Hesap bakiyesi:",
+    todayTimes: "Bugünkü sayısı",
+    todayCommission: "Bugünkü komisyon",
+    cashGap: "Görevler arasındaki nakit farkı",
+    yesterdayCommission: "Dünkü satın alma komisyonu",
+    yesterdayTeamCommission: "Dünkü ekip komisyonu",
+    moneyFrozen: "Hesaplarda dondurulan para",
+    grabOrder: "Siparişi hemen al",
+    hint: "İpucu:",
+    hint1: "1: Tamamlanan işlemlerin tutarının %4'ü kazançtır.",
+    hint2: "2: Sistem görevleri rastgele gönderir. Eşleştikten sonra mümkün olduğunca çabuk tamamlayın.",
+    successfulOrder: "Sipariş başarılı",
+    orderNos: "Sipariş No:",
+    transactionTime: "İşlem zamanı",
+    orderAmount: "Sipariş tutarı",
+    commissions: "Komisyonlar",
+    expectedIncome: "Beklenen gelir",
+    submitOrder: "Siparişi gönder",
+
+    unpaidOrder: "Ödenmemiş bir siparişiniz var, lütfen önce bu siparişi tamamlayın.",
+    serverResponseFailed: "Sunucu yanıtı başarısız",
+    failedLoadStatus: "Kullanıcı durumu yüklenemedi",
+    insufficientBalance: "Hesabınızda yeterli bakiye yok.",
+    amazonUpgrade: "Amazon 20 - 499 sipariş görevine izin verir, bu nedenle seviyeniz yükseltildi.",
+    noOrder: "Henüz sipariş yok, görev almak için müşteri hizmetleriyle iletişime geçin.",
+    serverError: "Sunucu hatası",
+    notEnoughBalance: "Bakiyeniz yeterli değil, bu siparişi tamamlamak için {amount} yüklemeniz gerekiyor.",
+    orderSubmitted: "Sipariş başarıyla gönderildi",
+    submitFailed: "Gönderim başarısız"
+  },
+
+  fa: {
+    accountBalance: "موجودی حساب:",
+    todayTimes: "تعداد امروز",
+    todayCommission: "کمیسیون امروز",
+    cashGap: "اختلاف نقدی بین وظایف",
+    yesterdayCommission: "کمیسیون خرید دیروز",
+    yesterdayTeamCommission: "کمیسیون تیم دیروز",
+    moneyFrozen: "پول مسدود شده در حساب‌ها",
+    grabOrder: "دریافت فوری سفارش",
+    hint: "نکته:",
+    hint1: "1: چهار درصد مبلغ تراکنش‌های تکمیل شده درآمد شماست.",
+    hint2: "2: سیستم وظایف را به صورت تصادفی ارسال می‌کند. پس از تطبیق، آنها را در اسرع وقت تکمیل کنید.",
+    successfulOrder: "سفارش موفق",
+    orderNos: "شماره سفارش:",
+    transactionTime: "زمان تراکنش",
+    orderAmount: "مبلغ سفارش",
+    commissions: "کمیسیون‌ها",
+    expectedIncome: "درآمد مورد انتظار",
+    submitOrder: "ثبت سفارش",
+
+    unpaidOrder: "شما یک سفارش پرداخت نشده دارید، ابتدا آن سفارش را تکمیل کنید.",
+    serverResponseFailed: "پاسخ سرور ناموفق بود",
+    failedLoadStatus: "بارگذاری وضعیت کاربر ناموفق بود",
+    insufficientBalance: "موجودی حساب شما کافی نیست.",
+    amazonUpgrade: "Amazon اجازه 20 تا 499 وظیفه سفارش را می‌دهد، بنابراین سطح شما ارتقا یافته است.",
+    noOrder: "هنوز سفارشی وجود ندارد، برای دریافت وظایف با خدمات مشتری تماس بگیرید.",
+    serverError: "خطای سرور",
+    notEnoughBalance: "موجودی شما کافی نیست، برای تکمیل این سفارش باید {amount} شارژ کنید.",
+    orderSubmitted: "سفارش با موفقیت ثبت شد",
+    submitFailed: "ثبت ناموفق بود"
+  },
+
+  nl: {
+    accountBalance: "Accountsaldo:",
+    todayTimes: "Aantal vandaag",
+    todayCommission: "Commissie vandaag",
+    cashGap: "Geldverschil tussen taken",
+    yesterdayCommission: "Aankoopcommissie van gisteren",
+    yesterdayTeamCommission: "Teamcommissie van gisteren",
+    moneyFrozen: "Bevroren geld op accounts",
+    grabOrder: "Bestelling direct ophalen",
+    hint: "Tip:",
+    hint1: "1: 4% van het bedrag van voltooide transacties wordt verdiend.",
+    hint2: "2: Het systeem stuurt taken willekeurig. Voltooi ze zo snel mogelijk na het matchen.",
+    successfulOrder: "Bestelling succesvol",
+    orderNos: "Bestelnummer:",
+    transactionTime: "Transactietijd",
+    orderAmount: "Orderbedrag",
+    commissions: "Commissies",
+    expectedIncome: "Verwacht inkomen",
+    submitOrder: "Bestelling indienen",
+
+    unpaidOrder: "U heeft een onbetaalde bestelling, voltooi die bestelling eerst.",
+    serverResponseFailed: "Serverreactie mislukt",
+    failedLoadStatus: "Gebruikersstatus kon niet worden geladen",
+    insufficientBalance: "Uw accountsaldo is onvoldoende.",
+    amazonUpgrade: "Amazon staat 20 - 499 besteltaken toe, daarom is uw niveau verhoogd.",
+    noOrder: "Geen bestelling, neem contact op met de klantenservice om taken te krijgen.",
+    serverError: "Serverfout",
+    notEnoughBalance: "Uw saldo is onvoldoende, u moet {amount} opwaarderen om deze bestelling te voltooien.",
+    orderSubmitted: "Bestelling succesvol ingediend",
+    submitFailed: "Indienen mislukt"
+  }
+
+};
+
+const selectedLang =
+  localStorage.getItem("lang") || "en";
+const amazonLanguage =
+  amazonTranslations[selectedLang] ||
+  amazonTranslations.en;
+
+function applyAmazonLanguage() {
+  document.getElementById("accountBalanceText").innerText =
+    amazonLanguage.accountBalance;
+  document.getElementById("todayTimesText").innerText =
+    amazonLanguage.todayTimes;
+  document.getElementById("todayCommissionText").innerText =
+    amazonLanguage.todayCommission;
+  document.getElementById("cashGapText").innerText =
+    amazonLanguage.cashGap;
+  document.getElementById("yesterdayCommissionText").innerText =
+    amazonLanguage.yesterdayCommission;
+  document.getElementById("yesterdayTeamCommissionText").innerText =
+    amazonLanguage.yesterdayTeamCommission;
+  document.getElementById("moneyFrozenText").innerText =
+    amazonLanguage.moneyFrozen;
+  document.getElementById("grabOrderText").innerText =
+    amazonLanguage.grabOrder;
+  document.getElementById("hintTitle").innerText =
+    amazonLanguage.hint;
+  document.getElementById("hint1").innerText =
+    amazonLanguage.hint1;
+  document.getElementById("hint2").innerText =
+    amazonLanguage.hint2;
+  document.getElementById("successfulOrderText").innerText =
+    amazonLanguage.successfulOrder;
+  document.getElementById("orderNosText").innerText =
+    amazonLanguage.orderNos;
+  document.getElementById("transactionTimeText").innerText =
+    amazonLanguage.transactionTime;
+  document.getElementById("orderAmountText").innerText =
+    amazonLanguage.orderAmount;
+  document.getElementById("commissionsText").innerText =
+    amazonLanguage.commissions;
+  document.getElementById("expectedIncomeText").innerText =
+    amazonLanguage.expectedIncome;
+  document.getElementById("submitOrderText").innerText =
+    amazonLanguage.submitOrder;
+}
+
+applyAmazonLanguage();
+
 let currentCommission = 0;
 let currentOrderAmount = 0;
 
@@ -122,7 +743,7 @@ async function openPopup() {
   );
 
   if (pending) {
-    showMessage("You have an unpaid order, please complete that order first.");
+    showMessage(amazonLanguage.unpaidOrder);
     return;
   }
 
@@ -133,29 +754,31 @@ async function openPopup() {
     });
 
     if (!res.ok) {
-  showMessage("Server response failed");
+  showMessage(amazonLanguage.serverResponseFailed);
   return;
 }
 
     const data = await res.json();
 
     if (!data.success) {
-      showMessage(data.msg || "Failed to load user status");
+      showMessage(
+  data.msg || amazonLanguage.failedLoadStatus
+);
       return;
     }
 
     if (data.balance < 20) {
-      showMessage("You don't have sufficient balance in your account.");
+      showMessage(amazonLanguage.insufficientBalance);
       return;
     }
 
     if (data.balance > 498.99) {
-      showMessage("Amazon allows for up to 20 - 499 order tasks, so you've been upgraded.");
+      showMessage(amazonLanguage.amazonUpgrade);
       return;
     }
 
     if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
-      showMessage("No order yet, please contact customer service to get the task orders.");
+      showMessage(amazonLanguage.noOrder);
       return;
     }
 
@@ -433,7 +1056,7 @@ Number(
 
     console.log(err);
 
-    showMessage("Server error");
+    showMessage(amazonLanguage.serverError);
   }
 }
 
@@ -454,8 +1077,11 @@ async function submitOrder() {
       (currentOrderAmount - userBalance).toFixed(4);
 
     showMessage(
-      `Your account balance is not enough, you need to recharge ${shortage} to complete this order.`
-    );
+  amazonLanguage.notEnoughBalance.replace(
+    "{amount}",
+    shortage
+  )
+);
 
     return;
   }
@@ -514,18 +1140,20 @@ async function submitOrder() {
 
     closePopup();
 
-    showMessage("Order submitted successfully");
+    showMessage(amazonLanguage.orderSubmitted);
 
   } else {
 
-    showMessage(data.msg || "Submit failed");
+    showMessage(
+  data.msg || amazonLanguage.submitFailed
+);
   }
 
 } catch (err) {
 
   console.log(err);
 
-  showMessage("Server error");
+  showMessage(amazonLanguage.serverError);
 }
 }
 

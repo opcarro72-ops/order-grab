@@ -104,47 +104,312 @@
 
 <div class="header">
   <span class="back" onclick="history.back()">❮</span>
-  <h2>Deposit Records</h2>
+  <h2 data-lang="depositRecords">Deposit Records</h2>
 </div>
 
 <div class="container" id="recordList"></div>
 
-
 <script>
+
+const lang = localStorage.getItem("lang") || "en";
+const depositTexts = {
+
+  en: {
+    depositRecords: "Deposit Records",
+    amount: "Amount",
+    deposited: "Deposited",
+    time: "Time",
+    success: "Success",
+    pending: "Pending",
+    noDepositRecords: "No deposit records found",
+    loading: "Loading...",
+    userNotLoggedIn: "User not logged in",
+    serverError: "Server error"
+  },
+
+  zh: {
+    depositRecords: "存款记录",
+    amount: "金额",
+    deposited: "已存入",
+    time: "时间",
+    success: "成功",
+    pending: "处理中",
+    noDepositRecords: "未找到存款记录",
+    loading: "加载中...",
+    userNotLoggedIn: "用户未登录",
+    serverError: "服务器错误"
+  },
+
+  hi: {
+    depositRecords: "जमा रिकॉर्ड",
+    amount: "राशि",
+    deposited: "जमा किया गया",
+    time: "समय",
+    success: "सफल",
+    pending: "लंबित",
+    noDepositRecords: "कोई जमा रिकॉर्ड नहीं मिला",
+    loading: "लोड हो रहा है...",
+    userNotLoggedIn: "उपयोगकर्ता लॉग इन नहीं है",
+    serverError: "सर्वर त्रुटि"
+  },
+
+  es: {
+    depositRecords: "Registros de depósitos",
+    amount: "Cantidad",
+    deposited: "Depositado",
+    time: "Hora",
+    success: "Éxito",
+    pending: "Pendiente",
+    noDepositRecords: "No se encontraron registros de depósitos",
+    loading: "Cargando...",
+    userNotLoggedIn: "Usuario no ha iniciado sesión",
+    serverError: "Error del servidor"
+  },
+
+  fr: {
+    depositRecords: "Historique des dépôts",
+    amount: "Montant",
+    deposited: "Déposé",
+    time: "Heure",
+    success: "Réussi",
+    pending: "En attente",
+    noDepositRecords: "Aucun historique de dépôt trouvé",
+    loading: "Chargement...",
+    userNotLoggedIn: "Utilisateur non connecté",
+    serverError: "Erreur du serveur"
+  },
+
+  ar: {
+    depositRecords: "سجلات الإيداع",
+    amount: "المبلغ",
+    deposited: "تم الإيداع",
+    time: "الوقت",
+    success: "ناجح",
+    pending: "قيد الانتظار",
+    noDepositRecords: "لم يتم العثور على سجلات إيداع",
+    loading: "جارٍ التحميل...",
+    userNotLoggedIn: "المستخدم غير مسجل الدخول",
+    serverError: "خطأ في الخادم"
+  },
+
+  bn: {
+    depositRecords: "ডিপোজিট রেকর্ড",
+    amount: "পরিমাণ",
+    deposited: "ডিপোজিট করা হয়েছে",
+    time: "সময়",
+    success: "সফল",
+    pending: "অপেক্ষমাণ",
+    noDepositRecords: "কোনো ডিপোজিট রেকর্ড পাওয়া যায়নি",
+    loading: "লোড হচ্ছে...",
+    userNotLoggedIn: "ইউজার লগইন করা নেই",
+    serverError: "সার্ভার সমস্যা"
+  },
+
+  pt: {
+    depositRecords: "Registros de depósitos",
+    amount: "Valor",
+    deposited: "Depositado",
+    time: "Hora",
+    success: "Sucesso",
+    pending: "Pendente",
+    noDepositRecords: "Nenhum registro de depósito encontrado",
+    loading: "Carregando...",
+    userNotLoggedIn: "Usuário não conectado",
+    serverError: "Erro do servidor"
+  },
+
+  ru: {
+    depositRecords: "История пополнений",
+    amount: "Сумма",
+    deposited: "Зачислено",
+    time: "Время",
+    success: "Успешно",
+    pending: "В обработке",
+    noDepositRecords: "История пополнений не найдена",
+    loading: "Загрузка...",
+    userNotLoggedIn: "Пользователь не вошёл в систему",
+    serverError: "Ошибка сервера"
+  },
+
+  ur: {
+    depositRecords: "جمع ریکارڈ",
+    amount: "رقم",
+    deposited: "جمع شدہ",
+    time: "وقت",
+    success: "کامیاب",
+    pending: "زیر التوا",
+    noDepositRecords: "جمع کرنے کا کوئی ریکارڈ نہیں ملا",
+    loading: "لوڈ ہو رہا ہے...",
+    userNotLoggedIn: "صارف لاگ ان نہیں ہے",
+    serverError: "سرور کی خرابی"
+  },
+
+  id: {
+    depositRecords: "Catatan deposit",
+    amount: "Jumlah",
+    deposited: "Disetor",
+    time: "Waktu",
+    success: "Berhasil",
+    pending: "Tertunda",
+    noDepositRecords: "Tidak ada catatan deposit",
+    loading: "Memuat...",
+    userNotLoggedIn: "Pengguna belum masuk",
+    serverError: "Kesalahan server"
+  },
+
+  de: {
+    depositRecords: "Einzahlungsverlauf",
+    amount: "Betrag",
+    deposited: "Eingezahlt",
+    time: "Zeit",
+    success: "Erfolgreich",
+    pending: "Ausstehend",
+    noDepositRecords: "Keine Einzahlungsdaten gefunden",
+    loading: "Wird geladen...",
+    userNotLoggedIn: "Benutzer nicht angemeldet",
+    serverError: "Serverfehler"
+  },
+
+  ja: {
+    depositRecords: "入金履歴",
+    amount: "金額",
+    deposited: "入金済み",
+    time: "時間",
+    success: "成功",
+    pending: "保留中",
+    noDepositRecords: "入金履歴が見つかりません",
+    loading: "読み込み中...",
+    userNotLoggedIn: "ユーザーがログインしていません",
+    serverError: "サーバーエラー"
+  },
+
+  it: {
+    depositRecords: "Cronologia depositi",
+    amount: "Importo",
+    deposited: "Depositato",
+    time: "Ora",
+    success: "Successo",
+    pending: "In attesa",
+    noDepositRecords: "Nessun record di deposito trovato",
+    loading: "Caricamento...",
+    userNotLoggedIn: "Utente non connesso",
+    serverError: "Errore del server"
+  },
+
+  tr: {
+    depositRecords: "Para yatırma kayıtları",
+    amount: "Miktar",
+    deposited: "Yatırılan",
+    time: "Zaman",
+    success: "Başarılı",
+    pending: "Beklemede",
+    noDepositRecords: "Para yatırma kaydı bulunamadı",
+    loading: "Yükleniyor...",
+    userNotLoggedIn: "Kullanıcı giriş yapmamış",
+    serverError: "Sunucu hatası"
+  },
+
+  fa: {
+    depositRecords: "سوابق واریز",
+    amount: "مبلغ",
+    deposited: "واریز شده",
+    time: "زمان",
+    success: "موفق",
+    pending: "در انتظار",
+    noDepositRecords: "هیچ سابقه واریزی یافت نشد",
+    loading: "در حال بارگذاری...",
+    userNotLoggedIn: "کاربر وارد نشده است",
+    serverError: "خطای سرور"
+  },
+
+  nl: {
+    depositRecords: "Stortingsrecords",
+    amount: "Bedrag",
+    deposited: "Gestort",
+    time: "Tijd",
+    success: "Geslaagd",
+    pending: "In behandeling",
+    noDepositRecords: "Geen stortingsrecords gevonden",
+    loading: "Laden...",
+    userNotLoggedIn: "Gebruiker is niet ingelogd",
+    serverError: "Serverfout"
+  }
+
+};
+
+const currentTexts =
+  depositTexts[lang] || depositTexts.en;
+
+document.querySelector(
+  '[data-lang="depositRecords"]'
+).innerText = currentTexts.depositRecords;
+
+function translateStatus(status) {
+  if (status === "Pending") {
+    return currentTexts.pending;
+  }
+  return currentTexts.success;
+}
+
 async function loadDeposits() {
   const token = localStorage.getItem("token");
   const box = document.getElementById("recordList");
 
-  const res = await fetch("/my-deposits", {
-    headers: {
-      "Authorization": "Bearer " + token
-    }
-  });
-
-  const records = await res.json();
-
-  box.innerHTML = "";
-
-  if (!Array.isArray(records) || records.length === 0) {
-    box.innerHTML = '<p class="empty">No deposit records found</p>';
+  if (!token) {
+    box.innerHTML =
+      `<p class="empty">${currentTexts.userNotLoggedIn}</p>`;
     return;
   }
 
-  records.forEach(r => {
-    let statusClass = r.status === "Pending" ? "pending" : "success";
+  box.innerHTML =
+    `<p class="empty">${currentTexts.loading}</p>`;
+  try {
 
-    box.innerHTML += `
-      <div class="record-item">
-        <div class="status ${statusClass}">${r.status}</div>
-        <p>Amount: ${r.amount} USDT</p>
-        <p>Deposited: ${r.approvedAmount || 0} USDT</p>
-        <p>Time: ${new Date(r.time).toLocaleString()}</p>
-      </div>
-    `;
-  });
+    const res = await fetch("/my-deposits", {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    const records = await res.json();
+    box.innerHTML = "";
+
+    if (!Array.isArray(records) || records.length === 0) {
+      box.innerHTML =
+        `<p class="empty">${currentTexts.noDepositRecords}</p>`;
+      return;
+    }
+
+    records.forEach(r => {
+      let statusClass =
+        r.status === "Pending"
+          ? "pending"
+          : "success";
+      box.innerHTML += `
+        <div class="record-item">
+          <div class="status ${statusClass}">
+            ${translateStatus(r.status)}
+          </div>
+          <p>
+            ${currentTexts.amount}: ${r.amount} USDT
+          </p>
+          <p>
+            ${currentTexts.deposited}: ${r.approvedAmount || 0} USDT
+          </p>
+          <p>
+            ${currentTexts.time}: ${new Date(r.time).toLocaleString()}
+          </p>
+        </div>
+      `;
+    });
+  } catch (error) {
+    box.innerHTML =
+      `<p class="empty">${currentTexts.serverError}</p>`;
+  }
 }
 
 loadDeposits();
+
 </script>
 
 </body>

@@ -141,10 +141,15 @@ button.active {
   color: #555;
 }
 
-.menu-grid div span {
+.menu-grid div > span:first-child {
   display: block;
   font-size: 22px;
   margin-bottom: 5px;
+}
+
+.menu-grid div > span[data-lang] {
+  display: block;
+  font-size: 13px;
 }
 
 .menu-list {

@@ -13,14 +13,19 @@
 
   <div class="pay-header">
     <span onclick="goPage('mine.html')">❮</span>
-    <h3>Deposit</h3>
+    <h3 id="paymentTitle">Deposit</h3>
   </div>
 
   <div class="pay-card">
 
     <h1 id="amountText"></h1>
-    <p class="network">Network - TRON(TRC-20)</p>
-    <p class="network">One Time Address)</p>
+    <p class="network" id="networkText">
+  Network - TRON(TRC-20)
+</p>
+
+<p class="network" id="oneTimeAddressText">
+  One Time Address
+</p>
 
     <div class="qr-box">
       <p id="addressTitle">Address:</p>
@@ -38,21 +43,23 @@
 
     <div class="tips">
 
-  <b>Tips:</b><br><br>
+  <b id="tipsTitle">Tips:</b><br><br>
 
-  1. The recharge address is a 
-  <span style="color:red;">one-time address</span>, 
-  please do not leave it or transfer it repeatedly.
+  1. <span id="tip1"></span>
+  <span style="color:red;" id="tip1Red"></span>
+  <span id="tip1End"></span>
+
   <br><br>
 
-  2. The minimum recharge amount is subject to the actual transfer amount, 
-  not less than 
-  <span style="color:red;">10 USDT</span>.
+  2. <span id="tip2"></span>
+  <span style="color:red;" id="tip2Red"></span>
+  <span id="tip2End"></span>
+
   <br><br>
 
-  3. After recharging, it will take about 
-  <span style="color:red;">1 to 2 minutes</span> 
-  to confirm the payment. Please wait patiently.
+  3. <span id="tip3"></span>
+  <span style="color:red;" id="tip3Red"></span>
+  <span id="tip3End"></span>
 
 </div>
 
@@ -63,58 +70,508 @@
 <script src="script.js"></script>
 
 <script>
-let amount = localStorage.getItem("depositAmount") || 0;
-let warning = localStorage.getItem("depositWarning");
 
-document.getElementById("amountText").innerText = amount + " USDT";
+let amount = localStorage.getItem("depositAmount") || 0;
+const lang = localStorage.getItem("lang") || "en";
+
+const paymentTexts = {
+
+  en: {
+    title: "Deposit",
+    network: "Network - TRON(TRC-20)",
+    oneTimeAddress: "One Time Address",
+    address: "Address:",
+    waiting: "Waiting for payment...",
+    copied: "Copied ✅",
+    pending: "Previous deposit is pending.",
+
+    tips: "Tips:",
+    tip1: "The recharge address is a",
+    tip1Red: "one-time address",
+    tip1End: "please do not leave it or transfer it repeatedly.",
+
+    tip2: "The minimum recharge amount is subject to the actual transfer amount, not less than",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "After recharging, it will take about",
+    tip3Red: "1 to 2 minutes",
+    tip3End: "to confirm the payment. Please wait patiently."
+  },
+
+
+  zh: {
+    title: "存款",
+    network: "网络 - TRON(TRC-20)",
+    oneTimeAddress: "一次性地址",
+    address: "地址：",
+    waiting: "等待付款...",
+    copied: "已复制 ✅",
+    pending: "之前的存款正在处理中。",
+
+    tips: "提示：",
+    tip1: "充值地址是",
+    tip1Red: "一次性地址",
+    tip1End: "请勿离开或重复转账。",
+
+    tip2: "最低充值金额以实际转账金额为准，不得低于",
+    tip2Red: "10 USDT",
+    tip2End: "。",
+
+    tip3: "充值后大约需要",
+    tip3Red: "1到2分钟",
+    tip3End: "确认付款，请耐心等待。"
+  },
+
+
+  hi: {
+    title: "जमा",
+    network: "नेटवर्क - TRON(TRC-20)",
+    oneTimeAddress: "एक बार का पता",
+    address: "पता:",
+    waiting: "भुगतान की प्रतीक्षा है...",
+    copied: "कॉपी हो गया ✅",
+    pending: "पिछली जमा राशि अभी लंबित है।",
+
+    tips: "सुझाव:",
+    tip1: "रीचार्ज पता एक",
+    tip1Red: "एक बार का पता",
+    tip1End: "है, कृपया इसे छोड़ें या बार-बार ट्रांसफर न करें।",
+
+    tip2: "न्यूनतम रीचार्ज राशि वास्तविक ट्रांसफर राशि के अनुसार होगी, जो इससे कम नहीं होनी चाहिए",
+    tip2Red: "10 USDT",
+    tip2End: "।",
+
+    tip3: "रीचार्ज करने के बाद भुगतान की पुष्टि करने में लगभग",
+    tip3Red: "1 से 2 मिनट",
+    tip3End: "लग सकते हैं। कृपया धैर्य रखें।"
+  },
+
+
+  es: {
+    title: "Depósito",
+    network: "Red - TRON(TRC-20)",
+    oneTimeAddress: "Dirección de un solo uso",
+    address: "Dirección:",
+    waiting: "Esperando el pago...",
+    copied: "Copiado ✅",
+    pending: "El depósito anterior está pendiente.",
+
+    tips: "Consejos:",
+    tip1: "La dirección de recarga es una",
+    tip1Red: "dirección de un solo uso",
+    tip1End: ", no la abandones ni realices transferencias repetidas.",
+
+    tip2: "El importe mínimo de recarga depende del importe real transferido y no debe ser inferior a",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Después de recargar, la confirmación del pago tardará aproximadamente",
+    tip3Red: "1 a 2 minutos",
+    tip3End: ". Espera pacientemente."
+  },
+
+
+  fr: {
+    title: "Dépôt",
+    network: "Réseau - TRON(TRC-20)",
+    oneTimeAddress: "Adresse à usage unique",
+    address: "Adresse :",
+    waiting: "En attente du paiement...",
+    copied: "Copié ✅",
+    pending: "Le dépôt précédent est en attente.",
+
+    tips: "Conseils :",
+    tip1: "L'adresse de recharge est une",
+    tip1Red: "adresse à usage unique",
+    tip1End: ", veuillez ne pas la quitter ni effectuer de transferts répétés.",
+
+    tip2: "Le montant minimum de recharge dépend du montant réellement transféré et ne doit pas être inférieur à",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Après la recharge, il faudra environ",
+    tip3Red: "1 à 2 minutes",
+    tip3End: "pour confirmer le paiement. Veuillez patienter."
+  },
+
+
+  ar: {
+    title: "إيداع",
+    network: "الشبكة - TRON(TRC-20)",
+    oneTimeAddress: "عنوان للاستخدام مرة واحدة",
+    address: "العنوان:",
+    waiting: "في انتظار الدفع...",
+    copied: "تم النسخ ✅",
+    pending: "الإيداع السابق قيد الانتظار.",
+
+    tips: "نصائح:",
+    tip1: "عنوان إعادة الشحن هو",
+    tip1Red: "عنوان للاستخدام مرة واحدة",
+    tip1End: "، يرجى عدم مغادرته أو إجراء تحويلات متكررة.",
+
+    tip2: "الحد الأدنى لمبلغ إعادة الشحن يعتمد على مبلغ التحويل الفعلي، ولا يقل عن",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "بعد إعادة الشحن، سيستغرق تأكيد الدفع حوالي",
+    tip3Red: "1 إلى 2 دقيقة",
+    tip3End: ". يرجى الانتظار بصبر."
+  },
+
+
+  bn: {
+    title: "ডিপোজিট",
+    network: "নেটওয়ার্ক - TRON(TRC-20)",
+    oneTimeAddress: "একবার ব্যবহারযোগ্য ঠিকানা",
+    address: "ঠিকানা:",
+    waiting: "পেমেন্টের জন্য অপেক্ষা করা হচ্ছে...",
+    copied: "কপি হয়েছে ✅",
+    pending: "আগের ডিপোজিটটি এখনও অপেক্ষমাণ রয়েছে।",
+
+    tips: "টিপস:",
+    tip1: "রিচার্জের ঠিকানাটি একটি",
+    tip1Red: "একবার ব্যবহারযোগ্য ঠিকানা",
+    tip1End: ", অনুগ্রহ করে এটি ছেড়ে যাবেন না বা বারবার ট্রান্সফার করবেন না।",
+
+    tip2: "ন্যূনতম রিচার্জের পরিমাণ প্রকৃত ট্রান্সফারের পরিমাণ অনুযায়ী হবে এবং এর চেয়ে কম হওয়া যাবে না",
+    tip2Red: "10 USDT",
+    tip2End: "।",
+
+    tip3: "রিচার্জ করার পর পেমেন্ট নিশ্চিত হতে প্রায়",
+    tip3Red: "১ থেকে ২ মিনিট",
+    tip3End: "সময় লাগবে। অনুগ্রহ করে অপেক্ষা করুন।"
+  },
+
+
+  pt: {
+    title: "Depósito",
+    network: "Rede - TRON(TRC-20)",
+    oneTimeAddress: "Endereço de uso único",
+    address: "Endereço:",
+    waiting: "Aguardando pagamento...",
+    copied: "Copiado ✅",
+    pending: "O depósito anterior está pendente.",
+
+    tips: "Dicas:",
+    tip1: "O endereço de recarga é um",
+    tip1Red: "endereço de uso único",
+    tip1End: ", não saia dele nem faça transferências repetidas.",
+
+    tip2: "O valor mínimo de recarga depende do valor real transferido e não pode ser inferior a",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Após a recarga, levará cerca de",
+    tip3Red: "1 a 2 minutos",
+    tip3End: "para confirmar o pagamento. Aguarde pacientemente."
+  },
+
+
+  ru: {
+    title: "Пополнение",
+    network: "Сеть - TRON(TRC-20)",
+    oneTimeAddress: "Одноразовый адрес",
+    address: "Адрес:",
+    waiting: "Ожидание оплаты...",
+    copied: "Скопировано ✅",
+    pending: "Предыдущий депозит ожидает обработки.",
+
+    tips: "Советы:",
+    tip1: "Адрес пополнения является",
+    tip1Red: "одноразовым адресом",
+    tip1End: ", пожалуйста, не покидайте его и не выполняйте повторные переводы.",
+
+    tip2: "Минимальная сумма пополнения определяется фактической суммой перевода и не должна быть меньше",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "После пополнения подтверждение платежа займет около",
+    tip3Red: "1–2 минут",
+    tip3End: ". Пожалуйста, подождите."
+  },
+
+
+  ur: {
+    title: "جمع",
+    network: "نیٹ ورک - TRON(TRC-20)",
+    oneTimeAddress: "ایک بار استعمال ہونے والا ایڈریس",
+    address: "ایڈریس:",
+    waiting: "ادائیگی کا انتظار ہے...",
+    copied: "کاپی ہو گیا ✅",
+    pending: "پچھلی جمع رقم ابھی زیر التوا ہے۔",
+
+    tips: "تجاویز:",
+    tip1: "ریچارج ایڈریس ایک",
+    tip1Red: "ایک بار استعمال ہونے والا ایڈریس",
+    tip1End: "ہے، براہ کرم اسے چھوڑیں نہیں اور بار بار ٹرانسفر نہ کریں۔",
+
+    tip2: "کم از کم ریچارج کی رقم اصل ٹرانسفر کی رقم کے مطابق ہوگی، جو اس سے کم نہیں ہونی چاہیے",
+    tip2Red: "10 USDT",
+    tip2End: "۔",
+
+    tip3: "ریچارج کے بعد ادائیگی کی تصدیق میں تقریباً",
+    tip3Red: "1 سے 2 منٹ",
+    tip3End: "لگ سکتے ہیں۔ براہ کرم انتظار کریں۔"
+  },
+
+
+  id: {
+    title: "Deposit",
+    network: "Jaringan - TRON(TRC-20)",
+    oneTimeAddress: "Alamat sekali pakai",
+    address: "Alamat:",
+    waiting: "Menunggu pembayaran...",
+    copied: "Berhasil disalin ✅",
+    pending: "Deposit sebelumnya masih tertunda.",
+
+    tips: "Tips:",
+    tip1: "Alamat isi ulang adalah",
+    tip1Red: "alamat sekali pakai",
+    tip1End: ", jangan meninggalkannya atau melakukan transfer berulang.",
+
+    tip2: "Jumlah isi ulang minimum mengikuti jumlah transfer aktual dan tidak boleh kurang dari",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Setelah isi ulang, konfirmasi pembayaran membutuhkan sekitar",
+    tip3Red: "1 hingga 2 menit",
+    tip3End: ". Harap tunggu dengan sabar."
+  },
+
+
+  de: {
+    title: "Einzahlung",
+    network: "Netzwerk - TRON(TRC-20)",
+    oneTimeAddress: "Einmalige Adresse",
+    address: "Adresse:",
+    waiting: "Warten auf Zahlung...",
+    copied: "Kopiert ✅",
+    pending: "Die vorherige Einzahlung ist noch ausstehend.",
+
+    tips: "Tipps:",
+    tip1: "Die Aufladeadresse ist eine",
+    tip1Red: "einmalige Adresse",
+    tip1End: ". Bitte verlassen Sie sie nicht und führen Sie keine wiederholten Überweisungen durch.",
+
+    tip2: "Der Mindestbetrag für die Aufladung richtet sich nach dem tatsächlichen Überweisungsbetrag und darf nicht niedriger sein als",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Nach der Aufladung dauert die Zahlungsbestätigung etwa",
+    tip3Red: "1 bis 2 Minuten",
+    tip3End: ". Bitte warten Sie geduldig."
+  },
+
+
+  ja: {
+    title: "入金",
+    network: "ネットワーク - TRON(TRC-20)",
+    oneTimeAddress: "使い捨てアドレス",
+    address: "アドレス：",
+    waiting: "支払いを待っています...",
+    copied: "コピーしました ✅",
+    pending: "前回の入金は保留中です。",
+
+    tips: "ヒント：",
+    tip1: "チャージアドレスは",
+    tip1Red: "使い捨てアドレス",
+    tip1End: "です。離れたり、繰り返し送金したりしないでください。",
+
+    tip2: "最低チャージ額は実際の送金額に基づき、以下を下回ることはできません：",
+    tip2Red: "10 USDT",
+    tip2End: "。",
+
+    tip3: "チャージ後、支払いの確認には約",
+    tip3Red: "1～2分",
+    tip3End: "かかります。しばらくお待ちください。"
+  },
+
+
+  it: {
+    title: "Deposito",
+    network: "Rete - TRON(TRC-20)",
+    oneTimeAddress: "Indirizzo monouso",
+    address: "Indirizzo:",
+    waiting: "In attesa del pagamento...",
+    copied: "Copiato ✅",
+    pending: "Il deposito precedente è in sospeso.",
+
+    tips: "Suggerimenti:",
+    tip1: "L'indirizzo di ricarica è un",
+    tip1Red: "indirizzo monouso",
+    tip1End: ", non lasciarlo e non effettuare trasferimenti ripetuti.",
+
+    tip2: "L'importo minimo della ricarica dipende dall'importo effettivamente trasferito e non deve essere inferiore a",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Dopo la ricarica, saranno necessari circa",
+    tip3Red: "1-2 minuti",
+    tip3End: "per confermare il pagamento. Attendi pazientemente."
+  },
+
+
+  tr: {
+    title: "Para Yatırma",
+    network: "Ağ - TRON(TRC-20)",
+    oneTimeAddress: "Tek kullanımlık adres",
+    address: "Adres:",
+    waiting: "Ödeme bekleniyor...",
+    copied: "Kopyalandı ✅",
+    pending: "Önceki para yatırma işlemi beklemede.",
+
+    tips: "İpuçları:",
+    tip1: "Yatırma adresi",
+    tip1Red: "tek kullanımlık bir adrestir",
+    tip1End: ", lütfen adresi terk etmeyin veya tekrar tekrar transfer yapmayın.",
+
+    tip2: "Minimum yatırma tutarı gerçek transfer tutarına bağlıdır ve şu tutardan az olmamalıdır:",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Yatırma işleminden sonra ödemenin onaylanması yaklaşık",
+    tip3Red: "1 ila 2 dakika",
+    tip3End: "sürer. Lütfen sabırla bekleyin."
+  },
+
+
+  fa: {
+    title: "واریز",
+    network: "شبکه - TRON(TRC-20)",
+    oneTimeAddress: "آدرس یک‌بار مصرف",
+    address: "آدرس:",
+    waiting: "در انتظار پرداخت...",
+    copied: "کپی شد ✅",
+    pending: "واریز قبلی در انتظار پردازش است.",
+
+    tips: "نکات:",
+    tip1: "آدرس شارژ یک",
+    tip1Red: "آدرس یک‌بار مصرف",
+    tip1End: "است، لطفاً آن را ترک نکنید یا انتقال‌های مکرر انجام ندهید.",
+
+    tip2: "حداقل مبلغ شارژ بر اساس مبلغ واقعی انتقال تعیین می‌شود و نباید کمتر از",
+    tip2Red: "10 USDT",
+    tip2End: "باشد.",
+
+    tip3: "پس از شارژ، تأیید پرداخت حدود",
+    tip3Red: "1 تا 2 دقیقه",
+    tip3End: "زمان می‌برد. لطفاً صبر کنید."
+  },
+
+
+  nl: {
+    title: "Storten",
+    network: "Netwerk - TRON(TRC-20)",
+    oneTimeAddress: "Eenmalig adres",
+    address: "Adres:",
+    waiting: "Wachten op betaling...",
+    copied: "Gekopieerd ✅",
+    pending: "De vorige storting is nog in behandeling.",
+
+    tips: "Tips:",
+    tip1: "Het stortingsadres is een",
+    tip1Red: "eenmalig adres",
+    tip1End: ". Verlaat het niet en voer geen herhaalde overschrijvingen uit.",
+
+    tip2: "Het minimale stortingsbedrag is gebaseerd op het werkelijke overdrachtsbedrag en mag niet lager zijn dan",
+    tip2Red: "10 USDT",
+    tip2End: ".",
+
+    tip3: "Na het storten duurt het ongeveer",
+    tip3Red: "1 tot 2 minuten",
+    tip3End: "om de betaling te bevestigen. Wacht geduldig."
+  }
+
+};
+
+const currentTexts =
+  paymentTexts[lang] || paymentTexts.en;
+
+document.querySelector(".pay-header h3").innerText =
+  currentTexts.title;
+document.querySelector(".network").innerText =
+  currentTexts.network;
+document.getElementById("oneTimeAddressText").innerText =
+  currentTexts.oneTimeAddress;
+document.getElementById("addressTitle").innerText =
+  currentTexts.address;
+document.getElementById("msg").innerText =
+  currentTexts.waiting;
+document.getElementById("tipsTitle").innerText =
+  currentTexts.tips;
+document.getElementById("tip1").innerText =
+  currentTexts.tip1;
+document.getElementById("tip1Red").innerText =
+  currentTexts.tip1Red;
+document.getElementById("tip1End").innerText =
+  currentTexts.tip1End;
+document.getElementById("tip2").innerText =
+  currentTexts.tip2;
+document.getElementById("tip2Red").innerText =
+  currentTexts.tip2Red;
+document.getElementById("tip2End").innerText =
+  currentTexts.tip2End;
+document.getElementById("tip3").innerText =
+  currentTexts.tip3;
+document.getElementById("tip3Red").innerText =
+  currentTexts.tip3Red;
+document.getElementById("tip3End").innerText =
+  currentTexts.tip3End;
+
+let warning =
+  localStorage.getItem("depositWarning");
+document.getElementById("amountText").innerText =
+  amount + " USDT";
 
 let address = "";
-
-const token = localStorage.getItem("token");
+const token =
+  localStorage.getItem("token");
 
 fetch("/deposit-request", {
   method: "POST",
-
   headers: {
     "Content-Type": "application/json",
     "Authorization": "Bearer " + token
   },
-
   body: JSON.stringify({
     amount
   })
 
 })
+
 .then(res => res.json())
 .then(data => {
-
   if (data.address) {
-
     address = data.address;
-
-    document.getElementById("address").value = data.address;
-
-    document.getElementById("qrImage").src = data.qr;
-
+    document.getElementById("address").value =
+      data.address;
+    document.getElementById("qrImage").src =
+      data.qr;
   }
 
 });
 
 if (warning && warning !== "null") {
+  let translatedWarning =
+    currentTexts.pending;
   document.getElementById("addressTitle").innerHTML =
-    `<span style="color:red;">${warning}</span>`;
+    `<span style="color:red;">${translatedWarning}</span>`;
 } else {
-  document.getElementById("addressTitle").innerText = "Address:";
+  document.getElementById("addressTitle").innerText =
+    currentTexts.address;
 }
 
 function copyAddress() {
   navigator.clipboard.writeText(address);
-  document.getElementById("msg").innerText = "Copied ✅";
+  document.getElementById("msg").innerText =
+    currentTexts.copied;
 }
 
 function goPage(page) {
   window.location.href = page;
 }
+
 </script>
 
 </body>

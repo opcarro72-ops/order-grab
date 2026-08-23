@@ -10,21 +10,24 @@
 <body class="main-body">
 
 <div class="service-header">
-  <h2>Customer Service Center</h2>
-  <p>Online customer service time 07:00-23:00 (UK)</p>
-
+  <h2 id="serviceTitle">
+    Customer Service Center
+  </h2>
+  <p id="serviceTime">
+    Online customer service time 07:00-23:00 (UK)
+  </p>
   <img src="service-banner.png" alt="service">
 </div>
 
 <div class="service-box">
 
   <a href="https://t.me/UserService124" target="_blank" class="service-row">
-    <span>Online customer service</span>
+    <span id="onlineCustomerService">Online customer service</span>
     <span>›</span>
   </a>
 
   <div class="service-row" onclick="goHelp()">
-  <span>Help</span>
+  <span id="helpText">Help</span>
   <span>›</span>
 </div>
 
@@ -34,27 +37,27 @@
 
   <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
     <span>🏠</span>
-    <div>Home</div>
+    <div id="navHome">Home</div>
   </div>
 
   <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
     <span>🎧</span>
-    <div>Service</div>
+    <div id="navService">Service</div>
   </div>
 
   <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">
     <span>🛍️</span>
-    <div>Menu</div>
+    <div id="navMenu">Menu</div>
   </div>
 
   <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
     <span>📄</span>
-    <div>Record</div>
+    <div id="navRecord">Record</div>
   </div>
 
   <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
     <span>👤</span>
-    <div>Mine</div>
+    <div id="navMine">Mine</div>
   </div>
 
 </div>
@@ -62,9 +65,242 @@
 <script src="script.js"></script>
 
 <script>
+
 function goHelp(){
   window.location.href = "help.html";
 }
+
+const lang = localStorage.getItem("lang") || "en";
+const serviceTexts = {
+
+  en: {
+    serviceTitle: "Customer Service Center",
+    serviceTime: "Online customer service time 07:00-23:00 (UK)",
+    onlineCustomerService: "Online customer service",
+    help: "Help",
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    record: "Record",
+    mine: "Mine"
+  },
+
+  zh: {
+    serviceTitle: "客服中心",
+    serviceTime: "在线客服时间 07:00-23:00（英国时间）",
+    onlineCustomerService: "在线客服",
+    help: "帮助",
+    home: "首页",
+    service: "客服",
+    menu: "菜单",
+    record: "记录",
+    mine: "我的"
+  },
+
+  hi: {
+    serviceTitle: "ग्राहक सेवा केंद्र",
+    serviceTime: "ऑनलाइन ग्राहक सेवा समय 07:00-23:00 (UK)",
+    onlineCustomerService: "ऑनलाइन ग्राहक सेवा",
+    help: "मदद",
+    home: "होम",
+    service: "सेवा",
+    menu: "मेनू",
+    record: "रिकॉर्ड",
+    mine: "मेरा"
+  },
+
+  es: {
+    serviceTitle: "Centro de Atención al Cliente",
+    serviceTime: "Horario de atención al cliente en línea 07:00-23:00 (UK)",
+    onlineCustomerService: "Atención al cliente en línea",
+    help: "Ayuda",
+    home: "Inicio",
+    service: "Servicio",
+    menu: "Menú",
+    record: "Registro",
+    mine: "Mi cuenta"
+  },
+
+  fr: {
+    serviceTitle: "Centre de service client",
+    serviceTime: "Heures du service client en ligne 07:00-23:00 (UK)",
+    onlineCustomerService: "Service client en ligne",
+    help: "Aide",
+    home: "Accueil",
+    service: "Service",
+    menu: "Menu",
+    record: "Historique",
+    mine: "Moi"
+  },
+
+  ar: {
+    serviceTitle: "مركز خدمة العملاء",
+    serviceTime: "وقت خدمة العملاء عبر الإنترنت 07:00-23:00 (بتوقيت المملكة المتحدة)",
+    onlineCustomerService: "خدمة العملاء عبر الإنترنت",
+    help: "مساعدة",
+    home: "الرئيسية",
+    service: "الخدمة",
+    menu: "القائمة",
+    record: "السجل",
+    mine: "حسابي"
+  },
+
+  bn: {
+    serviceTitle: "কাস্টমার সার্ভিস সেন্টার",
+    serviceTime: "অনলাইন কাস্টমার সার্ভিস সময় ০৭:০০-২৩:০০ (UK)",
+    onlineCustomerService: "অনলাইন কাস্টমার সার্ভিস",
+    help: "সহায়তা",
+    home: "হোম",
+    service: "সার্ভিস",
+    menu: "মেনু",
+    record: "রেকর্ড",
+    mine: "মাইন"
+  },
+
+  pt: {
+    serviceTitle: "Central de Atendimento ao Cliente",
+    serviceTime: "Horário do atendimento ao cliente online 07:00-23:00 (UK)",
+    onlineCustomerService: "Atendimento ao cliente online",
+    help: "Ajuda",
+    home: "Início",
+    service: "Serviço",
+    menu: "Menu",
+    record: "Registro",
+    mine: "Minha conta"
+  },
+
+  ru: {
+    serviceTitle: "Центр обслуживания клиентов",
+    serviceTime: "Время онлайн-поддержки 07:00-23:00 (UK)",
+    onlineCustomerService: "Онлайн-поддержка",
+    help: "Помощь",
+    home: "Главная",
+    service: "Сервис",
+    menu: "Меню",
+    record: "Записи",
+    mine: "Мой аккаунт"
+  },
+
+  ur: {
+    serviceTitle: "کسٹمر سروس سینٹر",
+    serviceTime: "آن لائن کسٹمر سروس کا وقت 07:00-23:00 (UK)",
+    onlineCustomerService: "آن لائن کسٹمر سروس",
+    help: "مدد",
+    home: "ہوم",
+    service: "سروس",
+    menu: "مینو",
+    record: "ریکارڈ",
+    mine: "میرا اکاؤنٹ"
+  },
+
+  id: {
+    serviceTitle: "Pusat Layanan Pelanggan",
+    serviceTime: "Waktu layanan pelanggan online 07:00-23:00 (UK)",
+    onlineCustomerService: "Layanan pelanggan online",
+    help: "Bantuan",
+    home: "Beranda",
+    service: "Layanan",
+    menu: "Menu",
+    record: "Catatan",
+    mine: "Saya"
+  },
+
+  de: {
+    serviceTitle: "Kundendienstzentrum",
+    serviceTime: "Online-Kundenservice-Zeit 07:00-23:00 (UK)",
+    onlineCustomerService: "Online-Kundenservice",
+    help: "Hilfe",
+    home: "Startseite",
+    service: "Service",
+    menu: "Menü",
+    record: "Verlauf",
+    mine: "Mein Konto"
+  },
+
+  ja: {
+    serviceTitle: "カスタマーサービスセンター",
+    serviceTime: "オンラインカスタマーサービス時間 07:00-23:00（英国時間）",
+    onlineCustomerService: "オンラインカスタマーサービス",
+    help: "ヘルプ",
+    home: "ホーム",
+    service: "サービス",
+    menu: "メニュー",
+    record: "記録",
+    mine: "マイページ"
+  },
+
+  it: {
+    serviceTitle: "Centro assistenza clienti",
+    serviceTime: "Orario del servizio clienti online 07:00-23:00 (UK)",
+    onlineCustomerService: "Servizio clienti online",
+    help: "Aiuto",
+    home: "Home",
+    service: "Servizio",
+    menu: "Menu",
+    record: "Registro",
+    mine: "Il mio account"
+  },
+
+  tr: {
+    serviceTitle: "Müşteri Hizmetleri Merkezi",
+    serviceTime: "Çevrimiçi müşteri hizmetleri 07:00-23:00 (UK)",
+    onlineCustomerService: "Çevrimiçi müşteri hizmetleri",
+    help: "Yardım",
+    home: "Ana Sayfa",
+    service: "Hizmet",
+    menu: "Menü",
+    record: "Kayıt",
+    mine: "Hesabım"
+  },
+
+  fa: {
+    serviceTitle: "مرکز خدمات مشتریان",
+    serviceTime: "زمان خدمات مشتری آنلاین 07:00-23:00 (به وقت انگلستان)",
+    onlineCustomerService: "خدمات مشتری آنلاین",
+    help: "راهنما",
+    home: "خانه",
+    service: "خدمات",
+    menu: "منو",
+    record: "سوابق",
+    mine: "حساب من"
+  },
+
+  nl: {
+    serviceTitle: "Klantenservicecentrum",
+    serviceTime: "Online klantenservice van 07:00-23:00 (VK)",
+    onlineCustomerService: "Online klantenservice",
+    help: "Help",
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    record: "Record",
+    mine: "Mijn account"
+  }
+
+};
+
+const currentTexts =
+  serviceTexts[lang] || serviceTexts.en;
+
+document.getElementById("serviceTitle").innerText =
+  currentTexts.serviceTitle;
+document.getElementById("serviceTime").innerText =
+  currentTexts.serviceTime;
+document.getElementById("onlineCustomerService").innerText =
+  currentTexts.onlineCustomerService;
+document.getElementById("helpText").innerText =
+  currentTexts.help;
+document.getElementById("navHome").innerText =
+  currentTexts.home;
+document.getElementById("navService").innerText =
+  currentTexts.service;
+document.getElementById("navMenu").innerText =
+  currentTexts.menu;
+document.getElementById("navRecord").innerText =
+  currentTexts.record;
+document.getElementById("navMine").innerText =
+  currentTexts.mine;
+
 </script>
 
 </body>

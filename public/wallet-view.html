@@ -69,7 +69,7 @@
 
 <div class="header">
   <span class="back" onclick="goBack()">❮</span>
-  <h2>Wallet Management</h2>
+  <h2 id="walletTitle">Wallet Management</h2>
 </div>
 
 <div class="container">
@@ -85,6 +85,86 @@
 <script>
 
 const token = localStorage.getItem("token");
+
+const lang = localStorage.getItem("lang") || "en";
+
+const walletViewTexts = {
+
+  en: {
+    title: "Wallet Management"
+  },
+
+  zh: {
+    title: "钱包管理"
+  },
+
+  hi: {
+    title: "वॉलेट प्रबंधन"
+  },
+
+  es: {
+    title: "Gestión de billetera"
+  },
+
+  fr: {
+    title: "Gestion du portefeuille"
+  },
+
+  ar: {
+    title: "إدارة المحفظة"
+  },
+
+  bn: {
+    title: "ওয়ালেট ম্যানেজমেন্ট"
+  },
+
+  pt: {
+    title: "Gestão da carteira"
+  },
+
+  ru: {
+    title: "Управление кошельком"
+  },
+
+  ur: {
+    title: "والیٹ مینجمنٹ"
+  },
+
+  id: {
+    title: "Manajemen dompet"
+  },
+
+  de: {
+    title: "Wallet-Verwaltung"
+  },
+
+  ja: {
+    title: "ウォレット管理"
+  },
+
+  it: {
+    title: "Gestione portafoglio"
+  },
+
+  tr: {
+    title: "Cüzdan yönetimi"
+  },
+
+  fa: {
+    title: "مدیریت کیف پول"
+  },
+
+  nl: {
+    title: "Walletbeheer"
+  }
+
+};
+
+const currentTexts =
+  walletViewTexts[lang] || walletViewTexts.en;
+
+document.getElementById("walletTitle").innerText =
+  currentTexts.title;
 
 async function loadWallet() {
 

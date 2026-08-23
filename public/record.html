@@ -112,11 +112,26 @@ html {
 
 <body>
 
-  <h2 style="text-align:center;">Record</h2>
+  <h2 id="recordTitle" style="text-align:center;">Record</h2>
 
 <div class="tabs">
-  <div class="tab active" id="tabIncomplete" onclick="switchTab('incomplete')">Incomplete</div>
-  <div class="tab" id="tabComplete" onclick="switchTab('complete')">Complete</div>
+
+  <div
+    class="tab active"
+    id="tabIncomplete"
+    onclick="switchTab('incomplete')"
+  >
+    <span id="incompleteText">Incomplete</span>
+  </div>
+
+  <div
+    class="tab"
+    id="tabComplete"
+    onclick="switchTab('complete')"
+  >
+    <span id="completeText">Complete</span>
+  </div>
+
 </div>
 
 <div class="content">
@@ -126,29 +141,49 @@ html {
 
 <div class="bottom-nav">
 
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
+  <div
+    class="nav-item"
+    data-page="home.html"
+    onclick="goPage('home.html')"
+  >
     <span>🏠</span>
-    <div>Home</div>
+    <div id="navHome">Home</div>
   </div>
 
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
+  <div
+    class="nav-item"
+    data-page="service.html"
+    onclick="goPage('service.html')"
+  >
     <span>🎧</span>
-    <div>Service</div>
+    <div id="navService">Service</div>
   </div>
 
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">
+  <div
+    class="nav-item"
+    data-page="menu.html"
+    onclick="goPage('menu.html')"
+  >
     <span>🛍️</span>
-    <div>Menu</div>
+    <div id="navMenu">Menu</div>
   </div>
 
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
+  <div
+    class="nav-item"
+    data-page="record.html"
+    onclick="goPage('record.html')"
+  >
     <span>📄</span>
-    <div>Record</div>
+    <div id="navRecord">Record</div>
   </div>
 
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
+  <div
+    class="nav-item"
+    data-page="mine.html"
+    onclick="goPage('mine.html')"
+  >
     <span>👤</span>
-    <div>Mine</div>
+    <div id="navMine">Mine</div>
   </div>
 
 </div>
@@ -158,6 +193,579 @@ html {
 <script src="script.js"></script>
 
 <script>
+
+const recordTranslations = {
+
+  en: {
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    record: "Record",
+    mine: "Mine",
+
+    incomplete: "Incomplete",
+    complete: "Complete",
+
+    order: "Order",
+    completed: "Completed",
+    orderNos: "Order Nos",
+    transactionTime: "Transaction time",
+    orderAmount: "Order amount",
+    commissions: "Commissions",
+    expectedIncome: "Expected income",
+    total: "Total",
+    submitOrder: "Submit order",
+
+    noIncompleteOrder: "No incomplete order",
+    noCompletedOrders: "No completed orders",
+
+    failedToLoadOrder: "Failed to load order",
+    noPendingOrder: "No pending order found",
+    balanceLoadFailed: "Balance load failed",
+    balanceNotEnough: "Your account balance is not enough, you need to recharge {amount} to complete this order.",
+    orderSubmitted: "Order submitted successfully",
+    submitFailed: "Submit failed",
+    serverError: "Server error"
+  },
+
+  zh: {
+    home: "首页",
+    service: "客服",
+    menu: "菜单",
+    record: "记录",
+    mine: "我的",
+
+    incomplete: "未完成",
+    complete: "已完成",
+
+    order: "订单",
+    completed: "已完成",
+    orderNos: "订单编号",
+    transactionTime: "交易时间",
+    orderAmount: "订单金额",
+    commissions: "佣金",
+    expectedIncome: "预计收入",
+    total: "总计",
+    submitOrder: "提交订单",
+
+    noIncompleteOrder: "没有未完成的订单",
+    noCompletedOrders: "没有已完成的订单",
+
+    failedToLoadOrder: "加载订单失败",
+    noPendingOrder: "没有找到待处理订单",
+    balanceLoadFailed: "余额加载失败",
+    balanceNotEnough: "账户余额不足，您需要充值 {amount} 才能完成此订单。",
+    orderSubmitted: "订单提交成功",
+    submitFailed: "提交失败",
+    serverError: "服务器错误"
+  },
+
+  hi: {
+    home: "होम",
+    service: "सेवा",
+    menu: "मेनू",
+    record: "रिकॉर्ड",
+    mine: "मेरा",
+
+    incomplete: "अपूर्ण",
+    complete: "पूर्ण",
+
+    order: "ऑर्डर",
+    completed: "पूर्ण",
+    orderNos: "ऑर्डर नंबर",
+    transactionTime: "लेन-देन का समय",
+    orderAmount: "ऑर्डर राशि",
+    commissions: "कमीशन",
+    expectedIncome: "अपेक्षित आय",
+    total: "कुल",
+    submitOrder: "ऑर्डर जमा करें",
+
+    noIncompleteOrder: "कोई अधूरा ऑर्डर नहीं",
+    noCompletedOrders: "कोई पूर्ण ऑर्डर नहीं",
+
+    failedToLoadOrder: "ऑर्डर लोड करने में विफल",
+    noPendingOrder: "कोई लंबित ऑर्डर नहीं मिला",
+    balanceLoadFailed: "बैलेंस लोड करने में विफल",
+    balanceNotEnough: "आपके खाते में पर्याप्त बैलेंस नहीं है, इस ऑर्डर को पूरा करने के लिए {amount} रिचार्ज करें।",
+    orderSubmitted: "ऑर्डर सफलतापूर्वक जमा किया गया",
+    submitFailed: "जमा करने में विफल",
+    serverError: "सर्वर त्रुटि"
+  },
+
+  es: {
+    home: "Inicio",
+    service: "Servicio",
+    menu: "Menú",
+    record: "Registro",
+    mine: "Mi cuenta",
+
+    incomplete: "Incompleto",
+    complete: "Completado",
+
+    order: "Pedido",
+    completed: "Completado",
+    orderNos: "N.º de pedido",
+    transactionTime: "Hora de transacción",
+    orderAmount: "Importe del pedido",
+    commissions: "Comisiones",
+    expectedIncome: "Ingresos esperados",
+    total: "Total",
+    submitOrder: "Enviar pedido",
+
+    noIncompleteOrder: "No hay pedidos incompletos",
+    noCompletedOrders: "No hay pedidos completados",
+
+    failedToLoadOrder: "Error al cargar el pedido",
+    noPendingOrder: "No se encontró ningún pedido pendiente",
+    balanceLoadFailed: "Error al cargar el saldo",
+    balanceNotEnough: "El saldo de su cuenta no es suficiente, necesita recargar {amount} para completar este pedido.",
+    orderSubmitted: "Pedido enviado correctamente",
+    submitFailed: "Error al enviar",
+    serverError: "Error del servidor"
+  },
+
+  fr: {
+    home: "Accueil",
+    service: "Service",
+    menu: "Menu",
+    record: "Historique",
+    mine: "Moi",
+
+    incomplete: "Incomplet",
+    complete: "Terminé",
+
+    order: "Commande",
+    completed: "Terminé",
+    orderNos: "N° de commande",
+    transactionTime: "Heure de transaction",
+    orderAmount: "Montant de la commande",
+    commissions: "Commissions",
+    expectedIncome: "Revenu attendu",
+    total: "Total",
+    submitOrder: "Soumettre la commande",
+
+    noIncompleteOrder: "Aucune commande incomplète",
+    noCompletedOrders: "Aucune commande terminée",
+
+    failedToLoadOrder: "Échec du chargement de la commande",
+    noPendingOrder: "Aucune commande en attente trouvée",
+    balanceLoadFailed: "Échec du chargement du solde",
+    balanceNotEnough: "Le solde de votre compte est insuffisant, vous devez recharger {amount} pour terminer cette commande.",
+    orderSubmitted: "Commande soumise avec succès",
+    submitFailed: "Échec de l'envoi",
+    serverError: "Erreur du serveur"
+  },
+
+  ar: {
+    home: "الرئيسية",
+    service: "الخدمة",
+    menu: "القائمة",
+    record: "السجل",
+    mine: "حسابي",
+
+    incomplete: "غير مكتمل",
+    complete: "مكتمل",
+
+    order: "الطلب",
+    completed: "مكتمل",
+    orderNos: "رقم الطلب",
+    transactionTime: "وقت المعاملة",
+    orderAmount: "مبلغ الطلب",
+    commissions: "العمولة",
+    expectedIncome: "الدخل المتوقع",
+    total: "الإجمالي",
+    submitOrder: "إرسال الطلب",
+
+    noIncompleteOrder: "لا توجد طلبات غير مكتملة",
+    noCompletedOrders: "لا توجد طلبات مكتملة",
+
+    failedToLoadOrder: "فشل تحميل الطلب",
+    noPendingOrder: "لم يتم العثور على طلب قيد الانتظار",
+    balanceLoadFailed: "فشل تحميل الرصيد",
+    balanceNotEnough: "رصيد حسابك غير كافٍ، تحتاج إلى شحن {amount} لإكمال هذا الطلب.",
+    orderSubmitted: "تم إرسال الطلب بنجاح",
+    submitFailed: "فشل الإرسال",
+    serverError: "خطأ في الخادم"
+  },
+
+  bn: {
+    home: "হোম",
+    service: "সার্ভিস",
+    menu: "মেনু",
+    record: "রেকর্ড",
+    mine: "মাইন",
+
+    incomplete: "অসম্পূর্ণ",
+    complete: "সম্পন্ন",
+
+    order: "অর্ডার",
+    completed: "সম্পন্ন",
+    orderNos: "অর্ডার নম্বর",
+    transactionTime: "লেনদেনের সময়",
+    orderAmount: "অর্ডারের পরিমাণ",
+    commissions: "কমিশন",
+    expectedIncome: "প্রত্যাশিত আয়",
+    total: "মোট",
+    submitOrder: "অর্ডার জমা দিন",
+
+    noIncompleteOrder: "কোনো অসম্পূর্ণ অর্ডার নেই",
+    noCompletedOrders: "কোনো সম্পন্ন অর্ডার নেই",
+
+    failedToLoadOrder: "অর্ডার লোড করা যায়নি",
+    noPendingOrder: "কোনো অপেক্ষমাণ অর্ডার পাওয়া যায়নি",
+    balanceLoadFailed: "ব্যালেন্স লোড করা যায়নি",
+    balanceNotEnough: "আপনার অ্যাকাউন্ট ব্যালেন্স যথেষ্ট নয়, এই অর্ডার সম্পন্ন করতে {amount} রিচার্জ করতে হবে।",
+    orderSubmitted: "অর্ডার সফলভাবে জমা হয়েছে",
+    submitFailed: "জমা দেওয়া যায়নি",
+    serverError: "সার্ভার ত্রুটি"
+  },
+
+  pt: {
+    home: "Início",
+    service: "Serviço",
+    menu: "Menu",
+    record: "Registro",
+    mine: "Minha conta",
+
+    incomplete: "Incompleto",
+    complete: "Concluído",
+
+    order: "Pedido",
+    completed: "Concluído",
+    orderNos: "Nº do pedido",
+    transactionTime: "Hora da transação",
+    orderAmount: "Valor do pedido",
+    commissions: "Comissões",
+    expectedIncome: "Rendimento esperado",
+    total: "Total",
+    submitOrder: "Enviar pedido",
+
+    noIncompleteOrder: "Nenhum pedido incompleto",
+    noCompletedOrders: "Nenhum pedido concluído",
+
+    failedToLoadOrder: "Falha ao carregar pedido",
+    noPendingOrder: "Nenhum pedido pendente encontrado",
+    balanceLoadFailed: "Falha ao carregar saldo",
+    balanceNotEnough: "O saldo da sua conta não é suficiente, você precisa recarregar {amount} para concluir este pedido.",
+    orderSubmitted: "Pedido enviado com sucesso",
+    submitFailed: "Falha ao enviar",
+    serverError: "Erro do servidor"
+  },
+
+  ru: {
+    home: "Главная",
+    service: "Сервис",
+    menu: "Меню",
+    record: "Записи",
+    mine: "Мой аккаунт",
+
+    incomplete: "Незавершенные",
+    complete: "Завершенные",
+
+    order: "Заказ",
+    completed: "Завершено",
+    orderNos: "Номер заказа",
+    transactionTime: "Время транзакции",
+    orderAmount: "Сумма заказа",
+    commissions: "Комиссия",
+    expectedIncome: "Ожидаемый доход",
+    total: "Итого",
+    submitOrder: "Отправить заказ",
+
+    noIncompleteOrder: "Нет незавершенных заказов",
+    noCompletedOrders: "Нет завершенных заказов",
+
+    failedToLoadOrder: "Не удалось загрузить заказ",
+    noPendingOrder: "Ожидающий заказ не найден",
+    balanceLoadFailed: "Не удалось загрузить баланс",
+    balanceNotEnough: "Недостаточно средств на счете. Для завершения заказа необходимо пополнить {amount}.",
+    orderSubmitted: "Заказ успешно отправлен",
+    submitFailed: "Не удалось отправить",
+    serverError: "Ошибка сервера"
+  },
+
+  ur: {
+    home: "ہوم",
+    service: "سروس",
+    menu: "مینو",
+    record: "ریکارڈ",
+    mine: "میرا اکاؤنٹ",
+
+    incomplete: "نامکمل",
+    complete: "مکمل",
+
+    order: "آرڈر",
+    completed: "مکمل",
+    orderNos: "آرڈر نمبر",
+    transactionTime: "لین دین کا وقت",
+    orderAmount: "آرڈر کی رقم",
+    commissions: "کمیشن",
+    expectedIncome: "متوقع آمدنی",
+    total: "کل",
+    submitOrder: "آرڈر جمع کریں",
+
+    noIncompleteOrder: "کوئی نامکمل آرڈر نہیں",
+    noCompletedOrders: "کوئی مکمل آرڈر نہیں",
+
+    failedToLoadOrder: "آرڈر لوڈ نہیں ہو سکا",
+    noPendingOrder: "کوئی زیر التوا آرڈر نہیں ملا",
+    balanceLoadFailed: "بیلنس لوڈ نہیں ہو سکا",
+    balanceNotEnough: "آپ کے اکاؤنٹ میں کافی بیلنس نہیں ہے، اس آرڈر کو مکمل کرنے کے لیے {amount} ریچارج کریں۔",
+    orderSubmitted: "آرڈر کامیابی سے جمع ہو گیا",
+    submitFailed: "جمع نہیں ہو سکا",
+    serverError: "سرور کی خرابی"
+  },
+
+  id: {
+    home: "Beranda",
+    service: "Layanan",
+    menu: "Menu",
+    record: "Catatan",
+    mine: "Saya",
+
+    incomplete: "Belum selesai",
+    complete: "Selesai",
+
+    order: "Pesanan",
+    completed: "Selesai",
+    orderNos: "Nomor pesanan",
+    transactionTime: "Waktu transaksi",
+    orderAmount: "Jumlah pesanan",
+    commissions: "Komisi",
+    expectedIncome: "Pendapatan yang diharapkan",
+    total: "Total",
+    submitOrder: "Kirim pesanan",
+
+    noIncompleteOrder: "Tidak ada pesanan yang belum selesai",
+    noCompletedOrders: "Tidak ada pesanan yang selesai",
+
+    failedToLoadOrder: "Gagal memuat pesanan",
+    noPendingOrder: "Tidak ada pesanan tertunda",
+    balanceLoadFailed: "Gagal memuat saldo",
+    balanceNotEnough: "Saldo akun Anda tidak cukup, Anda perlu mengisi ulang {amount} untuk menyelesaikan pesanan ini.",
+    orderSubmitted: "Pesanan berhasil dikirim",
+    submitFailed: "Gagal mengirim",
+    serverError: "Kesalahan server"
+  },
+
+  de: {
+    home: "Startseite",
+    service: "Service",
+    menu: "Menü",
+    record: "Verlauf",
+    mine: "Mein Konto",
+
+    incomplete: "Unvollständig",
+    complete: "Abgeschlossen",
+
+    order: "Bestellung",
+    completed: "Abgeschlossen",
+    orderNos: "Bestellnummer",
+    transactionTime: "Transaktionszeit",
+    orderAmount: "Bestellbetrag",
+    commissions: "Provisionen",
+    expectedIncome: "Erwartetes Einkommen",
+    total: "Gesamt",
+    submitOrder: "Bestellung absenden",
+
+    noIncompleteOrder: "Keine unvollständigen Bestellungen",
+    noCompletedOrders: "Keine abgeschlossenen Bestellungen",
+
+    failedToLoadOrder: "Bestellung konnte nicht geladen werden",
+    noPendingOrder: "Keine ausstehende Bestellung gefunden",
+    balanceLoadFailed: "Kontostand konnte nicht geladen werden",
+    balanceNotEnough: "Ihr Kontostand reicht nicht aus. Sie müssen {amount} aufladen, um diese Bestellung abzuschließen.",
+    orderSubmitted: "Bestellung erfolgreich übermittelt",
+    submitFailed: "Übermittlung fehlgeschlagen",
+    serverError: "Serverfehler"
+  },
+
+  ja: {
+    home: "ホーム",
+    service: "サービス",
+    menu: "メニュー",
+    record: "記録",
+    mine: "マイページ",
+
+    incomplete: "未完了",
+    complete: "完了",
+
+    order: "注文",
+    completed: "完了",
+    orderNos: "注文番号",
+    transactionTime: "取引時間",
+    orderAmount: "注文金額",
+    commissions: "コミッション",
+    expectedIncome: "予想収益",
+    total: "合計",
+    submitOrder: "注文を送信",
+
+    noIncompleteOrder: "未完了の注文はありません",
+    noCompletedOrders: "完了した注文はありません",
+
+    failedToLoadOrder: "注文の読み込みに失敗しました",
+    noPendingOrder: "保留中の注文が見つかりません",
+    balanceLoadFailed: "残高の読み込みに失敗しました",
+    balanceNotEnough: "アカウント残高が不足しています。この注文を完了するには{amount}をチャージしてください。",
+    orderSubmitted: "注文が正常に送信されました",
+    submitFailed: "送信に失敗しました",
+    serverError: "サーバーエラー"
+  },
+
+  it: {
+    home: "Home",
+    service: "Servizio",
+    menu: "Menu",
+    record: "Registro",
+    mine: "Il mio account",
+
+    incomplete: "Incompleto",
+    complete: "Completato",
+
+    order: "Ordine",
+    completed: "Completato",
+    orderNos: "Numero ordine",
+    transactionTime: "Ora della transazione",
+    orderAmount: "Importo ordine",
+    commissions: "Commissioni",
+    expectedIncome: "Reddito previsto",
+    total: "Totale",
+    submitOrder: "Invia ordine",
+
+    noIncompleteOrder: "Nessun ordine incompleto",
+    noCompletedOrders: "Nessun ordine completato",
+
+    failedToLoadOrder: "Impossibile caricare l'ordine",
+    noPendingOrder: "Nessun ordine in sospeso trovato",
+    balanceLoadFailed: "Impossibile caricare il saldo",
+    balanceNotEnough: "Il saldo del tuo account non è sufficiente, devi ricaricare {amount} per completare questo ordine.",
+    orderSubmitted: "Ordine inviato con successo",
+    submitFailed: "Invio non riuscito",
+    serverError: "Errore del server"
+  },
+
+  tr: {
+    home: "Ana Sayfa",
+    service: "Hizmet",
+    menu: "Menü",
+    record: "Kayıt",
+    mine: "Hesabım",
+
+    incomplete: "Tamamlanmamış",
+    complete: "Tamamlandı",
+
+    order: "Sipariş",
+    completed: "Tamamlandı",
+    orderNos: "Sipariş No",
+    transactionTime: "İşlem zamanı",
+    orderAmount: "Sipariş tutarı",
+    commissions: "Komisyonlar",
+    expectedIncome: "Beklenen gelir",
+    total: "Toplam",
+    submitOrder: "Siparişi gönder",
+
+    noIncompleteOrder: "Tamamlanmamış sipariş yok",
+    noCompletedOrders: "Tamamlanmış sipariş yok",
+
+    failedToLoadOrder: "Sipariş yüklenemedi",
+    noPendingOrder: "Bekleyen sipariş bulunamadı",
+    balanceLoadFailed: "Bakiye yüklenemedi",
+    balanceNotEnough: "Hesap bakiyeniz yeterli değil, bu siparişi tamamlamak için {amount} yüklemeniz gerekiyor.",
+    orderSubmitted: "Sipariş başarıyla gönderildi",
+    submitFailed: "Gönderme başarısız",
+    serverError: "Sunucu hatası"
+  },
+
+  fa: {
+    home: "خانه",
+    service: "خدمات",
+    menu: "منو",
+    record: "سوابق",
+    mine: "حساب من",
+
+    incomplete: "ناقص",
+    complete: "تکمیل شده",
+
+    order: "سفارش",
+    completed: "تکمیل شده",
+    orderNos: "شماره سفارش",
+    transactionTime: "زمان تراکنش",
+    orderAmount: "مبلغ سفارش",
+    commissions: "کمیسیون",
+    expectedIncome: "درآمد مورد انتظار",
+    total: "مجموع",
+    submitOrder: "ثبت سفارش",
+
+    noIncompleteOrder: "هیچ سفارش ناقصی وجود ندارد",
+    noCompletedOrders: "هیچ سفارش تکمیل‌شده‌ای وجود ندارد",
+
+    failedToLoadOrder: "بارگذاری سفارش ناموفق بود",
+    noPendingOrder: "سفارش در حال انتظار یافت نشد",
+    balanceLoadFailed: "بارگذاری موجودی ناموفق بود",
+    balanceNotEnough: "موجودی حساب شما کافی نیست، برای تکمیل این سفارش باید {amount} شارژ کنید.",
+    orderSubmitted: "سفارش با موفقیت ثبت شد",
+    submitFailed: "ثبت ناموفق بود",
+    serverError: "خطای سرور"
+  },
+
+  nl: {
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    record: "Record",
+    mine: "Mijn account",
+
+    incomplete: "Onvolledig",
+    complete: "Voltooid",
+
+    order: "Bestelling",
+    completed: "Voltooid",
+    orderNos: "Bestelnummer",
+    transactionTime: "Transactietijd",
+    orderAmount: "Bestelbedrag",
+    commissions: "Commissies",
+    expectedIncome: "Verwachte inkomsten",
+    total: "Totaal",
+    submitOrder: "Bestelling indienen",
+
+    noIncompleteOrder: "Geen onvolledige bestellingen",
+    noCompletedOrders: "Geen voltooide bestellingen",
+
+    failedToLoadOrder: "Bestelling laden mislukt",
+    noPendingOrder: "Geen openstaande bestelling gevonden",
+    balanceLoadFailed: "Saldo laden mislukt",
+    balanceNotEnough: "Uw accountsaldo is niet voldoende. U moet {amount} opwaarderen om deze bestelling te voltooien.",
+    orderSubmitted: "Bestelling succesvol ingediend",
+    submitFailed: "Indienen mislukt",
+    serverError: "Serverfout"
+  }
+
+};
+
+const selectedLang =
+  localStorage.getItem("lang") || "en";
+const recordLanguage =
+  recordTranslations[selectedLang] ||
+  recordTranslations.en;
+
+window.recordLanguage = recordLanguage;
+
+document.getElementById("recordTitle").innerText =
+  recordLanguage.record;
+document.getElementById("incompleteText").innerText =
+  recordLanguage.incomplete;
+document.getElementById("completeText").innerText =
+  recordLanguage.complete;
+document.getElementById("navHome").innerText =
+  recordLanguage.home;
+document.getElementById("navService").innerText =
+  recordLanguage.service;
+document.getElementById("navMenu").innerText =
+  recordLanguage.menu;
+document.getElementById("navRecord").innerText =
+  recordLanguage.record;
+document.getElementById("navMine").innerText =
+  recordLanguage.mine;
 
 function goPage(page){
   window.location.href = page;
@@ -171,12 +779,16 @@ function switchTab(tab){
 
   document.getElementById("incompleteTab").style.display =
     tab === "incomplete" ? "block" : "none";
-
   document.getElementById("completeTab").style.display =
     tab === "complete" ? "block" : "none";
-
-  document.getElementById("tabIncomplete").classList.toggle("active", tab==="incomplete");
-  document.getElementById("tabComplete").classList.toggle("active", tab==="complete");
+  document.getElementById("tabIncomplete").classList.toggle(
+    "active",
+    tab === "incomplete"
+  );
+  document.getElementById("tabComplete").classList.toggle(
+    "active",
+    tab === "complete"
+  );
 }
 
 switchTab("incomplete");

@@ -47,10 +47,8 @@
       background:#fff;
       margin-bottom:12px;
       padding:15px;
-
       border-radius:12px;
       box-shadow:0 2px 8px rgba(0,0,0,0.06);
-
       position:relative;
     }
 
@@ -90,11 +88,9 @@
     }
 
     @media (min-width:768px){
-
       .container{
         padding:20px;
       }
-
       .record-item{
         max-width:900px;
         margin:0 auto 15px auto;
@@ -108,24 +104,275 @@
 
 <div class="header">
   <span class="back" onclick="history.back()">❮</span>
-  <h2>Withdraw Records</h2>
+  <h2 data-lang="withdrawRecords">Withdraw Records</h2>
 </div>
 
 <div class="container" id="recordList"></div>
 
 <script>
+
+const lang = localStorage.getItem("lang") || "en";
+const withdrawTexts = {
+
+  en: {
+    withdrawRecords: "Withdraw Records",
+    amount: "Amount",
+    time: "Time",
+    success: "Success",
+    rejected: "Rejected",
+    processing: "Processing",
+    userNotLoggedIn: "User not logged in",
+    loading: "Loading...",
+    noWithdrawalRecords: "No withdrawal records found",
+    serverErrorLoadingRecords: "Server error loading records"
+  },
+
+  zh: {
+    withdrawRecords: "提款记录",
+    amount: "金额",
+    time: "时间",
+    success: "成功",
+    rejected: "已拒绝",
+    processing: "处理中",
+    userNotLoggedIn: "用户未登录",
+    loading: "加载中...",
+    noWithdrawalRecords: "未找到提款记录",
+    serverErrorLoadingRecords: "加载提款记录时服务器出错"
+  },
+
+  hi: {
+    withdrawRecords: "निकासी रिकॉर्ड",
+    amount: "राशि",
+    time: "समय",
+    success: "सफल",
+    rejected: "अस्वीकृत",
+    processing: "प्रक्रिया में",
+    userNotLoggedIn: "उपयोगकर्ता लॉग इन नहीं है",
+    loading: "लोड हो रहा है...",
+    noWithdrawalRecords: "कोई निकासी रिकॉर्ड नहीं मिला",
+    serverErrorLoadingRecords: "रिकॉर्ड लोड करते समय सर्वर त्रुटि"
+  },
+
+  es: {
+    withdrawRecords: "Registros de retiros",
+    amount: "Cantidad",
+    time: "Hora",
+    success: "Éxito",
+    rejected: "Rechazado",
+    processing: "Procesando",
+    userNotLoggedIn: "Usuario no ha iniciado sesión",
+    loading: "Cargando...",
+    noWithdrawalRecords: "No se encontraron registros de retiros",
+    serverErrorLoadingRecords: "Error del servidor al cargar los registros"
+  },
+
+  fr: {
+    withdrawRecords: "Historique des retraits",
+    amount: "Montant",
+    time: "Heure",
+    success: "Réussi",
+    rejected: "Rejeté",
+    processing: "En traitement",
+    userNotLoggedIn: "Utilisateur non connecté",
+    loading: "Chargement...",
+    noWithdrawalRecords: "Aucun historique de retrait trouvé",
+    serverErrorLoadingRecords: "Erreur du serveur lors du chargement des retraits"
+  },
+
+  ar: {
+    withdrawRecords: "سجلات السحب",
+    amount: "المبلغ",
+    time: "الوقت",
+    success: "ناجح",
+    rejected: "مرفوض",
+    processing: "قيد المعالجة",
+    userNotLoggedIn: "المستخدم غير مسجل الدخول",
+    loading: "جارٍ التحميل...",
+    noWithdrawalRecords: "لم يتم العثور على سجلات سحب",
+    serverErrorLoadingRecords: "خطأ في الخادم أثناء تحميل سجلات السحب"
+  },
+
+  bn: {
+    withdrawRecords: "উইথড্র রেকর্ড",
+    amount: "পরিমাণ",
+    time: "সময়",
+    success: "সফল",
+    rejected: "প্রত্যাখ্যাত",
+    processing: "প্রক্রিয়াধীন",
+    userNotLoggedIn: "ইউজার লগইন করা নেই",
+    loading: "লোড হচ্ছে...",
+    noWithdrawalRecords: "কোনো উইথড্র রেকর্ড পাওয়া যায়নি",
+    serverErrorLoadingRecords: "রেকর্ড লোড করার সময় সার্ভার সমস্যা হয়েছে"
+  },
+
+  pt: {
+    withdrawRecords: "Registros de retiradas",
+    amount: "Valor",
+    time: "Hora",
+    success: "Sucesso",
+    rejected: "Rejeitado",
+    processing: "Processando",
+    userNotLoggedIn: "Usuário não conectado",
+    loading: "Carregando...",
+    noWithdrawalRecords: "Nenhum registro de retirada encontrado",
+    serverErrorLoadingRecords: "Erro do servidor ao carregar os registros"
+  },
+
+  ru: {
+    withdrawRecords: "История выводов",
+    amount: "Сумма",
+    time: "Время",
+    success: "Успешно",
+    rejected: "Отклонено",
+    processing: "В обработке",
+    userNotLoggedIn: "Пользователь не вошёл в систему",
+    loading: "Загрузка...",
+    noWithdrawalRecords: "История выводов не найдена",
+    serverErrorLoadingRecords: "Ошибка сервера при загрузке истории выводов"
+  },
+
+  ur: {
+    withdrawRecords: "رقم نکلوانے کے ریکارڈ",
+    amount: "رقم",
+    time: "وقت",
+    success: "کامیاب",
+    rejected: "مسترد",
+    processing: "زیر عمل",
+    userNotLoggedIn: "صارف لاگ ان نہیں ہے",
+    loading: "لوڈ ہو رہا ہے...",
+    noWithdrawalRecords: "رقم نکلوانے کا کوئی ریکارڈ نہیں ملا",
+    serverErrorLoadingRecords: "ریکارڈ لوڈ کرتے وقت سرور کی خرابی"
+  },
+
+  id: {
+    withdrawRecords: "Catatan penarikan",
+    amount: "Jumlah",
+    time: "Waktu",
+    success: "Berhasil",
+    rejected: "Ditolak",
+    processing: "Diproses",
+    userNotLoggedIn: "Pengguna belum masuk",
+    loading: "Memuat...",
+    noWithdrawalRecords: "Tidak ada catatan penarikan",
+    serverErrorLoadingRecords: "Kesalahan server saat memuat catatan"
+  },
+
+  de: {
+    withdrawRecords: "Auszahlungsverlauf",
+    amount: "Betrag",
+    time: "Zeit",
+    success: "Erfolgreich",
+    rejected: "Abgelehnt",
+    processing: "In Bearbeitung",
+    userNotLoggedIn: "Benutzer nicht angemeldet",
+    loading: "Wird geladen...",
+    noWithdrawalRecords: "Keine Auszahlungsdatensätze gefunden",
+    serverErrorLoadingRecords: "Serverfehler beim Laden der Auszahlungsdaten"
+  },
+
+  ja: {
+    withdrawRecords: "出金履歴",
+    amount: "金額",
+    time: "時間",
+    success: "成功",
+    rejected: "拒否",
+    processing: "処理中",
+    userNotLoggedIn: "ユーザーがログインしていません",
+    loading: "読み込み中...",
+    noWithdrawalRecords: "出金履歴が見つかりません",
+    serverErrorLoadingRecords: "出金履歴の読み込み中にサーバーエラーが発生しました"
+  },
+
+  it: {
+    withdrawRecords: "Cronologia prelievi",
+    amount: "Importo",
+    time: "Ora",
+    success: "Successo",
+    rejected: "Rifiutato",
+    processing: "In elaborazione",
+    userNotLoggedIn: "Utente non connesso",
+    loading: "Caricamento...",
+    noWithdrawalRecords: "Nessun record di prelievo trovato",
+    serverErrorLoadingRecords: "Errore del server durante il caricamento dei record"
+  },
+
+  tr: {
+    withdrawRecords: "Para çekme kayıtları",
+    amount: "Miktar",
+    time: "Zaman",
+    success: "Başarılı",
+    rejected: "Reddedildi",
+    processing: "İşleniyor",
+    userNotLoggedIn: "Kullanıcı giriş yapmamış",
+    loading: "Yükleniyor...",
+    noWithdrawalRecords: "Para çekme kaydı bulunamadı",
+    serverErrorLoadingRecords: "Kayıtlar yüklenirken sunucu hatası oluştu"
+  },
+
+  fa: {
+    withdrawRecords: "سوابق برداشت",
+    amount: "مبلغ",
+    time: "زمان",
+    success: "موفق",
+    rejected: "رد شده",
+    processing: "در حال پردازش",
+    userNotLoggedIn: "کاربر وارد نشده است",
+    loading: "در حال بارگذاری...",
+    noWithdrawalRecords: "هیچ سابقه برداشتی یافت نشد",
+    serverErrorLoadingRecords: "خطای سرور هنگام بارگذاری سوابق برداشت"
+  },
+
+  nl: {
+    withdrawRecords: "Opnamerecords",
+    amount: "Bedrag",
+    time: "Tijd",
+    success: "Geslaagd",
+    rejected: "Afgewezen",
+    processing: "In behandeling",
+    userNotLoggedIn: "Gebruiker is niet ingelogd",
+    loading: "Laden...",
+    noWithdrawalRecords: "Geen opnamerecords gevonden",
+    serverErrorLoadingRecords: "Serverfout bij het laden van de opnamerecords"
+  }
+
+};
+
+const currentTexts =
+  withdrawTexts[lang] || withdrawTexts.en;
+
+document.querySelector(
+  '[data-lang="withdrawRecords"]'
+).innerText = currentTexts.withdrawRecords;
+
+function translateStatus(status) {
+  if (status === "Success") {
+    return currentTexts.success;
+  }
+
+  if (status === "Rejected") {
+    return currentTexts.rejected;
+  }
+
+  if (status === "Processing") {
+    return currentTexts.processing;
+  }
+  return status;
+}
+
 async function loadWithdrawRecords() {
   const token = localStorage.getItem("token");
   const box = document.getElementById("recordList");
 
   if (!token) {
-    box.innerHTML = '<p class="empty">User not logged in</p>';
+    box.innerHTML =
+      `<p class="empty">${currentTexts.userNotLoggedIn}</p>`;
     return;
   }
 
-  box.innerHTML = '<p class="empty">Loading...</p>';
-
+  box.innerHTML =
+    `<p class="empty">${currentTexts.loading}</p>`;
   try {
+
     const res = await fetch("/my-withdraws", {
       headers: {
         "Authorization": "Bearer " + token
@@ -135,35 +382,46 @@ async function loadWithdrawRecords() {
     const records = await res.json();
 
     if (!Array.isArray(records) || records.length === 0) {
-      box.innerHTML = '<p class="empty">No withdrawal records found</p>';
+      box.innerHTML =
+        `<p class="empty">${currentTexts.noWithdrawalRecords}</p>`;
       return;
     }
-
     box.innerHTML = "";
-
     records.forEach(r => {
       let statusClass = "processing";
+      if (r.status === "Success") {
+        statusClass = "success";
+      }
 
-      if (r.status === "Success") statusClass = "success";
-      if (r.status === "Rejected") statusClass = "rejected";
-
-      const displayAmount = r.approvedAmount > 0 ? r.approvedAmount : r.amount;
-
+      if (r.status === "Rejected") {
+        statusClass = "rejected";
+      }
+      const displayAmount =
+        r.approvedAmount > 0
+          ? r.approvedAmount
+          : r.amount;
       box.innerHTML += `
         <div class="record-item">
-          <div class="status ${statusClass}">${r.status}</div>
-          <p>Amount: ${displayAmount} USDT</p>
-          <p>Time: ${new Date(r.time).toLocaleString()}</p>
+          <div class="status ${statusClass}">
+            ${translateStatus(r.status)}
+          </div>
+          <p>
+            ${currentTexts.amount}: ${displayAmount} USDT
+          </p>
+          <p>
+            ${currentTexts.time}: ${new Date(r.time).toLocaleString()}
+          </p>
         </div>
       `;
     });
-
   } catch (error) {
-    box.innerHTML = '<p class="empty">Server error loading records</p>';
+    box.innerHTML =
+      `<p class="empty">${currentTexts.serverErrorLoadingRecords}</p>`;
   }
 }
 
 loadWithdrawRecords();
+
 </script>
 
 </body>

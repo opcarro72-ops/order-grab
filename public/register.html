@@ -39,6 +39,63 @@
       cursor:pointer;
     }
 
+    .current-flag{
+  width:24px;
+  height:16px;
+  object-fit:cover;
+  border-radius:2px;
+  vertical-align:middle;
+  margin-right:6px;
+}
+
+.language-popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.language-popup{
+  width:320px;
+  max-width:90%;
+  max-height:70vh;
+  background:#fff;
+  border-radius:12px;
+  overflow-y:auto;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+}
+
+.language-option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 16px;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+  color:#333;
+  cursor:pointer;
+  background:#fff;
+}
+
+.language-option:hover{
+  background:#f5f5f5;
+}
+
+.language-option:last-child{
+  border-bottom:none;
+}
+
+.flag{
+  width:24px;
+  height:16px;
+  object-fit:cover;
+  border-radius:2px;
+  flex-shrink:0;
+}
+
     h1{
       margin-top:30px;
       font-size:22px;
@@ -89,31 +146,31 @@
     }
 
     .custom-message{
-  position:fixed;
-  top:30px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#222;
-  color:#fff;
-  padding:14px 25px;
-  border-radius:10px;
-  font-size:16px;
-  z-index:9999;
-  display:none;
-  animation:fadeIn 0.3s ease;
-}
+      position:fixed;
+      top:30px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#222;
+      color:#fff;
+      padding:14px 25px;
+      border-radius:10px;
+      font-size:16px;
+      z-index:9999;
+      display:none;
+      animation:fadeIn 0.3s ease;
+    }
 
-@keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateX(-50%) translateY(-10px);
-  }
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateX(-50%) translateY(-10px);
+      }
 
-  to{
-    opacity:1;
-    transform:translateX(-50%) translateY(0);
-  }
-}
+      to{
+        opacity:1;
+        transform:translateX(-50%) translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -124,10 +181,168 @@
   <div class="top">
     <div class="back" onclick="history.back()">❮</div>
 
-    <select class="lang" onchange="changeLang(this.value)">
-      <option value="en">US</option>
-    </select>
+    <div
+  class="lang"
+  onclick="toggleLanguage()"
+  id="currentLanguage"
+>
+  <img
+    src="flags/gb.png"
+    class="current-flag"
+    alt="English"
+  >
+
+  <span>English</span>
+</div>
+
   </div>
+
+<div
+  id="languagePopupOverlay"
+  class="language-popup-overlay"
+>
+
+  <div class="language-popup">
+
+    <div
+      class="language-option"
+      onclick="changeLang('en')"
+    >
+      <img src="flags/gb.png" class="flag">
+      <span>English</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('zh')"
+    >
+      <img src="flags/cn.png" class="flag">
+      <span>Chinese</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('hi')"
+    >
+      <img src="flags/in.png" class="flag">
+      <span>Hindi</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('es')"
+    >
+      <img src="flags/es.png" class="flag">
+      <span>Spanish</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('fr')"
+    >
+      <img src="flags/fr.png" class="flag">
+      <span>French</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('ar')"
+    >
+      <img src="flags/sa.png" class="flag">
+      <span>Arabic</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('bn')"
+    >
+      <img src="flags/bd.png" class="flag">
+      <span>Bengali</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('pt')"
+    >
+      <img src="flags/pt.png" class="flag">
+      <span>Portuguese</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('ru')"
+    >
+      <img src="flags/ru.png" class="flag">
+      <span>Russian</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('ur')"
+    >
+      <img src="flags/pk.png" class="flag">
+      <span>Urdu</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('id')"
+    >
+      <img src="flags/id.png" class="flag">
+      <span>Indonesian</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('de')"
+    >
+      <img src="flags/de.png" class="flag">
+      <span>German</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('ja')"
+    >
+      <img src="flags/jp.png" class="flag">
+      <span>Japanese</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('it')"
+    >
+      <img src="flags/it.png" class="flag">
+      <span>Italian</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('tr')"
+    >
+      <img src="flags/tr.png" class="flag">
+      <span>Turkish</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('fa')"
+    >
+      <img src="flags/ir.png" class="flag">
+      <span>Persian</span>
+    </div>
+
+    <div
+      class="language-option"
+      onclick="changeLang('nl')"
+    >
+      <img src="flags/nl.png" class="flag">
+      <span>Dutch</span>
+    </div>
+
+  </div>
+
+</div>
 
   <h1 id="welcome">Hello,Welcome!</h1>
   <h2 id="title">Register</h2>
@@ -148,43 +363,456 @@
     <input type="text" id="invite" placeholder="Invitation code (required)">
   </div>
 
-  <button class="register-btn" onclick="registerUser()">Registration</button>
+  <button class="register-btn" onclick="registerUser()">
+    Registration
+  </button>
 
-  <div class="login-link" onclick="goLogin()">Back to Login</div>
+  <div class="login-link" onclick="goLogin()">
+    Back to Login
+  </div>
 
 </div>
 
 <div id="customMessage" class="custom-message"></div>
 
 <script>
-async function registerUser() {
 
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const confirmPassword = document.getElementById("confirmPassword").value.trim();
-  const inviteCode = document.getElementById("invite").value.trim();
+const translations = {
+
+  en: {
+    welcome: "Hello,Welcome!",
+    title: "Register",
+    username: "6-16 letters or numbers",
+    password: "6-16 alphanumeric password",
+    confirmPassword: "Please enter the password again",
+    invite: "Invitation code (required)",
+    register: "Registration",
+    backLogin: "Back to Login",
+
+    fillAll: "Please fill all fields",
+    usernameSpace: "Username cannot contain spaces",
+    passwordSpace: "Password cannot contain spaces",
+    passwordMatch: "Passwords do not match",
+    usernameExists: "Username already exists",
+    invalidInvite: "Invalid invitation code",
+    success: "Registration successful",
+    failed: "Registration failed",
+    serverError: "Server error"
+  },
+
+  zh: {
+    welcome: "您好，欢迎！",
+    title: "注册",
+    username: "6-16个字母或数字",
+    password: "6-16位字母数字密码",
+    confirmPassword: "请再次输入密码",
+    invite: "邀请码（必填）",
+    register: "注册",
+    backLogin: "返回登录",
+
+    fillAll: "请填写所有字段",
+    usernameSpace: "用户名不能包含空格",
+    passwordSpace: "密码不能包含空格",
+    passwordMatch: "两次输入的密码不一致",
+    usernameExists: "用户名已存在",
+    invalidInvite: "邀请码无效",
+    success: "注册成功",
+    failed: "注册失败",
+    serverError: "服务器错误"
+  },
+
+  hi: {
+    welcome: "नमस्ते, स्वागत है!",
+    title: "पंजीकरण",
+    username: "6-16 अक्षर या संख्याएँ",
+    password: "6-16 अक्षरों का पासवर्ड",
+    confirmPassword: "कृपया पासवर्ड दोबारा दर्ज करें",
+    invite: "आमंत्रण कोड (आवश्यक)",
+    register: "पंजीकरण",
+    backLogin: "लॉगिन पर वापस जाएँ",
+
+    fillAll: "कृपया सभी फ़ील्ड भरें",
+    usernameSpace: "उपयोगकर्ता नाम में स्पेस नहीं हो सकता",
+    passwordSpace: "पासवर्ड में स्पेस नहीं हो सकता",
+    passwordMatch: "पासवर्ड मेल नहीं खाते",
+    usernameExists: "उपयोगकर्ता नाम पहले से मौजूद है",
+    invalidInvite: "अमान्य आमंत्रण कोड",
+    success: "पंजीकरण सफल हुआ",
+    failed: "पंजीकरण विफल हुआ",
+    serverError: "सर्वर त्रुटि"
+  },
+
+  es: {
+    welcome: "¡Hola, bienvenido!",
+    title: "Registrarse",
+    username: "6-16 letras o números",
+    password: "Contraseña alfanumérica de 6-16 caracteres",
+    confirmPassword: "Ingrese la contraseña nuevamente",
+    invite: "Código de invitación (obligatorio)",
+    register: "Registrarse",
+    backLogin: "Volver al inicio de sesión",
+
+    fillAll: "Complete todos los campos",
+    usernameSpace: "El nombre de usuario no puede contener espacios",
+    passwordSpace: "La contraseña no puede contener espacios",
+    passwordMatch: "Las contraseñas no coinciden",
+    usernameExists: "El nombre de usuario ya existe",
+    invalidInvite: "Código de invitación no válido",
+    success: "Registro exitoso",
+    failed: "Error en el registro",
+    serverError: "Error del servidor"
+  },
+
+  fr: {
+    welcome: "Bonjour, bienvenue !",
+    title: "Inscription",
+    username: "6-16 lettres ou chiffres",
+    password: "Mot de passe alphanumérique de 6-16 caractères",
+    confirmPassword: "Veuillez saisir à nouveau le mot de passe",
+    invite: "Code d'invitation (obligatoire)",
+    register: "Inscription",
+    backLogin: "Retour à la connexion",
+
+    fillAll: "Veuillez remplir tous les champs",
+    usernameSpace: "Le nom d'utilisateur ne peut pas contenir d'espaces",
+    passwordSpace: "Le mot de passe ne peut pas contenir d'espaces",
+    passwordMatch: "Les mots de passe ne correspondent pas",
+    usernameExists: "Le nom d'utilisateur existe déjà",
+    invalidInvite: "Code d'invitation invalide",
+    success: "Inscription réussie",
+    failed: "Échec de l'inscription",
+    serverError: "Erreur du serveur"
+  },
+
+  ar: {
+    welcome: "مرحباً، أهلاً بك!",
+    title: "التسجيل",
+    username: "6-16 حرفًا أو رقمًا",
+    password: "كلمة مرور مكونة من 6-16 حرفًا أو رقمًا",
+    confirmPassword: "يرجى إدخال كلمة المرور مرة أخرى",
+    invite: "رمز الدعوة (مطلوب)",
+    register: "التسجيل",
+    backLogin: "العودة إلى تسجيل الدخول",
+
+    fillAll: "يرجى ملء جميع الحقول",
+    usernameSpace: "لا يمكن أن يحتوي اسم المستخدم على مسافات",
+    passwordSpace: "لا يمكن أن تحتوي كلمة المرور على مسافات",
+    passwordMatch: "كلمتا المرور غير متطابقتين",
+    usernameExists: "اسم المستخدم موجود بالفعل",
+    invalidInvite: "رمز الدعوة غير صالح",
+    success: "تم التسجيل بنجاح",
+    failed: "فشل التسجيل",
+    serverError: "خطأ في الخادم"
+  },
+
+  bn: {
+    welcome: "হ্যালো, স্বাগতম!",
+    title: "রেজিস্ট্রেশন",
+    username: "৬-১৬ অক্ষর বা সংখ্যা",
+    password: "৬-১৬ অক্ষরের পাসওয়ার্ড",
+    confirmPassword: "পাসওয়ার্ড আবার লিখুন",
+    invite: "ইনভাইট কোড (প্রয়োজন)",
+    register: "রেজিস্ট্রেশন",
+    backLogin: "লগইনে ফিরে যান",
+
+    fillAll: "সবগুলো ঘর পূরণ করুন",
+    usernameSpace: "ইউজারনেমে স্পেস থাকতে পারবে না",
+    passwordSpace: "পাসওয়ার্ডে স্পেস থাকতে পারবে না",
+    passwordMatch: "পাসওয়ার্ড মিলছে না",
+    usernameExists: "ইউজারনেম ইতিমধ্যে আছে",
+    invalidInvite: "ইনভাইটেশন কোড সঠিক নয়",
+    success: "রেজিস্ট্রেশন সফল হয়েছে",
+    failed: "রেজিস্ট্রেশন ব্যর্থ হয়েছে",
+    serverError: "সার্ভার সমস্যা হয়েছে"
+  },
+
+  pt: {
+    welcome: "Olá, bem-vindo!",
+    title: "Registrar",
+    username: "6-16 letras ou números",
+    password: "Senha alfanumérica de 6-16 caracteres",
+    confirmPassword: "Digite a senha novamente",
+    invite: "Código de convite (obrigatório)",
+    register: "Registrar",
+    backLogin: "Voltar ao login",
+
+    fillAll: "Preencha todos os campos",
+    usernameSpace: "O nome de usuário não pode conter espaços",
+    passwordSpace: "A senha não pode conter espaços",
+    passwordMatch: "As senhas não coincidem",
+    usernameExists: "O nome de usuário já existe",
+    invalidInvite: "Código de convite inválido",
+    success: "Registro realizado com sucesso",
+    failed: "Falha no registro",
+    serverError: "Erro do servidor"
+  },
+
+  ru: {
+    welcome: "Здравствуйте, добро пожаловать!",
+    title: "Регистрация",
+    username: "6-16 букв или цифр",
+    password: "Пароль из 6-16 букв или цифр",
+    confirmPassword: "Введите пароль еще раз",
+    invite: "Код приглашения (обязательно)",
+    register: "Регистрация",
+    backLogin: "Вернуться к входу",
+
+    fillAll: "Заполните все поля",
+    usernameSpace: "Имя пользователя не может содержать пробелы",
+    passwordSpace: "Пароль не может содержать пробелы",
+    passwordMatch: "Пароли не совпадают",
+    usernameExists: "Имя пользователя уже существует",
+    invalidInvite: "Недействительный код приглашения",
+    success: "Регистрация прошла успешно",
+    failed: "Ошибка регистрации",
+    serverError: "Ошибка сервера"
+  },
+
+  ur: {
+    welcome: "ہیلو، خوش آمدید!",
+    title: "رجسٹریشن",
+    username: "6-16 حروف یا اعداد",
+    password: "6-16 حروف یا اعداد کا پاس ورڈ",
+    confirmPassword: "پاس ورڈ دوبارہ درج کریں",
+    invite: "دعوتی کوڈ (ضروری)",
+    register: "رجسٹریشن",
+    backLogin: "لاگ ان پر واپس جائیں",
+
+    fillAll: "براہ کرم تمام خانے پُر کریں",
+    usernameSpace: "صارف نام میں اسپیس نہیں ہو سکتی",
+    passwordSpace: "پاس ورڈ میں اسپیس نہیں ہو سکتی",
+    passwordMatch: "پاس ورڈ مماثل نہیں ہیں",
+    usernameExists: "صارف نام پہلے سے موجود ہے",
+    invalidInvite: "دعوتی کوڈ درست نہیں ہے",
+    success: "رجسٹریشن کامیاب ہو گئی",
+    failed: "رجسٹریشن ناکام ہو گئی",
+    serverError: "سرور کی خرابی"
+  },
+
+  id: {
+    welcome: "Halo, Selamat Datang!",
+    title: "Pendaftaran",
+    username: "6-16 huruf atau angka",
+    password: "Kata sandi alfanumerik 6-16 karakter",
+    confirmPassword: "Masukkan kata sandi lagi",
+    invite: "Kode undangan (wajib)",
+    register: "Pendaftaran",
+    backLogin: "Kembali ke Login",
+
+    fillAll: "Silakan isi semua kolom",
+    usernameSpace: "Nama pengguna tidak boleh mengandung spasi",
+    passwordSpace: "Kata sandi tidak boleh mengandung spasi",
+    passwordMatch: "Kata sandi tidak cocok",
+    usernameExists: "Nama pengguna sudah ada",
+    invalidInvite: "Kode undangan tidak valid",
+    success: "Pendaftaran berhasil",
+    failed: "Pendaftaran gagal",
+    serverError: "Kesalahan server"
+  },
+
+  de: {
+    welcome: "Hallo, willkommen!",
+    title: "Registrierung",
+    username: "6-16 Buchstaben oder Zahlen",
+    password: "6-16-stelliges alphanumerisches Passwort",
+    confirmPassword: "Passwort erneut eingeben",
+    invite: "Einladungscode (erforderlich)",
+    register: "Registrierung",
+    backLogin: "Zurück zur Anmeldung",
+
+    fillAll: "Bitte füllen Sie alle Felder aus",
+    usernameSpace: "Der Benutzername darf keine Leerzeichen enthalten",
+    passwordSpace: "Das Passwort darf keine Leerzeichen enthalten",
+    passwordMatch: "Die Passwörter stimmen nicht überein",
+    usernameExists: "Der Benutzername existiert bereits",
+    invalidInvite: "Ungültiger Einladungscode",
+    success: "Registrierung erfolgreich",
+    failed: "Registrierung fehlgeschlagen",
+    serverError: "Serverfehler"
+  },
+
+  ja: {
+    welcome: "こんにちは、ようこそ！",
+    title: "登録",
+    username: "6〜16文字の英数字",
+    password: "6〜16文字の英数字パスワード",
+    confirmPassword: "パスワードをもう一度入力してください",
+    invite: "招待コード（必須）",
+    register: "登録",
+    backLogin: "ログインに戻る",
+
+    fillAll: "すべての項目を入力してください",
+    usernameSpace: "ユーザー名にスペースを使用できません",
+    passwordSpace: "パスワードにスペースを使用できません",
+    passwordMatch: "パスワードが一致しません",
+    usernameExists: "ユーザー名はすでに存在します",
+    invalidInvite: "無効な招待コードです",
+    success: "登録に成功しました",
+    failed: "登録に失敗しました",
+    serverError: "サーバーエラー"
+  },
+
+  it: {
+    welcome: "Ciao, benvenuto!",
+    title: "Registrazione",
+    username: "6-16 lettere o numeri",
+    password: "Password alfanumerica di 6-16 caratteri",
+    confirmPassword: "Inserisci nuovamente la password",
+    invite: "Codice di invito (obbligatorio)",
+    register: "Registrazione",
+    backLogin: "Torna al login",
+
+    fillAll: "Compila tutti i campi",
+    usernameSpace: "Il nome utente non può contenere spazi",
+    passwordSpace: "La password non può contenere spazi",
+    passwordMatch: "Le password non corrispondono",
+    usernameExists: "Il nome utente esiste già",
+    invalidInvite: "Codice di invito non valido",
+    success: "Registrazione riuscita",
+    failed: "Registrazione non riuscita",
+    serverError: "Errore del server"
+  },
+
+  tr: {
+    welcome: "Merhaba, Hoş Geldiniz!",
+    title: "Kayıt Ol",
+    username: "6-16 harf veya rakam",
+    password: "6-16 karakterli alfanümerik şifre",
+    confirmPassword: "Şifreyi tekrar girin",
+    invite: "Davet kodu (gerekli)",
+    register: "Kayıt Ol",
+    backLogin: "Girişe Geri Dön",
+
+    fillAll: "Lütfen tüm alanları doldurun",
+    usernameSpace: "Kullanıcı adında boşluk olamaz",
+    passwordSpace: "Şifrede boşluk olamaz",
+    passwordMatch: "Şifreler eşleşmiyor",
+    usernameExists: "Kullanıcı adı zaten mevcut",
+    invalidInvite: "Geçersiz davet kodu",
+    success: "Kayıt başarılı",
+    failed: "Kayıt başarısız",
+    serverError: "Sunucu hatası"
+  },
+
+  fa: {
+    welcome: "سلام، خوش آمدید!",
+    title: "ثبت نام",
+    username: "۶-۱۶ حرف یا عدد",
+    password: "رمز عبور ۶-۱۶ کاراکتری",
+    confirmPassword: "رمز عبور را دوباره وارد کنید",
+    invite: "کد دعوت (ضروری)",
+    register: "ثبت نام",
+    backLogin: "بازگشت به ورود",
+
+    fillAll: "لطفاً همه فیلدها را پر کنید",
+    usernameSpace: "نام کاربری نمی‌تواند شامل فاصله باشد",
+    passwordSpace: "رمز عبور نمی‌تواند شامل فاصله باشد",
+    passwordMatch: "رمزهای عبور مطابقت ندارند",
+    usernameExists: "نام کاربری از قبل وجود دارد",
+    invalidInvite: "کد دعوت نامعتبر است",
+    success: "ثبت نام با موفقیت انجام شد",
+    failed: "ثبت نام ناموفق بود",
+    serverError: "خطای سرور"
+  },
+
+  nl: {
+    welcome: "Hallo, welkom!",
+    title: "Registreren",
+    username: "6-16 letters of cijfers",
+    password: "Alfanumeriek wachtwoord van 6-16 tekens",
+    confirmPassword: "Voer het wachtwoord opnieuw in",
+    invite: "Uitnodigingscode (verplicht)",
+    register: "Registreren",
+    backLogin: "Terug naar inloggen",
+
+    fillAll: "Vul alle velden in",
+    usernameSpace: "Gebruikersnaam mag geen spaties bevatten",
+    passwordSpace: "Wachtwoord mag geen spaties bevatten",
+    passwordMatch: "Wachtwoorden komen niet overeen",
+    usernameExists: "Gebruikersnaam bestaat al",
+    invalidInvite: "Ongeldige uitnodigingscode",
+    success: "Registratie geslaagd",
+    failed: "Registratie mislukt",
+    serverError: "Serverfout"
+  }
+
+};
+
+const flags = {
+
+  en: "gb.png",
+  zh: "cn.png",
+  hi: "in.png",
+  es: "es.png",
+  fr: "fr.png",
+  ar: "sa.png",
+  bn: "bd.png",
+  pt: "pt.png",
+  ru: "ru.png",
+  ur: "pk.png",
+  id: "id.png",
+  de: "de.png",
+  ja: "jp.png",
+  it: "it.png",
+  tr: "tr.png",
+  fa: "ir.png",
+  nl: "nl.png"
+
+};
+
+const names = {
+
+  en: "English",
+  zh: "Chinese",
+  hi: "Hindi",
+  es: "Spanish",
+  fr: "French",
+  ar: "Arabic",
+  bn: "Bengali",
+  pt: "Portuguese",
+  ru: "Russian",
+  ur: "Urdu",
+  id: "Indonesian",
+  de: "German",
+  ja: "Japanese",
+  it: "Italian",
+  tr: "Turkish",
+  fa: "Persian",
+  nl: "Dutch"
+
+};
+
+async function registerUser() {
+  const username =
+    document.getElementById("username").value.trim();
+  const password =
+    document.getElementById("password").value.trim();
+  const confirmPassword =
+    document.getElementById("confirmPassword").value.trim();
+  const inviteCode =
+    document.getElementById("invite").value.trim();
+  const lang =
+    localStorage.getItem("lang") || "en";
+  const t =
+    translations[lang] || translations.en;
 
   if (!username || !password || !confirmPassword || !inviteCode) {
-
-    showMessage("Please fill all fields");
+    showMessage(t.fillAll);
     return;
   }
 
   if (username.includes(" ")) {
-
-    showMessage("Username cannot contain spaces");
+    showMessage(t.usernameSpace);
     return;
   }
 
   if (password.includes(" ")) {
-
-    showMessage("Password cannot contain spaces");
+    showMessage(t.passwordSpace);
     return;
   }
 
   if (password !== confirmPassword) {
-
-    showMessage("Passwords do not match");
+    showMessage(t.passwordMatch);
     return;
   }
 
@@ -195,42 +823,51 @@ async function registerUser() {
       headers: {
         "Content-Type": "application/json"
       },
+
       body: JSON.stringify({
-  username,
-  password,
-  inviteCode
-})
+        username,
+        password,
+        inviteCode
+      })
+
     });
 
     const data = await res.json();
 
     if (data.success) {
-
-      showMessage("Registration successful");
-
-setTimeout(() => {
-  window.location.href = "login.html";
-}, 3000);
-
-    } else {
-
-      showMessage(data.msg || "Registration failed");
+      showMessage(t.success);
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 3000);
+      return;
     }
 
-  } catch (err) {
+    if (
+      data.msg === "Username already exists" ||
+      data.msg === "Username already exist"
+    ) {
+      showMessage(t.usernameExists);
+      return;
+    }
 
-    showMessage("Server error");
+    if (
+      data.msg === "Invalid invitation code" ||
+      data.msg === "Invalid invite code"
+    ) {
+      showMessage(t.invalidInvite);
+      return;
+    }
+    showMessage(t.failed);
+  } catch (err) {
+    showMessage(t.serverError);
   }
 }
 
 function showMessage(text) {
-
-  const msg = document.getElementById("customMessage");
-
+  const msg =
+    document.getElementById("customMessage");
   msg.innerText = text;
-
   msg.style.display = "block";
-
   setTimeout(() => {
     msg.style.display = "none";
   }, 3000);
@@ -243,50 +880,81 @@ function goLogin(){
 
 function changeLang(lang){
   localStorage.setItem("lang", lang);
+  const t =
+    translations[lang] || translations.en;
+  document.getElementById("welcome").innerText =
+    t.welcome;
+  document.getElementById("title").innerText =
+    t.title;
+  document.getElementById("username").placeholder =
+    t.username;
+  document.getElementById("password").placeholder =
+    t.password;
+  document.getElementById("confirmPassword").placeholder =
+    t.confirmPassword;
+  document.getElementById("invite").placeholder =
+    t.invite;
+  document.querySelector(".register-btn").innerText =
+    t.register;
+  document.querySelector(".login-link").innerText =
+    t.backLogin;
 
-  if(lang === "bn"){
-    document.getElementById("welcome").innerText = "হ্যালো, স্বাগতম!";
-    document.getElementById("title").innerText = "রেজিস্ট্রেশন";
+  const flagFile =
+    flags[lang] || flags.en;
 
-    document.getElementById("username").placeholder = "৬-১৬ অক্ষর বা সংখ্যা";
-    document.getElementById("password").placeholder = "৬-১৬ অক্ষরের পাসওয়ার্ড";
-    document.getElementById("confirmPassword").placeholder = "পাসওয়ার্ড আবার লিখুন";
-    document.getElementById("invite").placeholder = "ইনভাইট কোড (প্রয়োজন)";
+  const languageName =
+    names[lang] || names.en;
 
-    document.querySelector(".register-btn").innerText = "রেজিস্ট্রেশন";
-    document.querySelector(".login-link").innerText = "লগইন এ ফিরে যান";
+  document.getElementById("currentLanguage").innerHTML = `
+    <img
+      src="flags/${flagFile}"
+      class="current-flag"
+      alt="${languageName}"
+    >
+    <span>${languageName}</span>
+  `;
 
+  if(
+    lang === "ar" ||
+    lang === "ur" ||
+    lang === "fa"
+  ){
+    document.body.dir = "rtl";
   }else{
-    document.getElementById("welcome").innerText = "Hello,Welcome!";
-    document.getElementById("title").innerText = "Register";
-
-    document.getElementById("username").placeholder = "6-16 letters or numbers";
-    document.getElementById("password").placeholder = "6-16 alphanumeric password";
-    document.getElementById("confirmPassword").placeholder = "Please enter the password again";
-    document.getElementById("invite").placeholder = "Invitation code (required)";
-
-    document.querySelector(".register-btn").innerText = "Registration";
-    document.querySelector(".login-link").innerText = "Back to Login";
+    document.body.dir = "ltr";
   }
+
+  document.getElementById(
+    "languagePopupOverlay"
+  ).style.display = "none";
+}
+
+function toggleLanguage(){
+  const popup =
+    document.getElementById(
+      "languagePopupOverlay"
+    );
+  popup.style.display = "flex";
 }
 
 window.onload = function () {
-
-  const lang = localStorage.getItem("lang") || "en";
-
-  document.querySelector(".lang").value = lang;
-
+  const lang =
+    localStorage.getItem("lang") || "en";
+    lang;
   changeLang(lang);
 
-  const params = new URLSearchParams(window.location.search);
+  const params =
+    new URLSearchParams(window.location.search);
 
-  const code = params.get("code");
-
-  if (code) {
-    document.getElementById("invite").value = code;
+  const code =
+    params.get("code");
+  if(code){
+    document.getElementById("invite").value =
+      code;
   }
 
-}
+};
+
 </script>
 
 </body>

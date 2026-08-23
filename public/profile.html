@@ -46,14 +46,11 @@
       width:calc(100% - 15px);
       margin-left:0;
       margin-right:15px;
-
       background:#fff;
       padding:15px;
       margin-bottom:12px;
-
       border-radius:12px;
       box-shadow:0 2px 8px rgba(0,0,0,0.06);
-
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -78,7 +75,6 @@
     }
 
     @media (min-width:768px){
-
       .container{
         padding:0;
       }
@@ -126,13 +122,13 @@
 
 <div class="header">
   <span class="back" onclick="window.location.href='mine.html'">❮</span>
-  <h2>Profile</h2>
+  <h2 id="profileTitle">Profile</h2>
 </div>
 
 <div class="container">
 
   <div class="card">
-    <span>Personal Avatar</span>
+    <span id="personalAvatarText">Personal Avatar</span>
     <img id="avatarPreview" class="avatar" src="default.png">
   </div>
 
@@ -147,33 +143,158 @@
 <input type="file" id="fileInput" accept="image/*">
 
 <script>
+
+  const lang = localStorage.getItem("lang") || "en";
+const profileTexts = {
+
+  en: {
+    profile: "Profile",
+    personalAvatar: "Personal Avatar",
+    imageUpdated: "Profile image updated successfully",
+    serverError: "Server error"
+  },
+
+  zh: {
+    profile: "个人资料",
+    personalAvatar: "个人头像",
+    imageUpdated: "个人头像更新成功",
+    serverError: "服务器错误"
+  },
+
+  hi: {
+    profile: "प्रोफ़ाइल",
+    personalAvatar: "व्यक्तिगत अवतार",
+    imageUpdated: "प्रोफ़ाइल छवि सफलतापूर्वक अपडेट हुई",
+    serverError: "सर्वर त्रुटि"
+  },
+
+  es: {
+    profile: "Perfil",
+    personalAvatar: "Avatar personal",
+    imageUpdated: "Imagen de perfil actualizada correctamente",
+    serverError: "Error del servidor"
+  },
+
+  fr: {
+    profile: "Profil",
+    personalAvatar: "Avatar personnel",
+    imageUpdated: "Image de profil mise à jour avec succès",
+    serverError: "Erreur du serveur"
+  },
+
+  ar: {
+    profile: "الملف الشخصي",
+    personalAvatar: "الصورة الشخصية",
+    imageUpdated: "تم تحديث صورة الملف الشخصي بنجاح",
+    serverError: "خطأ في الخادم"
+  },
+
+  bn: {
+    profile: "প্রোফাইল",
+    personalAvatar: "ব্যক্তিগত ছবি",
+    imageUpdated: "প্রোফাইল ছবি সফলভাবে আপডেট হয়েছে",
+    serverError: "সার্ভার সমস্যা"
+  },
+
+  pt: {
+    profile: "Perfil",
+    personalAvatar: "Avatar pessoal",
+    imageUpdated: "Imagem do perfil atualizada com sucesso",
+    serverError: "Erro do servidor"
+  },
+
+  ru: {
+    profile: "Профиль",
+    personalAvatar: "Личный аватар",
+    imageUpdated: "Изображение профиля успешно обновлено",
+    serverError: "Ошибка сервера"
+  },
+
+  ur: {
+    profile: "پروفائل",
+    personalAvatar: "ذاتی تصویر",
+    imageUpdated: "پروفائل تصویر کامیابی سے اپ ڈیٹ ہو گئی",
+    serverError: "سرور کی خرابی"
+  },
+
+  id: {
+    profile: "Profil",
+    personalAvatar: "Avatar pribadi",
+    imageUpdated: "Foto profil berhasil diperbarui",
+    serverError: "Kesalahan server"
+  },
+
+  de: {
+    profile: "Profil",
+    personalAvatar: "Persönlicher Avatar",
+    imageUpdated: "Profilbild erfolgreich aktualisiert",
+    serverError: "Serverfehler"
+  },
+
+  ja: {
+    profile: "プロフィール",
+    personalAvatar: "個人アバター",
+    imageUpdated: "プロフィール画像が正常に更新されました",
+    serverError: "サーバーエラー"
+  },
+
+  it: {
+    profile: "Profilo",
+    personalAvatar: "Avatar personale",
+    imageUpdated: "Immagine del profilo aggiornata correttamente",
+    serverError: "Errore del server"
+  },
+
+  tr: {
+    profile: "Profil",
+    personalAvatar: "Kişisel avatar",
+    imageUpdated: "Profil resmi başarıyla güncellendi",
+    serverError: "Sunucu hatası"
+  },
+
+  fa: {
+    profile: "پروفایل",
+    personalAvatar: "آواتار شخصی",
+    imageUpdated: "تصویر پروفایل با موفقیت به‌روزرسانی شد",
+    serverError: "خطای سرور"
+  },
+
+  nl: {
+    profile: "Profiel",
+    personalAvatar: "Persoonlijke avatar",
+    imageUpdated: "Profielfoto succesvol bijgewerkt",
+    serverError: "Serverfout"
+  }
+
+};
+
+const currentTexts =
+  profileTexts[lang] || profileTexts.en;
+document.getElementById("profileTitle").innerText =
+  currentTexts.profile;
+document.getElementById("personalAvatarText").innerText =
+  currentTexts.personalAvatar;
+
 const avatar = document.getElementById("avatarPreview");
 const fileInput = document.getElementById("fileInput");
-
 const token = localStorage.getItem("token");
-
 if (!token) {
   window.location.href = "login.html";
 }
 
 function showMessage(message){
-
   const msg = document.getElementById("customMsg");
   const text = document.getElementById("msgText");
 
   text.innerText = message;
-
   msg.style.display = "block";
-
   setTimeout(() => {
     msg.style.display = "none";
   }, 3000);
 }
 
 async function loadProfileImage() {
-
   try {
-
     const res = await fetch("/get-profile-image", {
       headers: {
         Authorization: "Bearer " + token
@@ -181,7 +302,6 @@ async function loadProfileImage() {
     });
 
     const data = await res.json();
-
     if (data.success && data.image) {
       avatar.src = data.image;
     } else {
@@ -189,13 +309,11 @@ async function loadProfileImage() {
     }
 
   } catch (err) {
-
     avatar.src = "default.png";
   }
 }
 
 loadProfileImage();
-
 avatar.addEventListener("click", () => {
   fileInput.click();
 });
@@ -205,16 +323,13 @@ fileInput.addEventListener("change", function(){
   if(!file) return;
 
   const reader = new FileReader();
-
   reader.onload = async function(e){
 
   const imageData = e.target.result;
-
   try {
 
     const res = await fetch("/save-profile-image", {
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token
@@ -228,21 +343,15 @@ fileInput.addEventListener("change", function(){
     const data = await res.json();
 
     if (data.success) {
-
       avatar.src = imageData;
-
-      showMessage("Profile image updated successfully");
-
+      showMessage(currentTexts.imageUpdated);
     } else {
-
       showMessage(data.msg);
     }
 
   } catch (err) {
-
     console.log(err);
-
-    showMessage("Server error: " + err.message);
+    showMessage(currentTexts.serverError + ": " + err.message);
   }
 };
 

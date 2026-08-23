@@ -10,43 +10,299 @@
 
 <div class="deposit-header">
   <span class="back-btn" onclick="goBack('mine.html')">❮</span>
-  <h2>Deposit</h2>
+  <h2 id="depositTitle">Deposit</h2>
 </div>
 
 <div class="deposit-container">
 
   <div class="card">
-    <p class="label">Payment method</p>
+    <p class="label" id="paymentMethodText">Payment method</p>
     <div class="option-box active">USDT</div>
   </div>
 
   <div class="card">
-    <p class="label">Select the protocol to use</p>
+    <p class="label" id="protocolText">Select the protocol to use</p>
     <div class="option-box active">TRC-20</div>
   </div>
 
   <div class="card">
-    <p class="label">Currency selection</p>
+    <p class="label" id="currencySelectionText">Currency selection</p>
     <div class="option-box active">ALL</div>
   </div>
 
   <div class="card">
-    <p class="label">Deposit amount</p>
-    <input type="number" id="amountInput" placeholder="Enter amount">
-    <p class="hint">Deposit amount must be greater than 0.1 USDT</p>
+    <p class="label" id="depositAmountText">Deposit amount</p>
+
+  <input
+    type="number"
+    id="amountInput"
+    placeholder="Enter amount"
+  >
+
+  <p class="hint" id="depositAmountHint">
+   Deposit amount must be greater than 0.1 USDT
+   </p>
   </div>
 
   <div class="estimate">
-    Estimated payment: <span id="showAmount">0</span> USDT
+   <span id="estimatedPaymentText">Estimated payment:</span>
+   <span id="showAmount">0</span> USDT
   </div>
 
 </div>
 
 <div class="bottom-fixed">
-  <button id="depositBtn" disabled onclick="goNext()">Deposit now</button>
+  <button
+  id="depositBtn"
+  disabled
+  onclick="goNext()"
+>
+  Deposit now
+</button>
 </div>
 
 <script>
+
+const lang = localStorage.getItem("lang") || "en";
+
+const depositTexts = {
+
+  en: {
+    title: "Deposit",
+    paymentMethod: "Payment method",
+    protocol: "Select the protocol to use",
+    currencySelection: "Currency selection",
+    depositAmount: "Deposit amount",
+    enterAmount: "Enter amount",
+    amountHint: "Deposit amount must be greater than 0.1 USDT",
+    estimatedPayment: "Estimated payment:",
+    depositNow: "Deposit now"
+  },
+
+  zh: {
+    title: "存款",
+    paymentMethod: "支付方式",
+    protocol: "选择使用的协议",
+    currencySelection: "货币选择",
+    depositAmount: "存款金额",
+    enterAmount: "输入金额",
+    amountHint: "存款金额必须大于 0.1 USDT",
+    estimatedPayment: "预计支付：",
+    depositNow: "立即存款"
+  },
+
+  hi: {
+    title: "जमा",
+    paymentMethod: "भुगतान विधि",
+    protocol: "उपयोग करने के लिए प्रोटोकॉल चुनें",
+    currencySelection: "मुद्रा चयन",
+    depositAmount: "जमा राशि",
+    enterAmount: "राशि दर्ज करें",
+    amountHint: "जमा राशि 0.1 USDT से अधिक होनी चाहिए",
+    estimatedPayment: "अनुमानित भुगतान:",
+    depositNow: "अभी जमा करें"
+  },
+
+  es: {
+    title: "Depósito",
+    paymentMethod: "Método de pago",
+    protocol: "Selecciona el protocolo que deseas usar",
+    currencySelection: "Selección de moneda",
+    depositAmount: "Importe del depósito",
+    enterAmount: "Ingrese el importe",
+    amountHint: "El importe del depósito debe ser superior a 0.1 USDT",
+    estimatedPayment: "Pago estimado:",
+    depositNow: "Depositar ahora"
+  },
+
+  fr: {
+    title: "Dépôt",
+    paymentMethod: "Mode de paiement",
+    protocol: "Sélectionnez le protocole à utiliser",
+    currencySelection: "Sélection de la devise",
+    depositAmount: "Montant du dépôt",
+    enterAmount: "Entrez le montant",
+    amountHint: "Le montant du dépôt doit être supérieur à 0.1 USDT",
+    estimatedPayment: "Paiement estimé :",
+    depositNow: "Déposer maintenant"
+  },
+
+  ar: {
+    title: "إيداع",
+    paymentMethod: "طريقة الدفع",
+    protocol: "اختر البروتوكول المطلوب استخدامه",
+    currencySelection: "اختيار العملة",
+    depositAmount: "مبلغ الإيداع",
+    enterAmount: "أدخل المبلغ",
+    amountHint: "يجب أن يكون مبلغ الإيداع أكبر من 0.1 USDT",
+    estimatedPayment: "الدفع المقدر:",
+    depositNow: "إيداع الآن"
+  },
+
+  bn: {
+    title: "ডিপোজিট",
+    paymentMethod: "পেমেন্ট পদ্ধতি",
+    protocol: "ব্যবহারের জন্য প্রোটোকল নির্বাচন করুন",
+    currencySelection: "কারেন্সি নির্বাচন",
+    depositAmount: "ডিপোজিটের পরিমাণ",
+    enterAmount: "পরিমাণ লিখুন",
+    amountHint: "ডিপোজিটের পরিমাণ 0.1 USDT-এর বেশি হতে হবে",
+    estimatedPayment: "আনুমানিক পেমেন্ট:",
+    depositNow: "এখনই ডিপোজিট করুন"
+  },
+
+  pt: {
+    title: "Depósito",
+    paymentMethod: "Método de pagamento",
+    protocol: "Selecione o protocolo a utilizar",
+    currencySelection: "Seleção de moeda",
+    depositAmount: "Valor do depósito",
+    enterAmount: "Digite o valor",
+    amountHint: "O valor do depósito deve ser superior a 0.1 USDT",
+    estimatedPayment: "Pagamento estimado:",
+    depositNow: "Depositar agora"
+  },
+
+  ru: {
+    title: "Пополнение",
+    paymentMethod: "Способ оплаты",
+    protocol: "Выберите протокол для использования",
+    currencySelection: "Выбор валюты",
+    depositAmount: "Сумма пополнения",
+    enterAmount: "Введите сумму",
+    amountHint: "Сумма пополнения должна быть больше 0.1 USDT",
+    estimatedPayment: "Расчётный платёж:",
+    depositNow: "Пополнить сейчас"
+  },
+
+  ur: {
+    title: "جمع",
+    paymentMethod: "ادائیگی کا طریقہ",
+    protocol: "استعمال کرنے کے لیے پروٹوکول منتخب کریں",
+    currencySelection: "کرنسی کا انتخاب",
+    depositAmount: "جمع کی رقم",
+    enterAmount: "رقم درج کریں",
+    amountHint: "جمع کی رقم 0.1 USDT سے زیادہ ہونی چاہیے",
+    estimatedPayment: "متوقع ادائیگی:",
+    depositNow: "ابھی جمع کریں"
+  },
+
+  id: {
+    title: "Deposit",
+    paymentMethod: "Metode pembayaran",
+    protocol: "Pilih protokol yang akan digunakan",
+    currencySelection: "Pilihan mata uang",
+    depositAmount: "Jumlah deposit",
+    enterAmount: "Masukkan jumlah",
+    amountHint: "Jumlah deposit harus lebih dari 0.1 USDT",
+    estimatedPayment: "Perkiraan pembayaran:",
+    depositNow: "Deposit sekarang"
+  },
+
+  de: {
+    title: "Einzahlung",
+    paymentMethod: "Zahlungsmethode",
+    protocol: "Protokoll auswählen",
+    currencySelection: "Währungsauswahl",
+    depositAmount: "Einzahlungsbetrag",
+    enterAmount: "Betrag eingeben",
+    amountHint: "Der Einzahlungsbetrag muss größer als 0.1 USDT sein",
+    estimatedPayment: "Geschätzte Zahlung:",
+    depositNow: "Jetzt einzahlen"
+  },
+
+  ja: {
+    title: "入金",
+    paymentMethod: "支払い方法",
+    protocol: "使用するプロトコルを選択",
+    currencySelection: "通貨選択",
+    depositAmount: "入金額",
+    enterAmount: "金額を入力",
+    amountHint: "入金額は0.1 USDTを超える必要があります",
+    estimatedPayment: "推定支払額：",
+    depositNow: "今すぐ入金"
+  },
+
+  it: {
+    title: "Deposito",
+    paymentMethod: "Metodo di pagamento",
+    protocol: "Seleziona il protocollo da utilizzare",
+    currencySelection: "Selezione della valuta",
+    depositAmount: "Importo del deposito",
+    enterAmount: "Inserisci l'importo",
+    amountHint: "L'importo del deposito deve essere superiore a 0.1 USDT",
+    estimatedPayment: "Pagamento stimato:",
+    depositNow: "Deposita ora"
+  },
+
+  tr: {
+    title: "Para Yatırma",
+    paymentMethod: "Ödeme yöntemi",
+    protocol: "Kullanılacak protokolü seçin",
+    currencySelection: "Para birimi seçimi",
+    depositAmount: "Yatırma tutarı",
+    enterAmount: "Tutarı girin",
+    amountHint: "Yatırma tutarı 0.1 USDT'den büyük olmalıdır",
+    estimatedPayment: "Tahmini ödeme:",
+    depositNow: "Şimdi yatır"
+  },
+
+  fa: {
+    title: "واریز",
+    paymentMethod: "روش پرداخت",
+    protocol: "پروتکل مورد استفاده را انتخاب کنید",
+    currencySelection: "انتخاب ارز",
+    depositAmount: "مبلغ واریز",
+    enterAmount: "مبلغ را وارد کنید",
+    amountHint: "مبلغ واریز باید بیشتر از 0.1 USDT باشد",
+    estimatedPayment: "پرداخت تخمینی:",
+    depositNow: "اکنون واریز کنید"
+  },
+
+  nl: {
+    title: "Storten",
+    paymentMethod: "Betaalmethode",
+    protocol: "Selecteer het te gebruiken protocol",
+    currencySelection: "Valutaselectie",
+    depositAmount: "Stortingsbedrag",
+    enterAmount: "Bedrag invoeren",
+    amountHint: "Het stortingsbedrag moet groter zijn dan 0.1 USDT",
+    estimatedPayment: "Geschatte betaling:",
+    depositNow: "Nu storten"
+  }
+
+};
+
+const currentTexts =
+  depositTexts[lang] || depositTexts.en;
+
+document.getElementById("depositTitle").innerText =
+  currentTexts.title;
+
+document.getElementById("paymentMethodText").innerText =
+  currentTexts.paymentMethod;
+
+document.getElementById("protocolText").innerText =
+  currentTexts.protocol;
+
+document.getElementById("currencySelectionText").innerText =
+  currentTexts.currencySelection;
+
+document.getElementById("depositAmountText").innerText =
+  currentTexts.depositAmount;
+
+document.getElementById("amountInput").placeholder =
+  currentTexts.enterAmount;
+
+document.getElementById("depositAmountHint").innerText =
+  currentTexts.amountHint;
+
+document.getElementById("estimatedPaymentText").innerText =
+  currentTexts.estimatedPayment;
+
+document.getElementById("depositBtn").innerText =
+  currentTexts.depositNow;
+
 const amountInput = document.getElementById("amountInput");
 const depositBtn = document.getElementById("depositBtn");
 const showAmount = document.getElementById("showAmount");

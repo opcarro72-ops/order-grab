@@ -34,6 +34,63 @@
   cursor:pointer;
 }
 
+.current-flag{
+  width:24px;
+  height:16px;
+  object-fit:cover;
+  border-radius:2px;
+  vertical-align:middle;
+  margin-right:6px;
+}
+
+.language-popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.language-popup{
+  width:320px;
+  max-width:90%;
+  max-height:70vh;
+  background:#fff;
+  border-radius:12px;
+  overflow-y:auto;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+}
+
+.language-option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 16px;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+  color:#333;
+  cursor:pointer;
+  background:#fff;
+}
+
+.language-option:hover{
+  background:#f5f5f5;
+}
+
+.language-option:last-child{
+  border-bottom:none;
+}
+
+.flag{
+  width:24px;
+  height:16px;
+  object-fit:cover;
+  border-radius:2px;
+  flex-shrink:0;
+}
+
     h1{
       margin-top:40px;
       font-size:22px;
@@ -125,9 +182,103 @@
   <div class="top">
   <div></div>
 
-  <select class="lang" onchange="changeLang(this.value)">
-    <option value="en">US</option>
-  </select>
+  <div class="lang" onclick="toggleLanguage()" id="currentLanguage">
+  <img src="flags/gb.png" class="current-flag">
+  <span>English</span>
+</div>
+
+</div>
+
+<div id="languagePopupOverlay" class="language-popup-overlay">
+
+  <div class="language-popup">
+
+    <div class="language-option" onclick="changeLang('en')">
+      <img src="flags/gb.png" class="flag">
+      <span>English</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('zh')">
+      <img src="flags/cn.png" class="flag">
+      <span>Chinese</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('hi')">
+      <img src="flags/in.png" class="flag">
+      <span>Hindi</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('es')">
+      <img src="flags/es.png" class="flag">
+      <span>Spanish</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('fr')">
+      <img src="flags/fr.png" class="flag">
+      <span>French</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('ar')">
+      <img src="flags/sa.png" class="flag">
+      <span>Arabic</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('bn')">
+      <img src="flags/bd.png" class="flag">
+      <span>Bengali</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('pt')">
+      <img src="flags/pt.png" class="flag">
+      <span>Portuguese</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('ru')">
+      <img src="flags/ru.png" class="flag">
+      <span>Russian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('ur')">
+      <img src="flags/pk.png" class="flag">
+      <span>Urdu</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('id')">
+      <img src="flags/id.png" class="flag">
+      <span>Indonesian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('de')">
+      <img src="flags/de.png" class="flag">
+      <span>German</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('ja')">
+      <img src="flags/jp.png" class="flag">
+      <span>Japanese</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('it')">
+      <img src="flags/it.png" class="flag">
+      <span>Italian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('tr')">
+      <img src="flags/tr.png" class="flag">
+      <span>Turkish</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('fa')">
+      <img src="flags/ir.png" class="flag">
+      <span>Persian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLang('nl')">
+      <img src="flags/nl.png" class="flag">
+      <span>Dutch</span>
+    </div>
+
+  </div>
 
 </div>
 
@@ -143,25 +294,21 @@
   </div>
 
   <div class="remember">
-    <input type="checkbox" checked> Remember password
-  </div>
+  <input type="checkbox" checked>
+  <span id="rememberText">Remember password</span>
+</div>
 
   <button class="login-btn" onclick="login()">Login</button>
-
   <div class="register" onclick="goRegister()">Registration</div>
-
 </div>
 
 <div id="customMessage" class="custom-message"></div>
-
 <script src="login.js"></script>
 
 <script>
 
 if(localStorage.getItem("token")){
-
   window.location.href = "/home.html";
-
 }
 
 </script>

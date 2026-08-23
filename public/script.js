@@ -183,23 +183,10 @@ const translations = {
   }
 };
 
-function applyLanguage() {
-  const lang = localStorage.getItem("siteLanguage") || "en";
-  const t = translations[lang];
-
-  document.querySelectorAll("[data-lang]").forEach(el => {
-    const key = el.getAttribute("data-lang");
-    if (t[key]) {
-      el.innerText = t[key];
-    }
-  });
-}
-
 window.addEventListener("load", function () {
 
   loadBalance();
   loadUsername();
-  applyLanguage();
 
   const todayTimesEl = document.getElementById("todayTimes");
   const todayCommissionEl = document.getElementById("todayCommission");
@@ -270,39 +257,56 @@ async function submitPendingOrder(orderNo) {
     pendingOrder = data.orders.find(
       o => o.orderNo === orderNo && o.status === "pending"
     );
-
+    
   } catch (err) {
-    showMessage("Failed to load order");
-    return;
-  }
 
-  if (!pendingOrder) {
-    showMessage("No pending order found");
-    return;
-  }
+  const t = window.recordLanguage || {};
+  showMessage(
+    t.failedToLoadOrder || "Failed to load order"
+  );
+  return;
+}
 
-  let userBalance = 0;
+if (!pendingOrder) {
+  const t = window.recordLanguage || {};
 
-  try {
-    const res = await fetch("/balance", {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    });
+  showMessage(
+    t.noPendingOrder || "No pending order found"
+  );
+  return;
+}
 
-    const data = await res.json();
-    userBalance = data.balance || 0;
+let userBalance = 0;
 
-  } catch (err) {
-    showMessage("Balance load failed");
-    return;
-  }
+try {
+  const res = await fetch("/balance", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
 
-  if (userBalance < pendingOrder.orderAmount) {
-    const shortage = (pendingOrder.orderAmount - userBalance).toFixed(4);
-    showMessage(`Your account balance is not enough, you need to recharge ${shortage} to complete this order.`);
-    return;
-  }
+  const data = await res.json();
+  userBalance = data.balance || 0;
+
+} catch (err) {
+  const t = window.recordLanguage || {};
+  showMessage(
+    t.balanceLoadFailed || "Balance load failed"
+  );
+  return;
+}
+
+if (userBalance < pendingOrder.orderAmount) {
+  const t = window.recordLanguage || {};
+  const shortage =
+    (pendingOrder.orderAmount - userBalance).toFixed(4);
+  showMessage(
+    (t.balanceNotEnough ||
+      "Your account balance is not enough, you need to recharge {amount} to complete this order."
+    ).replace("{amount}", shortage)
+  );
+  return;
+}
 
   try {
     const res = await fetch("/add-commission", {
@@ -321,39 +325,48 @@ async function submitPendingOrder(orderNo) {
 
     if (data.success) {
 
-      await fetch("/complete-order", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + token
-  },
-  body: JSON.stringify({
-    orderNo: pendingOrder.orderNo
-  })
-});
+  await fetch("/complete-order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({
+      orderNo: pendingOrder.orderNo
+    })
+  });
 
-      renderOrders();
-      localStorage.setItem("recordTab", "complete");
-      switchTab("complete");
-      loadBalance();
+  renderOrders();
+  localStorage.setItem("recordTab", "complete");
+  switchTab("complete");
+  loadBalance();
 
-      showMessage("Order submitted successfully");
+  const t = window.recordLanguage || {};
+  showMessage(
+    t.orderSubmitted || "Order submitted successfully"
+  );
+} else {
 
-    } else {
-      showMessage(data.msg || "Submit failed");
-    }
-
-  } catch (err) {
-    console.log(err);
-    showMessage("Server error");
-  }
+  const t = window.recordLanguage || {};
+  showMessage(
+    data.msg ||
+    t.submitFailed ||
+    "Submit failed"
+  );
 }
 
+} catch (err) {
+  console.log(err);
+  const t = window.recordLanguage || {};
+  showMessage(
+    t.serverError || "Server error"
+  );
+}
+}
 
 async function renderOrders() {
-
+  const t = window.recordLanguage || {};
   const username = localStorage.getItem("username");
-
   const token = localStorage.getItem("token");
 
 const res = await fetch("/my-orders", {
@@ -419,30 +432,47 @@ const completeAliExpress = orders.filter(
         <div class="order-popup">
 
           <div class="popup-header">
-            <span>${tag} Order</span>
+           <span>${tag} ${t.order}</span>
           </div>
 
           <div class="order-number">
-            Order Nos: ${order.orderNo}
+           ${t.orderNos}: ${order.orderNo}
           </div>
 
           ${productsHTML}
 
           <div class="order-info">
-            <p><span>Transaction time</span><span>${order.trxTime}</span></p>
-            <p><span>Order amount</span><span>${order.orderAmount.toFixed(2)} USDT</span></p>
-            <p><span>Commissions</span><span>${order.commission.toFixed(4)} USDT</span></p>
-            <p class="income-row">
-              <span>Expected income</span>
-              <span class="income">
-                ${(order.orderAmount + order.commission).toFixed(4)} USDT
-              </span>
-            </p>
-          </div>
 
-          <button class="submit-btn" onclick="submitPendingOrder('${order.orderNo}')">
-            Submit order
-          </button>
+  <p>
+    <span>${t.transactionTime}</span>
+    <span>${order.trxTime}</span>
+  </p>
+
+  <p>
+    <span>${t.orderAmount}</span>
+    <span>${order.orderAmount.toFixed(2)} USDT</span>
+  </p>
+
+  <p>
+    <span>${t.commissions}</span>
+    <span>${order.commission.toFixed(4)} USDT</span>
+  </p>
+
+  <p class="income-row">
+    <span>${t.expectedIncome}</span>
+    <span class="income">
+      ${(order.orderAmount + order.commission).toFixed(4)} USDT
+    </span>
+  </p>
+
+</div>
+
+<button
+  class="submit-btn"
+  onclick="submitPendingOrder('${order.orderNo}')"
+>
+  ${t.submitOrder}
+</button>
 
         </div>
       </div>
@@ -450,7 +480,7 @@ const completeAliExpress = orders.filter(
   }
 
   if (!pendingAmazon && !pendingAlibaba && !pendingAliExpress) {
-    incompleteTab.innerHTML = `<div class="empty">No incomplete order</div>`;
+    incompleteTab.innerHTML = `<div class="empty">${t.noIncompleteOrder}</div>`;
   }
 
   if (pendingAmazon) {
@@ -473,7 +503,7 @@ const completeAliExpress = orders.filter(
   ];
 
   if (allComplete.length === 0) {
-    completeTab.innerHTML = `<div class="empty">No completed orders</div>`;
+    completeTab.innerHTML = `<div class="empty">${t.noCompletedOrders}</div>`;
   } else {
 
     allComplete.forEach(order => {
@@ -499,28 +529,36 @@ const completeAliExpress = orders.filter(
         <div class="order-popup" style="margin-bottom:20px;">
 
           <div class="popup-header">
-            <span>${order.tag} Completed</span>
+            <span>${order.tag} ${t.completed}</span>
           </div>
 
           <div class="order-number">
-            Order Nos: ${order.orderNo}
+            ${t.orderNos}: ${order.orderNo}
           </div>
 
           ${productsHTML}
 
           <div class="order-info">
-            <p><span>Order amount</span><span>${order.orderAmount.toFixed(2)} USDT</span></p>
-            <p><span>Commissions</span><span>${order.commission.toFixed(4)} USDT</span></p>
-            <p class="income-row">
-              <span>Total</span>
-              <span class="income">
-                ${(order.orderAmount + order.commission).toFixed(4)} USDT
-              </span>
-            </p>
+            <p>
+  <span>${t.orderAmount}</span>
+  <span>${order.orderAmount.toFixed(2)} USDT</span>
+</p>
+
+<p>
+  <span>${t.commissions}</span>
+  <span>${order.commission.toFixed(4)} USDT</span>
+</p>
+
+<p class="income-row">
+  <span>${t.total}</span>
+  <span class="income">
+    ${(order.orderAmount + order.commission).toFixed(4)} USDT
+  </span>
+</p>
           </div>
 
           <button class="submit-btn" style="background:green;">
-            Completed
+            ${t.completed}
           </button>
 
         </div>

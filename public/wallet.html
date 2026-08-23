@@ -113,43 +113,292 @@ input {
 <body>
 
 <div class="wrapper">
-
   <div class="header">
     <span class="back" onclick="history.back()">❮</span>
-    <h2>Virtual Currency</h2>
+    <h2 id="walletTitle">Virtual Currency</h2>
   </div>
 
   <div class="container">
-
     <div class="card">
-      <input id="name" placeholder="Wallet name" autocomplete="off">
-      <input id="protocol" placeholder="Virtual currency protocol" autocomplete="off">
-      <input id="address" placeholder="Wallet address" autocomplete="off">
 
-      <div class="password-box">
-        <input id="password" placeholder="Withdrawal password" type="password" autocomplete="new-password">
-        <span onclick="togglePassword()">👁️</span>
-      </div>
-    </div>
+  <input
+    id="name"
+    placeholder="Wallet name"
+    autocomplete="off"
+  >
 
-    <button id="okBtn" class="btn" disabled>OK</button>
-    <button id="cancelBtn" class="btn">Cancel</button>
+  <input
+    id="protocol"
+    placeholder="Virtual currency protocol"
+    autocomplete="off"
+  >
+
+  <input
+    id="address"
+    placeholder="Wallet address"
+    autocomplete="off"
+  >
+
+  <div class="password-box">
+    <input
+      id="password"
+      placeholder="Withdrawal password"
+      type="password"
+      autocomplete="new-password"
+    >
+
+    <span onclick="togglePassword()">👁️</span>
 
   </div>
 
 </div>
+
+<button id="okBtn" class="btn" disabled>
+  OK
+</button>
+
+<button id="cancelBtn" class="btn">
+  Cancel
+</button>
 
 <div id="customAlert" class="custom-alert-inside-wallet"></div>
 
 <script>
 
 const token = localStorage.getItem("token");
+const lang =
+  localStorage.getItem("lang") || "en";
+const walletTexts = {
 
+  en: {
+    title: "Virtual Currency",
+    walletName: "Wallet name",
+    protocol: "Virtual currency protocol",
+    address: "Wallet address",
+    withdrawalPassword: "Withdrawal password",
+    ok: "OK",
+    cancel: "Cancel",
+    walletSaved: "Wallet saved",
+    failed: "Failed",
+    serverError: "Server error"
+  },
+
+  zh: {
+    title: "虚拟货币",
+    walletName: "钱包名称",
+    protocol: "虚拟货币协议",
+    address: "钱包地址",
+    withdrawalPassword: "提款密码",
+    ok: "确定",
+    cancel: "取消",
+    walletSaved: "钱包已保存",
+    failed: "失败",
+    serverError: "服务器错误"
+  },
+
+  hi: {
+    title: "वर्चुअल करेंसी",
+    walletName: "वॉलेट का नाम",
+    protocol: "वर्चुअल करेंसी प्रोटोकॉल",
+    address: "वॉलेट पता",
+    withdrawalPassword: "निकासी पासवर्ड",
+    ok: "ठीक है",
+    cancel: "रद्द करें",
+    walletSaved: "वॉलेट सेव हो गया",
+    failed: "विफल",
+    serverError: "सर्वर त्रुटि"
+  },
+
+  es: {
+    title: "Moneda virtual",
+    walletName: "Nombre de la billetera",
+    protocol: "Protocolo de moneda virtual",
+    address: "Dirección de la billetera",
+    withdrawalPassword: "Contraseña de retiro",
+    ok: "Aceptar",
+    cancel: "Cancelar",
+    walletSaved: "Billetera guardada",
+    failed: "Error",
+    serverError: "Error del servidor"
+  },
+
+  fr: {
+    title: "Monnaie virtuelle",
+    walletName: "Nom du portefeuille",
+    protocol: "Protocole de monnaie virtuelle",
+    address: "Adresse du portefeuille",
+    withdrawalPassword: "Mot de passe de retrait",
+    ok: "OK",
+    cancel: "Annuler",
+    walletSaved: "Portefeuille enregistré",
+    failed: "Échec",
+    serverError: "Erreur du serveur"
+  },
+
+  ar: {
+    title: "العملة الافتراضية",
+    walletName: "اسم المحفظة",
+    protocol: "بروتوكول العملة الافتراضية",
+    address: "عنوان المحفظة",
+    withdrawalPassword: "كلمة مرور السحب",
+    ok: "موافق",
+    cancel: "إلغاء",
+    walletSaved: "تم حفظ المحفظة",
+    failed: "فشل",
+    serverError: "خطأ في الخادم"
+  },
+
+  bn: {
+    title: "ভার্চুয়াল কারেন্সি",
+    walletName: "ওয়ালেটের নাম",
+    protocol: "ভার্চুয়াল কারেন্সি প্রোটোকল",
+    address: "ওয়ালেট অ্যাড্রেস",
+    withdrawalPassword: "উইথড্র পাসওয়ার্ড",
+    ok: "ঠিক আছে",
+    cancel: "বাতিল",
+    walletSaved: "ওয়ালেট সংরক্ষণ হয়েছে",
+    failed: "ব্যর্থ",
+    serverError: "সার্ভার সমস্যা"
+  },
+
+  pt: {
+    title: "Moeda virtual",
+    walletName: "Nome da carteira",
+    protocol: "Protocolo de moeda virtual",
+    address: "Endereço da carteira",
+    withdrawalPassword: "Senha de retirada",
+    ok: "OK",
+    cancel: "Cancelar",
+    walletSaved: "Carteira salva",
+    failed: "Falhou",
+    serverError: "Erro do servidor"
+  },
+
+  ru: {
+    title: "Виртуальная валюта",
+    walletName: "Название кошелька",
+    protocol: "Протокол виртуальной валюты",
+    address: "Адрес кошелька",
+    withdrawalPassword: "Пароль для вывода",
+    ok: "ОК",
+    cancel: "Отмена",
+    walletSaved: "Кошелек сохранен",
+    failed: "Ошибка",
+    serverError: "Ошибка сервера"
+  },
+
+  ur: {
+    title: "ورچوئل کرنسی",
+    walletName: "والیٹ کا نام",
+    protocol: "ورچوئل کرنسی پروٹوکول",
+    address: "والیٹ ایڈریس",
+    withdrawalPassword: "رقم نکلوانے کا پاس ورڈ",
+    ok: "ٹھیک ہے",
+    cancel: "منسوخ",
+    walletSaved: "والیٹ محفوظ ہو گیا",
+    failed: "ناکام",
+    serverError: "سرور کی خرابی"
+  },
+
+  id: {
+    title: "Mata Uang Virtual",
+    walletName: "Nama dompet",
+    protocol: "Protokol mata uang virtual",
+    address: "Alamat dompet",
+    withdrawalPassword: "Kata sandi penarikan",
+    ok: "OK",
+    cancel: "Batal",
+    walletSaved: "Dompet berhasil disimpan",
+    failed: "Gagal",
+    serverError: "Kesalahan server"
+  },
+
+  de: {
+    title: "Virtuelle Währung",
+    walletName: "Wallet-Name",
+    protocol: "Protokoll der virtuellen Währung",
+    address: "Wallet-Adresse",
+    withdrawalPassword: "Auszahlungs-Passwort",
+    ok: "OK",
+    cancel: "Abbrechen",
+    walletSaved: "Wallet gespeichert",
+    failed: "Fehlgeschlagen",
+    serverError: "Serverfehler"
+  },
+
+  ja: {
+    title: "仮想通貨",
+    walletName: "ウォレット名",
+    protocol: "仮想通貨プロトコル",
+    address: "ウォレットアドレス",
+    withdrawalPassword: "出金パスワード",
+    ok: "OK",
+    cancel: "キャンセル",
+    walletSaved: "ウォレットを保存しました",
+    failed: "失敗しました",
+    serverError: "サーバーエラー"
+  },
+
+  it: {
+    title: "Valuta virtuale",
+    walletName: "Nome del portafoglio",
+    protocol: "Protocollo della valuta virtuale",
+    address: "Indirizzo del portafoglio",
+    withdrawalPassword: "Password di prelievo",
+    ok: "OK",
+    cancel: "Annulla",
+    walletSaved: "Portafoglio salvato",
+    failed: "Operazione fallita",
+    serverError: "Errore del server"
+  },
+
+  tr: {
+    title: "Sanal Para",
+    walletName: "Cüzdan adı",
+    protocol: "Sanal para protokolü",
+    address: "Cüzdan adresi",
+    withdrawalPassword: "Para çekme şifresi",
+    ok: "Tamam",
+    cancel: "İptal",
+    walletSaved: "Cüzdan kaydedildi",
+    failed: "Başarısız",
+    serverError: "Sunucu hatası"
+  },
+
+  fa: {
+    title: "ارز مجازی",
+    walletName: "نام کیف پول",
+    protocol: "پروتکل ارز مجازی",
+    address: "آدرس کیف پول",
+    withdrawalPassword: "رمز عبور برداشت",
+    ok: "تأیید",
+    cancel: "لغو",
+    walletSaved: "کیف پول ذخیره شد",
+    failed: "ناموفق",
+    serverError: "خطای سرور"
+  },
+
+  nl: {
+    title: "Virtuele valuta",
+    walletName: "Walletnaam",
+    protocol: "Virtueel valutaprotocol",
+    address: "Walletadres",
+    withdrawalPassword: "Opnamewachtwoord",
+    ok: "OK",
+    cancel: "Annuleren",
+    walletSaved: "Wallet opgeslagen",
+    failed: "Mislukt",
+    serverError: "Serverfout"
+  }
+
+};
+
+const currentTexts =
+  walletTexts[lang] || walletTexts.en;
 const nameInput = document.getElementById("name");
 const protocolInput = document.getElementById("protocol");
 const addressInput = document.getElementById("address");
 const passwordInput = document.getElementById("password");
-
 const inputs = [
   nameInput,
   protocolInput,
@@ -160,14 +409,25 @@ const inputs = [
 const okBtn = document.getElementById("okBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 
+document.getElementById("walletTitle").innerText =
+  currentTexts.title;
+nameInput.placeholder =
+  currentTexts.walletName;
+protocolInput.placeholder =
+  currentTexts.protocol;
+addressInput.placeholder =
+  currentTexts.address;
+passwordInput.placeholder =
+  currentTexts.withdrawalPassword;
+okBtn.innerText =
+  currentTexts.ok;
+cancelBtn.innerText =
+  currentTexts.cancel;
+
 function showMessage(text) {
-
   const alertBox = document.getElementById("customAlert");
-
   alertBox.innerText = text;
-
   alertBox.style.display = "block";
-
   setTimeout(() => {
     alertBox.style.display = "none";
   }, 3000);
@@ -175,18 +435,15 @@ function showMessage(text) {
 }
 
 async function checkWallet() {
-
   try {
 
     const res = await fetch("/get-wallet", {
-
       headers: {
         Authorization: "Bearer " + token
       }
     });
 
     const data = await res.json();
-
     if (
       data.success &&
       data.wallet &&
@@ -195,9 +452,7 @@ async function checkWallet() {
 
       window.location.replace("wallet-view.html");
     }
-
   } catch (err) {
-
     console.log(err);
   }
 }
@@ -205,11 +460,8 @@ async function checkWallet() {
 checkWallet();
 
 inputs.forEach(input => {
-
   input.addEventListener("input", () => {
-
     let filled = inputs.every(i => i.value.trim() !== "");
-
     if (filled) {
       okBtn.disabled = false;
       okBtn.classList.add("active");
@@ -222,20 +474,16 @@ inputs.forEach(input => {
 
 
 okBtn.addEventListener("click", async () => {
-
   try {
 
     const res = await fetch("/save-wallet", {
-
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token
       },
 
       body: JSON.stringify({
-
         name: nameInput.value,
         protocol: protocolInput.value,
         address: addressInput.value,
@@ -244,23 +492,17 @@ okBtn.addEventListener("click", async () => {
     });
 
     const data = await res.json();
-
     if (data.success) {
-
-      showMessage("Wallet saved");
-
+      showMessage(currentTexts.walletSaved);
       setTimeout(() => {
         window.location.replace("wallet-view.html");
       }, 3000);
-
     } else {
-
-      showMessage(data.msg || "Failed");
+      showMessage(data.msg || currentTexts.failed);
     }
 
   } catch (err) {
-
-    showMessage("Server error");
+    showMessage(currentTexts.serverError);
   }
 });
 
@@ -269,7 +511,6 @@ cancelBtn.addEventListener("click", () => {
 });
 
 function togglePassword() {
-
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
   } else {

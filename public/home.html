@@ -59,29 +59,29 @@
 
 <div class="bottom-nav">
 
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
-    <span>🏠</span>
-    <div>Home</div>
-  </div>
+  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')"> 
+   <span>🏠</span> 
+   <div id="navHome">Home</div> 
+  </div> 
 
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
-    <span>🎧</span>
-    <div>Service</div>
-  </div>
+  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')"> 
+  <span>🎧</span> 
+  <div id="navService">Service</div> 
+  </div> 
 
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">
-    <span>🛍️</span>
-    <div>Menu</div>
-  </div>
+  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')"> 
+   <span>🛍️</span> 
+   <div id="navMenu">Menu</div> 
+  </div> 
 
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
-    <span>📄</span>
-    <div>Record</div>
-  </div>
+  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')"> 
+   <span>📄</span> 
+   <div id="navRecord">Record</div> 
+  </div> 
 
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
-    <span>👤</span>
-    <div>Mine</div>
+  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')"> 
+   <span>👤</span> 
+   <div id="navMine">Mine</div> 
   </div>
 
 </div>
@@ -89,6 +89,161 @@
 <script src="script.js"></script>
 
 <script>
+
+const homeLang =
+  localStorage.getItem("lang") || "en";
+const homeTexts = {
+
+  en: {
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    record: "Record",
+    mine: "Mine"
+  },
+
+  zh: {
+    home: "首页",
+    service: "客服",
+    menu: "菜单",
+    record: "记录",
+    mine: "我的"
+  },
+
+  hi: {
+    home: "होम",
+    service: "सेवा",
+    menu: "मेनू",
+    record: "रिकॉर्ड",
+    mine: "मेरा"
+  },
+
+  es: {
+    home: "Inicio",
+    service: "Servicio",
+    menu: "Menú",
+    record: "Registro",
+    mine: "Mi cuenta"
+  },
+
+  fr: {
+    home: "Accueil",
+    service: "Service",
+    menu: "Menu",
+    record: "Historique",
+    mine: "Moi"
+  },
+
+  ar: {
+    home: "الرئيسية",
+    service: "الخدمة",
+    menu: "القائمة",
+    record: "السجل",
+    mine: "حسابي"
+  },
+
+  bn: {
+    home: "হোম",
+    service: "সেবা",
+    menu: "মেনু",
+    record: "রেকর্ড",
+    mine: "মাইন"
+  },
+
+  pt: {
+    home: "Início",
+    service: "Serviço",
+    menu: "Menu",
+    record: "Registros",
+    mine: "Minha conta"
+  },
+
+  ru: {
+    home: "Главная",
+    service: "Сервис",
+    menu: "Меню",
+    record: "Записи",
+    mine: "Мой"
+  },
+
+  ur: {
+    home: "ہوم",
+    service: "سروس",
+    menu: "مینو",
+    record: "ریکارڈ",
+    mine: "میرا"
+  },
+
+  id: {
+    home: "Beranda",
+    service: "Layanan",
+    menu: "Menu",
+    record: "Riwayat",
+    mine: "Saya"
+  },
+
+  de: {
+    home: "Startseite",
+    service: "Service",
+    menu: "Menü",
+    record: "Verlauf",
+    mine: "Mein Konto"
+  },
+
+  ja: {
+    home: "ホーム",
+    service: "サービス",
+    menu: "メニュー",
+    record: "記録",
+    mine: "マイページ"
+  },
+
+  it: {
+    home: "Home",
+    service: "Servizio",
+    menu: "Menu",
+    record: "Registro",
+    mine: "Il mio"
+  },
+
+  tr: {
+    home: "Ana Sayfa",
+    service: "Hizmet",
+    menu: "Menü",
+    record: "Kayıt",
+    mine: "Hesabım"
+  },
+
+  fa: {
+    home: "خانه",
+    service: "خدمات",
+    menu: "منو",
+    record: "سوابق",
+    mine: "حساب من"
+  },
+
+  nl: {
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    record: "Record",
+    mine: "Mijn"
+  }
+
+};
+
+const currentHomeTexts =
+  homeTexts[homeLang] || homeTexts.en;
+document.getElementById("navHome").innerText =
+  currentHomeTexts.home;
+document.getElementById("navService").innerText =
+  currentHomeTexts.service;
+document.getElementById("navMenu").innerText =
+  currentHomeTexts.menu;
+document.getElementById("navRecord").innerText =
+  currentHomeTexts.record;
+document.getElementById("navMine").innerText =
+  currentHomeTexts.mine;
 
 function openPage(page){
   window.location.href = page;

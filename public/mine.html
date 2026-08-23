@@ -17,47 +17,54 @@
 
     <div class="user-text">
       <h3 id="usernameDisplay"></h3>
-      <p>Invitation code: <span id="inviteCodeDisplay"></span></p>
+      <p>
+        <span data-lang="invitationCode">Invitation code</span>:
+        <span id="inviteCodeDisplay"></span>
+      </p>
     </div>
 
   </div>
 
   <div class="account-row">
     <div>
-      <p>My Account</p>
+      <p data-lang="accountBalance">Account Balance</p>
       <h2 id="balance">USDT 0</h2>
     </div>
 
     <div class="action-icons">
       <div onclick="goPage('deposit.html')">
         💳
-        <p>Deposit</p>
+        <p data-lang="deposit">Deposit</p>
       </div>
 
       <div onclick="checkWithdrawPassword()">
         💳
-        <p>Withdrawal</p>
+        <p data-lang="withdrawal">Withdrawal</p> 
       </div>
     </div>
   </div>
 </div>
 
 <div class="menu-grid">
-  <div onclick="goPage('team.html')">
-    <span>👥</span>Teams
-  </div>
-
-  <div onclick="goPage('record.html')">
-    <span>📄</span>Record
-  </div>
-
-  <div onclick="goPage('wallet.html')">
-    <span>💳</span>Wallet management
-  </div>
-
-  <div onclick="goPage('invite.html')">
-    <span>📩</span>Invite friends
-  </div>
+  <div onclick="goPage('team.html')"> 
+  <span>👥</span>
+  <span data-lang="teams">Teams</span>
+</div> 
+ 
+<div onclick="goPage('record.html')"> 
+  <span>📄</span>
+  <span data-lang="record">Record</span>
+</div> 
+ 
+<div onclick="goPage('wallet.html')"> 
+  <span>💳</span>
+  <span data-lang="walletManagement">Wallet management</span>
+</div> 
+ 
+<div onclick="goPage('invite.html')"> 
+  <span>📩</span>
+  <span data-lang="inviteFriends">Invite friends</span>
+</div>
 </div>
 
 <div class="menu-list">
@@ -84,54 +91,85 @@
 
 </div>
 
-<div class="bottom-nav">
-
-  <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
-    <span>🏠</span>
-    <div>Home</div>
-  </div>
-
-  <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
-    <span>🎧</span>
-    <div>Service</div>
-  </div>
-
-  <div class="nav-item" data-page="menu.html" onclick="goPage('menu.html')">
-    <span>🛍️</span>
-    <div>Menu</div>
-  </div>
-
-  <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
-    <span>📄</span>
-    <div>Record</div>
-  </div>
-
-  <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
-    <span>👤</span>
-    <div>Mine</div>
-  </div>
-
+<div class="bottom-nav"> 
+ 
+  <div
+    class="nav-item"
+    data-page="home.html"
+    onclick="goPage('home.html')"
+  > 
+    <span>🏠</span> 
+    <div data-lang="home">Home</div> 
+  </div> 
+ 
+  <div
+    class="nav-item"
+    data-page="service.html"
+    onclick="goPage('service.html')"
+  > 
+    <span>🎧</span> 
+    <div data-lang="service">Service</div> 
+  </div> 
+ 
+  <div
+    class="nav-item"
+    data-page="menu.html"
+    onclick="goPage('menu.html')"
+  > 
+    <span>🛍️</span> 
+    <div data-lang="menu">Menu</div> 
+  </div> 
+ 
+  <div
+    class="nav-item"
+    data-page="record.html"
+    onclick="goPage('record.html')"
+  > 
+    <span>📄</span> 
+    <div data-lang="record">Record</div> 
+  </div> 
+ 
+  <div
+    class="nav-item"
+    data-page="mine.html"
+    onclick="goPage('mine.html')"
+  > 
+    <span>👤</span> 
+    <div data-lang="mine">Mine</div> 
+  </div> 
+ 
 </div>
 
 <div class="withdraw-popup" id="withdrawPopup">
 
   <div class="withdraw-box">
 
-    <h3>Withdrawal Password</h3>
+    <h3 data-lang="withdrawalPassword">
+      Withdrawal Password
+    </h3>
 
     <input
       type="text"
       id="withdrawPassword"
+      data-placeholder-lang="enterWithdrawalPassword"
       placeholder="Enter withdrawal password"
     >
 
     <div class="popup-buttons">
 
-      <button class="cancel-btn" onclick="closeWithdrawPopup()">
+      <button
+        class="cancel-btn"
+        onclick="closeWithdrawPopup()"
+        data-lang="cancel"
+      >
         Cancel
       </button>
 
-      <button class="ok-btn" onclick="submitWithdrawPassword()">
+      <button
+        class="ok-btn"
+        onclick="submitWithdrawPassword()"
+        data-lang="confirm"
+      >
         Confirm
       </button>
 
@@ -203,7 +241,10 @@ async function checkWithdrawPassword() {
       !data.wallet.locked ||
       !data.wallet.address
     ) {
-      showMessage("Please add wallet first!");
+      const currentTexts =
+  texts[lang] || texts.en;
+
+showMessage(currentTexts.pleaseAddWallet);
       return;
     }
 
@@ -213,7 +254,10 @@ document.getElementById("withdrawPopup").style.display = "flex";
 
   } catch (err) {
 
-    showMessage("Server error");
+    const currentTexts =
+  texts[lang] || texts.en;
+
+showMessage(currentTexts.serverError);
   }
 }
 
@@ -229,7 +273,10 @@ function submitWithdrawPassword() {
 
   if (!inputPass) {
 
-    showMessage("Enter withdrawal password");
+    const currentTexts =
+  texts[lang] || texts.en;
+
+showMessage(currentTexts.enterWithdrawalPasswordError);
     return;
   }
 
@@ -241,7 +288,10 @@ function submitWithdrawPassword() {
 
   } else {
 
-    showMessage("Wrong password!");
+    const currentTexts =
+  texts[lang] || texts.en;
+
+showMessage(currentTexts.wrongPassword);
   }
 }
 
@@ -249,29 +299,590 @@ const inviteCode = localStorage.getItem("inviteCode");
 
 document.getElementById("inviteCodeDisplay").innerText = inviteCode || "";
 
-const lang = localStorage.getItem("siteLanguage") || "en";
+const lang =
+  localStorage.getItem("lang") || "en";
 
 const texts = {
+
   en: {
+
+    invitationCode: "Invitation code",
+    accountBalance: "Account Balance",
+    deposit: "Deposit",
+    withdrawal: "Withdrawal",
+    teams: "Teams",
+    record: "Record",
+    walletManagement: "Wallet management",
+    inviteFriends: "Invite friends",
     profile: "Profile",
     depositRecords: "Deposit records",
     withdrawRecords: "Withdrawal records",
-    settings: "Settings"
+    settings: "Settings",
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    mine: "Mine",
+
+    withdrawalPassword: "Withdrawal Password",
+    enterWithdrawalPassword: "Enter withdrawal password",
+    cancel: "Cancel",
+    confirm: "Confirm",
+
+    pleaseAddWallet: "Please add wallet first!",
+    serverError: "Server error",
+    enterWithdrawalPasswordError: "Enter withdrawal password",
+    wrongPassword: "Wrong password!"
+
   },
+
+
+  zh: {
+
+    invitationCode: "邀请码",
+    accountBalance: "账户余额",
+    deposit: "存款",
+    withdrawal: "提款",
+    teams: "团队",
+    record: "记录",
+    walletManagement: "钱包管理",
+    inviteFriends: "邀请好友",
+    profile: "个人资料",
+    depositRecords: "存款记录",
+    withdrawRecords: "提款记录",
+    settings: "设置",
+    home: "首页",
+    service: "客服",
+    menu: "菜单",
+    mine: "我的",
+
+    withdrawalPassword: "提款密码",
+    enterWithdrawalPassword: "请输入提款密码",
+    cancel: "取消",
+    confirm: "确认",
+
+    pleaseAddWallet: "请先添加钱包！",
+    serverError: "服务器错误",
+    enterWithdrawalPasswordError: "请输入提款密码",
+    wrongPassword: "密码错误！"
+
+  },
+
+
+  hi: {
+
+    invitationCode: "आमंत्रण कोड",
+    accountBalance: "खाता शेष",
+    deposit: "जमा",
+    withdrawal: "निकासी",
+    teams: "टीम",
+    record: "रिकॉर्ड",
+    walletManagement: "वॉलेट प्रबंधन",
+    inviteFriends: "दोस्तों को आमंत्रित करें",
+    profile: "प्रोफ़ाइल",
+    depositRecords: "जमा रिकॉर्ड",
+    withdrawRecords: "निकासी रिकॉर्ड",
+    settings: "सेटिंग्स",
+    home: "होम",
+    service: "सेवा",
+    menu: "मेनू",
+    mine: "मेरा",
+
+    withdrawalPassword: "निकासी पासवर्ड",
+    enterWithdrawalPassword: "निकासी पासवर्ड दर्ज करें",
+    cancel: "रद्द करें",
+    confirm: "पुष्टि करें",
+
+    pleaseAddWallet: "कृपया पहले वॉलेट जोड़ें!",
+    serverError: "सर्वर त्रुटि",
+    enterWithdrawalPasswordError: "निकासी पासवर्ड दर्ज करें",
+    wrongPassword: "गलत पासवर्ड!"
+
+  },
+
+
+  es: {
+
+    invitationCode: "Código de invitación",
+    accountBalance: "Saldo de la cuenta",
+    deposit: "Depósito",
+    withdrawal: "Retiro",
+    teams: "Equipos",
+    record: "Registro",
+    walletManagement: "Gestión de billetera",
+    inviteFriends: "Invitar amigos",
+    profile: "Perfil",
+    depositRecords: "Registros de depósitos",
+    withdrawRecords: "Registros de retiros",
+    settings: "Configuración",
+    home: "Inicio",
+    service: "Servicio",
+    menu: "Menú",
+    mine: "Mi cuenta",
+
+    withdrawalPassword: "Contraseña de retiro",
+    enterWithdrawalPassword: "Ingrese la contraseña de retiro",
+    cancel: "Cancelar",
+    confirm: "Confirmar",
+
+    pleaseAddWallet: "¡Primero agregue una billetera!",
+    serverError: "Error del servidor",
+    enterWithdrawalPasswordError: "Ingrese la contraseña de retiro",
+    wrongPassword: "¡Contraseña incorrecta!"
+
+  },
+
+
+  fr: {
+
+    invitationCode: "Code d'invitation",
+    accountBalance: "Solde du compte",
+    deposit: "Dépôt",
+    withdrawal: "Retrait",
+    teams: "Équipes",
+    record: "Historique",
+    walletManagement: "Gestion du portefeuille",
+    inviteFriends: "Inviter des amis",
+    profile: "Profil",
+    depositRecords: "Historique des dépôts",
+    withdrawRecords: "Historique des retraits",
+    settings: "Paramètres",
+    home: "Accueil",
+    service: "Service",
+    menu: "Menu",
+    mine: "Moi",
+
+    withdrawalPassword: "Mot de passe de retrait",
+    enterWithdrawalPassword: "Entrez le mot de passe de retrait",
+    cancel: "Annuler",
+    confirm: "Confirmer",
+
+    pleaseAddWallet: "Veuillez d'abord ajouter un portefeuille !",
+    serverError: "Erreur du serveur",
+    enterWithdrawalPasswordError: "Entrez le mot de passe de retrait",
+    wrongPassword: "Mot de passe incorrect !"
+
+  },
+
+
+  ar: {
+
+    invitationCode: "رمز الدعوة",
+    accountBalance: "رصيد الحساب",
+    deposit: "إيداع",
+    withdrawal: "سحب",
+    teams: "الفريق",
+    record: "السجل",
+    walletManagement: "إدارة المحفظة",
+    inviteFriends: "دعوة الأصدقاء",
+    profile: "الملف الشخصي",
+    depositRecords: "سجلات الإيداع",
+    withdrawRecords: "سجلات السحب",
+    settings: "الإعدادات",
+    home: "الرئيسية",
+    service: "الخدمة",
+    menu: "القائمة",
+    mine: "حسابي",
+
+    withdrawalPassword: "كلمة مرور السحب",
+    enterWithdrawalPassword: "أدخل كلمة مرور السحب",
+    cancel: "إلغاء",
+    confirm: "تأكيد",
+
+    pleaseAddWallet: "يرجى إضافة المحفظة أولاً!",
+    serverError: "خطأ في الخادم",
+    enterWithdrawalPasswordError: "أدخل كلمة مرور السحب",
+    wrongPassword: "كلمة المرور خاطئة!"
+
+  },
+
+
   bn: {
+
+    invitationCode: "ইনভাইটেশন কোড",
+    accountBalance: "অ্যাকাউন্ট ব্যালেন্স",
+    deposit: "ডিপোজিট",
+    withdrawal: "উইথড্র",
+    teams: "টিম",
+    record: "রেকর্ড",
+    walletManagement: "ওয়ালেট ম্যানেজমেন্ট",
+    inviteFriends: "বন্ধুদের আমন্ত্রণ করুন",
     profile: "প্রোফাইল",
     depositRecords: "ডিপোজিট রেকর্ড",
     withdrawRecords: "উইথড্র রেকর্ড",
-    settings: "সেটিংস"
+    settings: "সেটিংস",
+    home: "হোম",
+    service: "সার্ভিস",
+    menu: "মেনু",
+    mine: "মাইন",
+
+    withdrawalPassword: "উইথড্র পাসওয়ার্ড",
+    enterWithdrawalPassword: "উইথড্র পাসওয়ার্ড লিখুন",
+    cancel: "বাতিল",
+    confirm: "নিশ্চিত করুন",
+
+    pleaseAddWallet: "প্রথমে ওয়ালেট যোগ করুন!",
+    serverError: "সার্ভার সমস্যা হয়েছে",
+    enterWithdrawalPasswordError: "উইথড্র পাসওয়ার্ড লিখুন",
+    wrongPassword: "ভুল পাসওয়ার্ড!"
+
+  },
+
+
+  pt: {
+
+    invitationCode: "Código de convite",
+    accountBalance: "Saldo da conta",
+    deposit: "Depósito",
+    withdrawal: "Retirada",
+    teams: "Equipes",
+    record: "Registro",
+    walletManagement: "Gestão da carteira",
+    inviteFriends: "Convidar amigos",
+    profile: "Perfil",
+    depositRecords: "Registros de depósitos",
+    withdrawRecords: "Registros de retiradas",
+    settings: "Configurações",
+    home: "Início",
+    service: "Serviço",
+    menu: "Menu",
+    mine: "Minha conta",
+
+    withdrawalPassword: "Senha de retirada",
+    enterWithdrawalPassword: "Digite a senha de retirada",
+    cancel: "Cancelar",
+    confirm: "Confirmar",
+
+    pleaseAddWallet: "Adicione a carteira primeiro!",
+    serverError: "Erro do servidor",
+    enterWithdrawalPasswordError: "Digite a senha de retirada",
+    wrongPassword: "Senha incorreta!"
+
+  },
+
+
+  ru: {
+
+    invitationCode: "Код приглашения",
+    accountBalance: "Баланс счета",
+    deposit: "Пополнение",
+    withdrawal: "Вывод",
+    teams: "Команда",
+    record: "Записи",
+    walletManagement: "Управление кошельком",
+    inviteFriends: "Пригласить друзей",
+    profile: "Профиль",
+    depositRecords: "История пополнений",
+    withdrawRecords: "История выводов",
+    settings: "Настройки",
+    home: "Главная",
+    service: "Сервис",
+    menu: "Меню",
+    mine: "Мой аккаунт",
+
+    withdrawalPassword: "Пароль для вывода",
+    enterWithdrawalPassword: "Введите пароль для вывода",
+    cancel: "Отмена",
+    confirm: "Подтвердить",
+
+    pleaseAddWallet: "Сначала добавьте кошелек!",
+    serverError: "Ошибка сервера",
+    enterWithdrawalPasswordError: "Введите пароль для вывода",
+    wrongPassword: "Неверный пароль!"
+
+  },
+
+
+  ur: {
+
+    invitationCode: "دعوتی کوڈ",
+    accountBalance: "اکاؤنٹ بیلنس",
+    deposit: "جمع",
+    withdrawal: "رقم نکلوانا",
+    teams: "ٹیمیں",
+    record: "ریکارڈ",
+    walletManagement: "والیٹ مینجمنٹ",
+    inviteFriends: "دوستوں کو مدعو کریں",
+    profile: "پروفائل",
+    depositRecords: "جمع ریکارڈ",
+    withdrawRecords: "رقم نکلوانے کے ریکارڈ",
+    settings: "ترتیبات",
+    home: "ہوم",
+    service: "سروس",
+    menu: "مینو",
+    mine: "میرا اکاؤنٹ",
+
+    withdrawalPassword: "رقم نکلوانے کا پاس ورڈ",
+    enterWithdrawalPassword: "رقم نکلوانے کا پاس ورڈ درج کریں",
+    cancel: "منسوخ کریں",
+    confirm: "تصدیق کریں",
+
+    pleaseAddWallet: "پہلے والیٹ شامل کریں!",
+    serverError: "سرور کی خرابی",
+    enterWithdrawalPasswordError: "رقم نکلوانے کا پاس ورڈ درج کریں",
+    wrongPassword: "غلط پاس ورڈ!"
+
+  },
+
+
+  id: {
+
+    invitationCode: "Kode undangan",
+    accountBalance: "Saldo akun",
+    deposit: "Deposit",
+    withdrawal: "Penarikan",
+    teams: "Tim",
+    record: "Catatan",
+    walletManagement: "Manajemen dompet",
+    inviteFriends: "Undang teman",
+    profile: "Profil",
+    depositRecords: "Catatan deposit",
+    withdrawRecords: "Catatan penarikan",
+    settings: "Pengaturan",
+    home: "Beranda",
+    service: "Layanan",
+    menu: "Menu",
+    mine: "Saya",
+
+    withdrawalPassword: "Kata Sandi Penarikan",
+    enterWithdrawalPassword: "Masukkan kata sandi penarikan",
+    cancel: "Batal",
+    confirm: "Konfirmasi",
+
+    pleaseAddWallet: "Silakan tambahkan dompet terlebih dahulu!",
+    serverError: "Kesalahan server",
+    enterWithdrawalPasswordError: "Masukkan kata sandi penarikan",
+    wrongPassword: "Kata sandi salah!"
+
+  },
+
+
+  de: {
+
+    invitationCode: "Einladungscode",
+    accountBalance: "Kontostand",
+    deposit: "Einzahlung",
+    withdrawal: "Auszahlung",
+    teams: "Teams",
+    record: "Verlauf",
+    walletManagement: "Wallet-Verwaltung",
+    inviteFriends: "Freunde einladen",
+    profile: "Profil",
+    depositRecords: "Einzahlungsverlauf",
+    withdrawRecords: "Auszahlungsverlauf",
+    settings: "Einstellungen",
+    home: "Startseite",
+    service: "Service",
+    menu: "Menü",
+    mine: "Mein Konto",
+
+    withdrawalPassword: "Auszahlungs-Passwort",
+    enterWithdrawalPassword: "Auszahlungs-Passwort eingeben",
+    cancel: "Abbrechen",
+    confirm: "Bestätigen",
+
+    pleaseAddWallet: "Bitte zuerst eine Wallet hinzufügen!",
+    serverError: "Serverfehler",
+    enterWithdrawalPasswordError: "Auszahlungs-Passwort eingeben",
+    wrongPassword: "Falsches Passwort!"
+
+  },
+
+
+  ja: {
+
+    invitationCode: "招待コード",
+    accountBalance: "アカウント残高",
+    deposit: "入金",
+    withdrawal: "出金",
+    teams: "チーム",
+    record: "記録",
+    walletManagement: "ウォレット管理",
+    inviteFriends: "友達を招待",
+    profile: "プロフィール",
+    depositRecords: "入金履歴",
+    withdrawRecords: "出金履歴",
+    settings: "設定",
+    home: "ホーム",
+    service: "サービス",
+    menu: "メニュー",
+    mine: "マイページ",
+
+    withdrawalPassword: "出金パスワード",
+    enterWithdrawalPassword: "出金パスワードを入力してください",
+    cancel: "キャンセル",
+    confirm: "確認",
+
+    pleaseAddWallet: "先にウォレットを追加してください！",
+    serverError: "サーバーエラー",
+    enterWithdrawalPasswordError: "出金パスワードを入力してください",
+    wrongPassword: "パスワードが間違っています！"
+
+  },
+
+
+  it: {
+
+    invitationCode: "Codice invito",
+    accountBalance: "Saldo del conto",
+    deposit: "Deposito",
+    withdrawal: "Prelievo",
+    teams: "Squadre",
+    record: "Registro",
+    walletManagement: "Gestione portafoglio",
+    inviteFriends: "Invita amici",
+    profile: "Profilo",
+    depositRecords: "Cronologia depositi",
+    withdrawRecords: "Cronologia prelievi",
+    settings: "Impostazioni",
+    home: "Home",
+    service: "Servizio",
+    menu: "Menu",
+    mine: "Il mio account",
+
+    withdrawalPassword: "Password di prelievo",
+    enterWithdrawalPassword: "Inserisci la password di prelievo",
+    cancel: "Annulla",
+    confirm: "Conferma",
+
+    pleaseAddWallet: "Aggiungi prima un portafoglio!",
+    serverError: "Errore del server",
+    enterWithdrawalPasswordError: "Inserisci la password di prelievo",
+    wrongPassword: "Password errata!"
+
+  },
+
+
+  tr: {
+
+    invitationCode: "Davet kodu",
+    accountBalance: "Hesap bakiyesi",
+    deposit: "Para yatırma",
+    withdrawal: "Para çekme",
+    teams: "Takımlar",
+    record: "Kayıt",
+    walletManagement: "Cüzdan yönetimi",
+    inviteFriends: "Arkadaşlarını davet et",
+    profile: "Profil",
+    depositRecords: "Para yatırma kayıtları",
+    withdrawRecords: "Para çekme kayıtları",
+    settings: "Ayarlar",
+    home: "Ana Sayfa",
+    service: "Hizmet",
+    menu: "Menü",
+    mine: "Hesabım",
+
+    withdrawalPassword: "Para çekme şifresi",
+    enterWithdrawalPassword: "Para çekme şifresini girin",
+    cancel: "İptal",
+    confirm: "Onayla",
+
+    pleaseAddWallet: "Lütfen önce cüzdan ekleyin!",
+    serverError: "Sunucu hatası",
+    enterWithdrawalPasswordError: "Para çekme şifresini girin",
+    wrongPassword: "Yanlış şifre!"
+
+  },
+
+
+  fa: {
+
+    invitationCode: "کد دعوت",
+    accountBalance: "موجودی حساب",
+    deposit: "واریز",
+    withdrawal: "برداشت",
+    teams: "تیم‌ها",
+    record: "سوابق",
+    walletManagement: "مدیریت کیف پول",
+    inviteFriends: "دعوت از دوستان",
+    profile: "پروفایل",
+    depositRecords: "سوابق واریز",
+    withdrawRecords: "سوابق برداشت",
+    settings: "تنظیمات",
+    home: "خانه",
+    service: "خدمات",
+    menu: "منو",
+    mine: "حساب من",
+
+    withdrawalPassword: "رمز برداشت",
+    enterWithdrawalPassword: "رمز برداشت را وارد کنید",
+    cancel: "لغو",
+    confirm: "تأیید",
+
+    pleaseAddWallet: "لطفاً ابتدا کیف پول را اضافه کنید!",
+    serverError: "خطای سرور",
+    enterWithdrawalPasswordError: "رمز برداشت را وارد کنید",
+    wrongPassword: "رمز عبور اشتباه است!"
+
+  },
+
+
+  nl: {
+
+    invitationCode: "Uitnodigingscode",
+    accountBalance: "Accountsaldo",
+    deposit: "Storten",
+    withdrawal: "Opnemen",
+    teams: "Teams",
+    record: "Record",
+    walletManagement: "Walletbeheer",
+    inviteFriends: "Vrienden uitnodigen",
+    profile: "Profiel",
+    depositRecords: "Stortingsrecords",
+    withdrawRecords: "Opnamerecords",
+    settings: "Instellingen",
+    home: "Home",
+    service: "Service",
+    menu: "Menu",
+    mine: "Mijn account",
+
+    withdrawalPassword: "Opnamewachtwoord",
+    enterWithdrawalPassword: "Voer het opnamewachtwoord in",
+    cancel: "Annuleren",
+    confirm: "Bevestigen",
+
+    pleaseAddWallet: "Voeg eerst een wallet toe!",
+    serverError: "Serverfout",
+    enterWithdrawalPasswordError: "Voer het opnamewachtwoord in",
+    wrongPassword: "Onjuist wachtwoord!"
+
   }
+
 };
 
+const currentTexts =
+  texts[lang] || texts.en;
+
+
+/* ================================
+   APPLY LANGUAGE TO TEXT
+================================ */
+
 document.querySelectorAll("[data-lang]").forEach(el => {
+
   const key = el.getAttribute("data-lang");
-  if(texts[lang][key]){
-    el.innerText = texts[lang][key];
+
+  if (currentTexts[key]) {
+
+    el.innerText = currentTexts[key];
+
   }
+
 });
+
+document.querySelectorAll("[data-placeholder-lang]").forEach(el => {
+
+  const key =
+    el.getAttribute("data-placeholder-lang");
+
+  if (currentTexts[key]) {
+
+    el.placeholder =
+      currentTexts[key];
+
+  }
+
+});
+
 </script>
 
 </body>

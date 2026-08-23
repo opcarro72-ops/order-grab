@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Setting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="logo.png">
 
+<head>
+
+  <title>Setting</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <link
+    rel="icon"
+    type="image/png"
+    href="logo.png"
+  >
   <style>
+
     body{
       margin:0;
       background:#f2f2f2;
@@ -13,28 +22,28 @@
     }
 
     .header{
-      position: relative;
-      height: 55px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
+      position:relative;
+      height:55px;
+      background:#fff;
+      border-bottom:1px solid #eee;
     }
 
     .header h2{
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      margin: 0;
-      font-size: 18px;
-      font-weight: 600;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%, -50%);
+      margin:0;
+      font-size:18px;
+      font-weight:600;
     }
 
     .back{
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
+      position:absolute;
+      left:15px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:20px;
       cursor:pointer;
     }
 
@@ -46,14 +55,12 @@
       background:#fff;
       padding:15px;
       margin-bottom:12px;
-
       border-radius:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.06);
-
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.06);
       display:flex;
       justify-content:space-between;
       align-items:center;
-
       font-size:14px;
       color:#333;
       cursor:pointer;
@@ -64,17 +71,57 @@
       font-size:16px;
     }
 
-    .language-select{
-      background:#fff;
-      border:1px solid #eee;
-      padding:10px;
-      border-radius:10px;
-      font-size:14px;
+.language-popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
 
-      width:100%;
-      margin-bottom:12px;
-      display:none;
-    }
+.language-popup{
+  width:320px;
+  max-width:90%;
+  max-height:70vh;
+  background:#fff;
+  border-radius:12px;
+  overflow-y:auto;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+}
+
+.language-option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 16px;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+  color:#333;
+  cursor:pointer;
+  background:#fff;
+}
+
+.flag{
+  width:22px;
+  height:15px;
+  object-fit:cover;
+  border-radius:2px;
+  flex-shrink:0;
+}
+
+.language-option:hover{
+  background:#f5f5f5;
+}
+
+.language-option:last-child{
+  border-bottom:none;
+}
+
+.language-option:hover{
+  background:#f5f5f5;
+}
 
     .logout{
       background:#fff;
@@ -84,88 +131,385 @@
       color:#dc2626;
       font-size:14px;
       cursor:pointer;
-
-      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.06);
     }
 
     @media (min-width:768px){
+  .container{
+    padding:20px;
+  }
 
-      .container{
-        padding:20px;
-      }
+  .menu-item,
+  .logout{
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+  }
 
-      .menu-item,
-      .logout,
-      .language-select{
-        max-width:900px;
-        margin-left:auto;
-        margin-right:auto;
-      }
-    }
+}
 
   </style>
+
 </head>
 
 <body>
 
 <div class="header">
-  <span class="back" onclick="history.back()">❮</span>
-  <h2>Setting</h2>
+
+  <span
+    class="back"
+    onclick="history.back()"
+  >
+    ❮
+  </span>
+
+
+  <h2 id="settingTitle">
+    Setting
+  </h2>
+
 </div>
 
 <div class="container">
 
-  <div class="menu-item" onclick="toggleLanguage()">
-    <span id="langText">Language settings</span>
-    <span class="arrow">›</span>
+  <div
+    class="menu-item"
+    onclick="toggleLanguage()"
+  >
+    <span id="langText">
+      Language settings
+    </span>
+
+    <span class="arrow">
+      ›
+    </span>
+
   </div>
 
-  <select id="languageSelect" class="language-select" onchange="changeLanguage()">
-    <option value="en">English</option>
-  </select>
+<div id="languagePopupOverlay" class="language-popup-overlay">
 
-  <div class="logout" onclick="logout()">
+  <div class="language-popup">
+
+    <div class="language-option" onclick="changeLanguage('en')">
+      <img src="flags/gb.png" class="flag" alt="English">
+      <span>English</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('zh')">
+      <img src="flags/cn.png" class="flag" alt="Chinese">
+      <span>Chinese</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('hi')">
+      <img src="flags/in.png" class="flag" alt="Hindi">
+      <span>Hindi</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('es')">
+      <img src="flags/es.png" class="flag" alt="Spanish">
+      <span>Spanish</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('fr')">
+      <img src="flags/fr.png" class="flag" alt="French">
+      <span>French</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('ar')">
+      <img src="flags/sa.png" class="flag" alt="Arabic">
+      <span>Arabic</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('bn')">
+      <img src="flags/bd.png" class="flag" alt="Bengali">
+      <span>Bengali</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('pt')">
+      <img src="flags/pt.png" class="flag" alt="Portuguese">
+      <span>Portuguese</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('ru')">
+      <img src="flags/ru.png" class="flag" alt="Russian">
+      <span>Russian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('ur')">
+      <img src="flags/pk.png" class="flag" alt="Urdu">
+      <span>Urdu</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('id')">
+      <img src="flags/id.png" class="flag" alt="Indonesian">
+      <span>Indonesian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('de')">
+      <img src="flags/de.png" class="flag" alt="German">
+      <span>German</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('ja')">
+      <img src="flags/jp.png" class="flag" alt="Japanese">
+      <span>Japanese</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('it')">
+      <img src="flags/it.png" class="flag" alt="Italian">
+      <span>Italian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('tr')">
+      <img src="flags/tr.png" class="flag" alt="Turkish">
+      <span>Turkish</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('fa')">
+      <img src="flags/ir.png" class="flag" alt="Persian">
+      <span>Persian</span>
+    </div>
+
+    <div class="language-option" onclick="changeLanguage('nl')">
+      <img src="flags/nl.png" class="flag" alt="Dutch">
+      <span>Dutch</span>
+    </div>
+
+  </div>
+
+</div>
+
+  <div
+    class="logout"
+    id="logoutText"
+    onclick="logout()"
+  >
     Logout
   </div>
 
 </div>
 
 <script>
+
+const translations = {
+
+  en: {
+    setting: "Setting",
+    languageSettings:
+      "Language settings",
+    logout:
+      "Logout"
+  },
+
+  zh: {
+    setting: "设置",
+    languageSettings:
+      "语言设置",
+    logout:
+      "退出登录"
+  },
+
+  hi: {
+    setting: "सेटिंग",
+    languageSettings:
+      "भाषा सेटिंग्स",
+    logout:
+      "लॉगआउट"
+  },
+
+  es: {
+    setting: "Configuración",
+    languageSettings:
+      "Configuración de idioma",
+    logout:
+      "Cerrar sesión"
+  },
+
+  fr: {
+    setting: "Paramètres",
+    languageSettings:
+      "Paramètres de langue",
+    logout:
+      "Déconnexion"
+  },
+
+  ar: {
+    setting: "الإعدادات",
+    languageSettings:
+      "إعدادات اللغة",
+    logout:
+      "تسجيل الخروج"
+  },
+
+  bn: {
+    setting: "সেটিংস",
+    languageSettings:
+      "ভাষা সেটিংস",
+    logout:
+      "লগআউট"
+  },
+
+  pt: {
+    setting: "Configurações",
+    languageSettings:
+      "Configurações de idioma",
+    logout:
+      "Sair"
+  },
+
+  ru: {
+    setting: "Настройки",
+    languageSettings:
+      "Настройки языка",
+    logout:
+      "Выйти"
+  },
+
+  ur: {
+    setting: "ترتیبات",
+    languageSettings:
+      "زبان کی ترتیبات",
+    logout:
+      "لاگ آؤٹ"
+  },
+
+  id: {
+    setting: "Pengaturan",
+    languageSettings:
+      "Pengaturan bahasa",
+    logout:
+      "Keluar"
+  },
+
+  de: {
+    setting: "Einstellungen",
+    languageSettings:
+      "Spracheinstellungen",
+    logout:
+      "Abmelden"
+  },
+
+  ja: {
+    setting: "設定",
+    languageSettings:
+      "言語設定",
+    logout:
+      "ログアウト"
+  },
+
+  it: {
+    setting: "Impostazioni",
+    languageSettings:
+      "Impostazioni lingua",
+    logout:
+      "Esci"
+  },
+
+  tr: {
+    setting: "Ayarlar",
+    languageSettings:
+      "Dil ayarları",
+    logout:
+      "Çıkış yap"
+  },
+
+  fa: {
+    setting: "تنظیمات",
+    languageSettings:
+      "تنظیمات زبان",
+    logout:
+      "خروج"
+  },
+
+  nl: {
+    setting: "Instellingen",
+    languageSettings:
+      "Taalinstellingen",
+    logout:
+      "Uitloggen"
+  }
+
+};
+
 function toggleLanguage(){
-  const select = document.getElementById("languageSelect");
-  select.style.display = select.style.display === "block" ? "none" : "block";
+  const popup =
+    document.getElementById("languagePopupOverlay");
+  popup.style.display = "flex";
+
 }
 
-function changeLanguage(){
-  const lang = document.getElementById("languageSelect").value;
+function changeLanguage(lang){
 
-  localStorage.setItem("siteLanguage", lang);
+  localStorage.setItem(
+    "lang",
+    lang
+  );
 
-  if(lang === "bn"){
-    document.getElementById("langText").innerText = "ভাষা পরিবর্তন";
-    document.querySelector(".logout").innerText = "লগআউট";
+  const t =
+    translations[lang] ||
+    translations.en;
+
+  document.getElementById(
+  "settingTitle"
+).innerText =
+  t.setting;
+
+  document.getElementById(
+    "langText"
+  ).innerText =
+    t.languageSettings;
+
+  document.getElementById(
+    "logoutText"
+  ).innerText =
+    t.logout;
+
+  if(
+    lang === "ar" ||
+    lang === "ur" ||
+    lang === "fa"
+  ){
+    document.body.dir =
+      "rtl";
   }else{
-    document.getElementById("langText").innerText = "Language settings";
-    document.querySelector(".logout").innerText = "Logout";
+    document.body.dir =
+      "ltr";
+
   }
+
+  document.getElementById(
+  "languagePopupOverlay"
+).style.display =
+  "none";
+
 }
 
 function logout(){
-  localStorage.removeItem("token");
-  localStorage.removeItem("username");
-  window.location.href = "login.html";
+  localStorage.removeItem(
+    "token"
+  );
+  localStorage.removeItem(
+    "username"
+  );
+  localStorage.removeItem(
+    "inviteCode"
+  );
+  window.location.href =
+    "login.html";
+
 }
 
 window.onload = function(){
-  const savedLang = localStorage.getItem("siteLanguage") || "en";
-  document.getElementById("languageSelect").value = savedLang;
+  const savedLang =
+    localStorage.getItem("lang") ||
+    "en";
+  changeLanguage(savedLang);
 
-  if(savedLang === "bn"){
-    document.getElementById("langText").innerText = "ভাষা পরিবর্তন";
-    document.querySelector(".logout").innerText = "লগআউট";
-  }
-}
+};
+
 </script>
 
 </body>
+
 </html>

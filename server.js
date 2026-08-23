@@ -693,7 +693,7 @@ if (user.taskLimit > 0) {
     if (pendingWithdraw) {
       return res.json({
         success: false,
-        msg: "Please wait for previous withdraw approval"
+        msg: "You have successfully submitted for withdrawal, please wait patiently."
       });
     }
 

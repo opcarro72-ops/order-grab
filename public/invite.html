@@ -172,20 +172,16 @@ body{
 <body>
 
 <div class="header">
-
   <div class="back-btn" onclick="history.back()">
     ❮
   </div>
-
-  <h2>Invite friends</h2>
-
+  <h2 id="inviteTitle">Invite friends</h2>
 </div>
 
 <div class="container">
-
-  <div class="code-text">
-    My invitation code
-  </div>
+  <div class="code-text" id="myInvitationCodeText">
+  My invitation code
+</div>
 
   <div class="invite-code" id="inviteCode">
     000000
@@ -196,26 +192,23 @@ body{
     <img id="qrImage"
       src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=test">
 
-    <div class="qr-note">
-      Long press to save the QR code
-    </div>
+    <div class="qr-note" id="qrNote">
+  Long press to save the QR code
+</div>
 
   </div>
 
   <div class="share-box">
-
     <div class="share-top">
-
-      <h3>Share link</h3>
-
-      <div class="copy-btn" onclick="copyLink()">
-        Copy
-      </div>
-
+      <h3 id="shareLinkText">Share link</h3>
+      <div class="copy-btn" id="copyText" onclick="copyLink()">
+      Copy
     </div>
 
+   </div>
+
     <div class="link-area" id="shareLink">
-      Loading...
+    Loading...
     </div>
 
   </div>
@@ -225,6 +218,204 @@ body{
 <div id="customAlert-inside-invite"></div>
 
 <script>
+
+  const lang = localStorage.getItem("lang") || "en";
+
+const inviteTexts = {
+
+  en: {
+    inviteTitle: "Invite friends",
+    myInvitationCode: "My invitation code",
+    qrNote: "Long press to save the QR code",
+    shareLink: "Share link",
+    copy: "Copy",
+    loading: "Loading...",
+    copied: "Invite link copied!"
+  },
+
+  zh: {
+    inviteTitle: "邀请好友",
+    myInvitationCode: "我的邀请码",
+    qrNote: "长按保存二维码",
+    shareLink: "分享链接",
+    copy: "复制",
+    loading: "加载中...",
+    copied: "邀请链接已复制！"
+  },
+
+  hi: {
+    inviteTitle: "दोस्तों को आमंत्रित करें",
+    myInvitationCode: "मेरा आमंत्रण कोड",
+    qrNote: "QR कोड सेव करने के लिए लंबे समय तक दबाएँ",
+    shareLink: "शेयर लिंक",
+    copy: "कॉपी",
+    loading: "लोड हो रहा है...",
+    copied: "आमंत्रण लिंक कॉपी हो गया!"
+  },
+
+  es: {
+    inviteTitle: "Invitar amigos",
+    myInvitationCode: "Mi código de invitación",
+    qrNote: "Mantén presionado para guardar el código QR",
+    shareLink: "Enlace para compartir",
+    copy: "Copiar",
+    loading: "Cargando...",
+    copied: "¡Enlace de invitación copiado!"
+  },
+
+  fr: {
+    inviteTitle: "Inviter des amis",
+    myInvitationCode: "Mon code d'invitation",
+    qrNote: "Appuyez longuement pour enregistrer le code QR",
+    shareLink: "Lien de partage",
+    copy: "Copier",
+    loading: "Chargement...",
+    copied: "Lien d'invitation copié !"
+  },
+
+  ar: {
+    inviteTitle: "دعوة الأصدقاء",
+    myInvitationCode: "رمز دعوتي",
+    qrNote: "اضغط مطولاً لحفظ رمز QR",
+    shareLink: "رابط المشاركة",
+    copy: "نسخ",
+    loading: "جارٍ التحميل...",
+    copied: "تم نسخ رابط الدعوة!"
+  },
+
+  bn: {
+    inviteTitle: "বন্ধুদের আমন্ত্রণ করুন",
+    myInvitationCode: "আমার ইনভাইটেশন কোড",
+    qrNote: "QR কোড সংরক্ষণ করতে দীর্ঘক্ষণ চাপুন",
+    shareLink: "শেয়ার লিংক",
+    copy: "কপি",
+    loading: "লোড হচ্ছে...",
+    copied: "ইনভাইট লিংক কপি হয়েছে!"
+  },
+
+  pt: {
+    inviteTitle: "Convidar amigos",
+    myInvitationCode: "Meu código de convite",
+    qrNote: "Pressione e segure para salvar o código QR",
+    shareLink: "Link de compartilhamento",
+    copy: "Copiar",
+    loading: "Carregando...",
+    copied: "Link de convite copiado!"
+  },
+
+  ru: {
+    inviteTitle: "Пригласить друзей",
+    myInvitationCode: "Мой код приглашения",
+    qrNote: "Нажмите и удерживайте, чтобы сохранить QR-код",
+    shareLink: "Ссылка для приглашения",
+    copy: "Копировать",
+    loading: "Загрузка...",
+    copied: "Ссылка приглашения скопирована!"
+  },
+
+  ur: {
+    inviteTitle: "دوستوں کو مدعو کریں",
+    myInvitationCode: "میرا دعوتی کوڈ",
+    qrNote: "QR کوڈ محفوظ کرنے کے لیے دیر تک دبائیں",
+    shareLink: "شیئر لنک",
+    copy: "کاپی",
+    loading: "لوڈ ہو رہا ہے...",
+    copied: "دعوتی لنک کاپی ہو گیا!"
+  },
+
+  id: {
+    inviteTitle: "Undang teman",
+    myInvitationCode: "Kode undangan saya",
+    qrNote: "Tekan lama untuk menyimpan kode QR",
+    shareLink: "Tautan berbagi",
+    copy: "Salin",
+    loading: "Memuat...",
+    copied: "Tautan undangan berhasil disalin!"
+  },
+
+  de: {
+    inviteTitle: "Freunde einladen",
+    myInvitationCode: "Mein Einladungscode",
+    qrNote: "Lange drücken, um den QR-Code zu speichern",
+    shareLink: "Freigabelink",
+    copy: "Kopieren",
+    loading: "Wird geladen...",
+    copied: "Einladungslink kopiert!"
+  },
+
+  ja: {
+    inviteTitle: "友達を招待",
+    myInvitationCode: "招待コード",
+    qrNote: "QRコードを保存するには長押ししてください",
+    shareLink: "共有リンク",
+    copy: "コピー",
+    loading: "読み込み中...",
+    copied: "招待リンクをコピーしました！"
+  },
+
+  it: {
+    inviteTitle: "Invita amici",
+    myInvitationCode: "Il mio codice invito",
+    qrNote: "Tieni premuto per salvare il codice QR",
+    shareLink: "Link di condivisione",
+    copy: "Copia",
+    loading: "Caricamento...",
+    copied: "Link di invito copiato!"
+  },
+
+  tr: {
+    inviteTitle: "Arkadaşlarını davet et",
+    myInvitationCode: "Davet kodum",
+    qrNote: "QR kodunu kaydetmek için uzun basın",
+    shareLink: "Paylaşım bağlantısı",
+    copy: "Kopyala",
+    loading: "Yükleniyor...",
+    copied: "Davet bağlantısı kopyalandı!"
+  },
+
+  fa: {
+    inviteTitle: "دعوت از دوستان",
+    myInvitationCode: "کد دعوت من",
+    qrNote: "برای ذخیره کد QR، لمس طولانی کنید",
+    shareLink: "لینک اشتراک‌گذاری",
+    copy: "کپی",
+    loading: "در حال بارگذاری...",
+    copied: "لینک دعوت کپی شد!"
+  },
+
+  nl: {
+    inviteTitle: "Vrienden uitnodigen",
+    myInvitationCode: "Mijn uitnodigingscode",
+    qrNote: "Houd lang ingedrukt om de QR-code op te slaan",
+    shareLink: "Deellink",
+    copy: "Kopiëren",
+    loading: "Laden...",
+    copied: "Uitnodigingslink gekopieerd!"
+  }
+
+};
+
+const currentTexts =
+  inviteTexts[lang] || inviteTexts.en;
+
+  document.getElementById("shareLink").innerText =
+  currentTexts.loading;
+
+document.getElementById("inviteTitle").innerText =
+  currentTexts.inviteTitle;
+
+document.getElementById("myInvitationCodeText").innerText =
+  currentTexts.myInvitationCode;
+
+document.getElementById("qrNote").innerText =
+  currentTexts.qrNote;
+
+document.getElementById("shareLinkText").innerText =
+  currentTexts.shareLink;
+
+document.getElementById("copyText").innerText =
+  currentTexts.copy;
+
 const inviteCode =
   localStorage.getItem("inviteCode") || "000000";
 
@@ -244,21 +435,15 @@ document.getElementById("qrImage").src =
   + encodeURIComponent(link);
 
 function copyLink(){
-
   navigator.clipboard.writeText(link);
-
-  showMessage("Invite link copied!");
+  showMessage(currentTexts.copied);
 }
 
 function showMessage(text){
-
   const alertBox =
     document.getElementById("customAlert-inside-invite");
-
   alertBox.innerText = text;
-
   alertBox.style.display = "block";
-
   setTimeout(() => {
     alertBox.style.display = "none";
   }, 2000);

@@ -12,25 +12,45 @@
 
 <div class="main-body">
 
-  <h2 class="page-title">Menu</h2>
+  <h2 class="page-title" id="menuTitle">Menu</h2>
 
   <div class="menu-wrapper">
 
     <div class="tabs">
-      <button class="tab active" onclick="filterCards('all', this)">All</button>
-      <button class="tab" onclick="filterCards('vip1', this)">VIP 1</button>
-      <button class="tab" onclick="filterCards('vip2', this)">VIP 2</button>
-      <button class="tab" onclick="filterCards('vip3', this)">VIP 3</button>
-    </div>
+  <button class="tab active" onclick="filterCards('all', this)" id="tabAll">
+    All
+  </button>
+
+  <button class="tab" onclick="filterCards('vip1', this)">
+    VIP 1
+  </button>
+
+  <button class="tab" onclick="filterCards('vip2', this)">
+    VIP 2
+  </button>
+
+  <button class="tab" onclick="filterCards('vip3', this)">
+    VIP 3
+  </button>
+</div>
 
     <div class="menu-card" data-vip="vip1" onclick="goPage('amazon.html')">
       <div class="vip-badge">VIP 1</div>
       <img src="/amazon.png" class="logo">
       <div class="info">
         <h3>Amazon</h3>
-        <p>Available balance: 20USDT - 498USDT</p>
-        <p>
-  <span class="commission-label">Commissions:</span>
+
+<p>
+  <span class="available-label" id="amazonAvailable">
+    Available balance:
+  </span>
+  20USDT - 498USDT
+</p>
+
+<p>
+  <span class="commission-label" id="amazonCommission">
+    Commissions:
+  </span>
   <span class="commission-value">4%</span>
 </p>
       </div>
@@ -41,9 +61,18 @@
       <img src="/alibaba.png" class="logo">
       <div class="info">
         <h3>Alibaba</h3>
-        <p>Available balance: 499USDT - 899USDT</p>
-        <p>
-  <span class="commission-label">Commissions:</span>
+
+<p>
+  <span class="available-label" id="alibabaAvailable">
+    Available balance:
+  </span>
+  499USDT - 899USDT
+</p>
+
+<p>
+  <span class="commission-label" id="alibabaCommission">
+    Commissions:
+  </span>
   <span class="commission-value">8%</span>
 </p>
       </div>
@@ -54,15 +83,24 @@
       <img src="/aliexpress.png" class="logo">
       <div class="info">
         <h3>AliExpress</h3>
-        <p>Available balance: 899+ USDT</p>
-        <p>
-  <span class="commission-label">Commissions:</span>
+
+<p>
+  <span class="available-label" id="aliexpressAvailable">
+    Available balance:
+  </span>
+  899+ USDT
+</p>
+
+<p>
+  <span class="commission-label" id="aliexpressCommission">
+    Commissions:
+  </span>
   <span class="commission-value">12%</span>
 </p>
       </div>
     </div>
 
-    <div class="no-more">No more</div>
+    <div class="no-more" id="noMoreText">No more</div>
 
   </div>
 
@@ -71,31 +109,32 @@
 <div class="bottom-nav">
   <div class="nav-item" data-page="home.html" onclick="goPage('home.html')">
     <span>🏠</span>
-    <div>Home</div>
+    <div id="navHome">Home</div>
   </div>
 
   <div class="nav-item" data-page="service.html" onclick="goPage('service.html')">
     <span>🎧</span>
-    <div>Service</div>
+    <div id="navService">Service</div>
   </div>
 
   <div class="nav-item active" data-page="menu.html">
     <span>🛍️</span>
-    <div>Menu</div>
+    <div id="navMenu">Menu</div>
   </div>
 
   <div class="nav-item" data-page="record.html" onclick="goPage('record.html')">
     <span>📄</span>
-    <div>Record</div>
+    <div id="navRecord">Record</div>
   </div>
 
   <div class="nav-item" data-page="mine.html" onclick="goPage('mine.html')">
     <span>👤</span>
-    <div>Mine</div>
+    <div id="navMine">Mine</div>
   </div>
 </div>
 
 <script>
+
 function goPage(page) {
   window.location.href = page;
 }
@@ -108,17 +147,289 @@ document.querySelectorAll(".nav-item").forEach(item => {
 });
 
 function filterCards(type, el) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document
+    .querySelectorAll(".tab")
+    .forEach(t => t.classList.remove("active"));
   el.classList.add("active");
-
-  document.querySelectorAll(".menu-card").forEach(card => {
-    if (type === "all" || card.dataset.vip === type) {
-      card.style.display = "flex";
-    } else {
-      card.style.display = "none";
-    }
-  });
+  document
+    .querySelectorAll(".menu-card")
+    .forEach(card => {
+      if (type === "all" || card.dataset.vip === type) {
+        card.style.display = "flex";
+      } else {
+        card.style.display = "none";
+      }
+    });
 }
+
+const menuTranslations = {
+
+  en: {
+    menu: "Menu",
+    all: "All",
+    availableBalance: "Available balance:",
+    commissions: "Commissions:",
+    noMore: "No more",
+    home: "Home",
+    service: "Service",
+    record: "Record",
+    mine: "Mine"
+  },
+
+  zh: {
+    menu: "菜单",
+    all: "全部",
+    availableBalance: "可用余额:",
+    commissions: "佣金:",
+    noMore: "没有更多",
+    home: "首页",
+    service: "客服",
+    record: "记录",
+    mine: "我的"
+  },
+
+  hi: {
+    menu: "मेनू",
+    all: "सभी",
+    availableBalance: "उपलब्ध बैलेंस:",
+    commissions: "कमीशन:",
+    noMore: "और कुछ नहीं",
+    home: "होम",
+    service: "सेवा",
+    record: "रिकॉर्ड",
+    mine: "मेरा"
+  },
+
+  es: {
+    menu: "Menú",
+    all: "Todos",
+    availableBalance: "Saldo disponible:",
+    commissions: "Comisiones:",
+    noMore: "No hay más",
+    home: "Inicio",
+    service: "Servicio",
+    record: "Registro",
+    mine: "Mi cuenta"
+  },
+
+  fr: {
+    menu: "Menu",
+    all: "Tous",
+    availableBalance: "Solde disponible:",
+    commissions: "Commissions:",
+    noMore: "Aucun autre",
+    home: "Accueil",
+    service: "Service",
+    record: "Historique",
+    mine: "Mon compte"
+  },
+
+  ar: {
+    menu: "القائمة",
+    all: "الكل",
+    availableBalance: "الرصيد المتاح:",
+    commissions: "العمولات:",
+    noMore: "لا يوجد المزيد",
+    home: "الرئيسية",
+    service: "الخدمة",
+    record: "السجل",
+    mine: "حسابي"
+  },
+
+  bn: {
+    menu: "মেনু",
+    all: "সব",
+    availableBalance: "উপলব্ধ ব্যালেন্স:",
+    commissions: "কমিশন:",
+    noMore: "আর কিছু নেই",
+    home: "হোম",
+    service: "সার্ভিস",
+    record: "রেকর্ড",
+    mine: "মাইন"
+  },
+
+  pt: {
+    menu: "Menu",
+    all: "Todos",
+    availableBalance: "Saldo disponível:",
+    commissions: "Comissões:",
+    noMore: "Não há mais",
+    home: "Início",
+    service: "Serviço",
+    record: "Registro",
+    mine: "Minha conta"
+  },
+
+  ru: {
+    menu: "Меню",
+    all: "Все",
+    availableBalance: "Доступный баланс:",
+    commissions: "Комиссии:",
+    noMore: "Больше ничего нет",
+    home: "Главная",
+    service: "Сервис",
+    record: "Записи",
+    mine: "Мой аккаунт"
+  },
+
+  ur: {
+    menu: "مینو",
+    all: "سب",
+    availableBalance: "دستیاب بیلنس:",
+    commissions: "کمیشن:",
+    noMore: "مزید کچھ نہیں",
+    home: "ہوم",
+    service: "سروس",
+    record: "ریکارڈ",
+    mine: "میرا اکاؤنٹ"
+  },
+
+  id: {
+    menu: "Menu",
+    all: "Semua",
+    availableBalance: "Saldo tersedia:",
+    commissions: "Komisi:",
+    noMore: "Tidak ada lagi",
+    home: "Beranda",
+    service: "Layanan",
+    record: "Catatan",
+    mine: "Saya"
+  },
+
+  de: {
+    menu: "Menü",
+    all: "Alle",
+    availableBalance: "Verfügbares Guthaben:",
+    commissions: "Provisionen:",
+    noMore: "Keine weiteren",
+    home: "Startseite",
+    service: "Service",
+    record: "Aufzeichnungen",
+    mine: "Mein Konto"
+  },
+
+  ja: {
+    menu: "メニュー",
+    all: "すべて",
+    availableBalance: "利用可能残高:",
+    commissions: "コミッション:",
+    noMore: "これ以上ありません",
+    home: "ホーム",
+    service: "サービス",
+    record: "記録",
+    mine: "マイページ"
+  },
+
+  it: {
+    menu: "Menu",
+    all: "Tutti",
+    availableBalance: "Saldo disponibile:",
+    commissions: "Commissioni:",
+    noMore: "Nessun altro",
+    home: "Home",
+    service: "Servizio",
+    record: "Registro",
+    mine: "Il mio account"
+  },
+
+  tr: {
+    menu: "Menü",
+    all: "Tümü",
+    availableBalance: "Kullanılabilir bakiye:",
+    commissions: "Komisyonlar:",
+    noMore: "Daha fazla yok",
+    home: "Ana Sayfa",
+    service: "Servis",
+    record: "Kayıt",
+    mine: "Hesabım"
+  },
+
+  fa: {
+    menu: "منو",
+    all: "همه",
+    availableBalance: "موجودی قابل استفاده:",
+    commissions: "کمیسیون:",
+    noMore: "مورد دیگری وجود ندارد",
+    home: "خانه",
+    service: "خدمات",
+    record: "سوابق",
+    mine: "حساب من"
+  },
+
+  nl: {
+    menu: "Menu",
+    all: "Alles",
+    availableBalance: "Beschikbaar saldo:",
+    commissions: "Commissies:",
+    noMore: "Geen meer",
+    home: "Home",
+    service: "Service",
+    record: "Records",
+    mine: "Mijn account"
+  }
+};
+
+function applyMenuLanguage() {
+
+  const selectedLang =
+    localStorage.getItem("lang") || "en";
+
+  const t =
+    menuTranslations[selectedLang] ||
+    menuTranslations.en;
+
+  const menuTitle =
+    document.querySelector(".page-title");
+  if (menuTitle) {
+    menuTitle.innerText = t.menu;
+  }
+
+  const allTab =
+    document.querySelector(".tab[onclick*=\"'all'\"]");
+  if (allTab) {
+    allTab.innerText = t.all;
+  }
+
+  document
+    .querySelectorAll(".available-label")
+    .forEach(element => {
+      element.innerText =
+        t.availableBalance;
+    });
+
+  document
+    .querySelectorAll(".commission-label")
+    .forEach(element => {
+      element.innerText =
+        t.commissions;
+    });
+
+  const noMore =
+    document.querySelector(".no-more");
+  if (noMore) {
+    noMore.innerText = t.noMore;
+  }
+
+
+  const navItems =
+    document.querySelectorAll(".bottom-nav .nav-item");
+
+  if (navItems.length >= 5) {
+    navItems[0].querySelector("div").innerText =
+      t.home;
+    navItems[1].querySelector("div").innerText =
+      t.service;
+    navItems[2].querySelector("div").innerText =
+      t.menu;
+    navItems[3].querySelector("div").innerText =
+      t.record;
+    navItems[4].querySelector("div").innerText =
+      t.mine;
+  }
+}
+
+applyMenuLanguage();
+
 </script>
 
 </body>

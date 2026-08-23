@@ -2,185 +2,664 @@
 <html>
 <head>
   <title>Withdrawal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
   <link rel="stylesheet" href="withdraw.css">
-  <link rel="icon" type="image/png" href="logo.png">
+  <link
+    rel="icon"
+    type="image/png"
+    href="logo.png"
+  >
 </head>
 
 <body>
 
 <div class="withdraw-page">
-
   <div class="withdraw-header">
-    <span class="back" onclick="history.back()">❮</span>
-    <h2>Withdrawal</h2>
+    <span
+      class="back"
+      onclick="history.back()"
+    >❮</span>
+    <h2 id="withdrawTitle">Withdrawal</h2>
   </div>
 
   <div class="withdraw-container">
-
     <div class="currency-box">
       💳
-      <p>virtual<br>currency</p>
+      <p id="currencyText">
+        virtual<br>currency
+      </p>
     </div>
 
-    <div class="section-title">Wallet</div>
+    <div
+      class="section-title"
+      id="walletTitle"
+    >
+      Wallet
+    </div>
 
     <div class="wallet-row">
-      <span id="walletName">No wallet added</span>
+      <span id="walletName">
+        No wallet added
+      </span>
       <span class="check">✔</span>
     </div>
 
     <div class="amount-box">
       <div class="amount-header">
         <span>USDT</span>
-        <span class="max">Maximum amount</span>
+        <span
+          class="max"
+          id="maximumText"
+        >
+          Maximum amount
+        </span>
       </div>
 
-      <input type="number" id="amount" placeholder="">
+      <input
+        type="number"
+        id="amount"
+        placeholder=""
+      >
 
     </div>
 
-    <button id="okBtn" class="ok-btn" disabled>OK</button>
+    <button
+      id="okBtn"
+      class="ok-btn"
+      disabled
+    >
+      OK
+    </button>
 
   </div>
+
 </div>
 
-<div class="custom-alert-inside-withdraw" id="customAlert"></div>
+<div
+  class="custom-alert-inside-withdraw"
+  id="customAlert"
+></div>
 
 <script>
-const amountInput = document.getElementById("amount");
-const okBtn = document.getElementById("okBtn");
 
-const token = localStorage.getItem("token");
+const lang =
+  localStorage.getItem("lang") || "en";
+const withdrawTexts = {
+
+  en: {
+    title: "Withdrawal",
+    currency: "virtual<br>currency",
+    wallet: "Wallet",
+    noWallet: "No wallet added",
+    maximum: "Maximum amount",
+    ok: "OK",
+    processing: "Processing...",
+    accessDenied: "Access denied",
+    addWallet: "Please add wallet first.",
+    serverError: "Server error",
+    minimum: "Minimum withdrawal is 10 USDT.",
+    submitted: "Withdrawal request submitted.",
+    failed: "Withdrawal failed",
+    insufficient: "Not enough balance.",
+    pending:
+      "You have successfully submitted for withdrawal, please wait patiently."
+  },
+
+  zh: {
+    title: "提现",
+    currency: "虚拟<br>货币",
+    wallet: "钱包",
+    noWallet: "尚未添加钱包",
+    maximum: "最大金额",
+    ok: "确定",
+    processing: "处理中...",
+    accessDenied: "访问被拒绝",
+    addWallet: "请先添加钱包",
+    serverError: "服务器错误",
+    minimum: "最低提现金额为 10 USDT",
+    submitted: "提现申请已提交",
+    failed: "提现失败",
+    insufficient: "余额不足",
+    pending:
+      "您已成功提交提现申请，请耐心等待。"
+  },
+
+  hi: {
+    title: "निकासी",
+    currency: "वर्चुअल<br>करेंसी",
+    wallet: "वॉलेट",
+    noWallet: "कोई वॉलेट नहीं जोड़ा गया",
+    maximum: "अधिकतम राशि",
+    ok: "OK",
+    processing: "प्रोसेसिंग...",
+    accessDenied: "पहुंच अस्वीकृत",
+    addWallet: "कृपया पहले वॉलेट जोड़ें",
+    serverError: "सर्वर त्रुटि",
+    minimum: "न्यूनतम निकासी 10 USDT है",
+    submitted: "निकासी अनुरोध सबमिट हो गया",
+    failed: "निकासी विफल",
+    insufficient: "पर्याप्त बैलेंस नहीं है",
+    pending:
+      "आपने निकासी के लिए सफलतापूर्वक अनुरोध सबमिट किया है, कृपया प्रतीक्षा करें।"
+  },
+
+  es: {
+    title: "Retiro",
+    currency: "moneda<br>virtual",
+    wallet: "Billetera",
+    noWallet: "No se ha añadido ninguna billetera",
+    maximum: "Cantidad máxima",
+    ok: "OK",
+    processing: "Procesando...",
+    accessDenied: "Acceso denegado",
+    addWallet: "Añade primero una billetera",
+    serverError: "Error del servidor",
+    minimum: "El retiro mínimo es de 10 USDT",
+    submitted: "Solicitud de retiro enviada",
+    failed: "Retiro fallido",
+    insufficient: "Saldo insuficiente",
+    pending:
+      "Has enviado correctamente la solicitud de retiro, espera pacientemente."
+  },
+
+  fr: {
+    title: "Retrait",
+    currency: "monnaie<br>virtuelle",
+    wallet: "Portefeuille",
+    noWallet: "Aucun portefeuille ajouté",
+    maximum: "Montant maximum",
+    ok: "OK",
+    processing: "Traitement...",
+    accessDenied: "Accès refusé",
+    addWallet: "Veuillez d'abord ajouter un portefeuille",
+    serverError: "Erreur du serveur",
+    minimum: "Le retrait minimum est de 10 USDT",
+    submitted: "Demande de retrait envoyée",
+    failed: "Échec du retrait",
+    insufficient: "Solde insuffisant",
+    pending:
+      "Votre demande de retrait a été soumise avec succès, veuillez patienter."
+  },
+
+  ar: {
+    title: "السحب",
+    currency: "العملة<br>الافتراضية",
+    wallet: "المحفظة",
+    noWallet: "لم تتم إضافة محفظة",
+    maximum: "الحد الأقصى للمبلغ",
+    ok: "موافق",
+    processing: "جارٍ المعالجة...",
+    accessDenied: "تم رفض الوصول",
+    addWallet: "يرجى إضافة محفظة أولاً",
+    serverError: "خطأ في الخادم",
+    minimum: "الحد الأدنى للسحب هو 10 USDT",
+    submitted: "تم إرسال طلب السحب",
+    failed: "فشل السحب",
+    insufficient: "الرصيد غير كافٍ",
+    pending:
+      "لقد تم إرسال طلب السحب بنجاح، يرجى الانتظار."
+  },
+
+  bn: {
+    title: "উত্তোলন",
+    currency: "ভার্চুয়াল<br>কারেন্সি",
+    wallet: "ওয়ালেট",
+    noWallet: "কোনো ওয়ালেট যোগ করা হয়নি",
+    maximum: "সর্বোচ্চ পরিমাণ",
+    ok: "ঠিক আছে",
+    processing: "প্রক্রিয়াধীন...",
+    accessDenied: "অ্যাক্সেস প্রত্যাখ্যান করা হয়েছে",
+    addWallet: "অনুগ্রহ করে প্রথমে ওয়ালেট যোগ করুন।",
+    serverError: "সার্ভার ত্রুটি",
+    minimum: "সর্বনিম্ন উত্তোলনের পরিমাণ 10 USDT.",
+    submitted: "উত্তোলনের অনুরোধ জমা দেওয়া হয়েছে।",
+    failed: "উত্তোলন ব্যর্থ হয়েছে",
+    insufficient: "পর্যাপ্ত ব্যালেন্স নেই।",
+    pending:
+      "আপনার উত্তোলনের অনুরোধ সফলভাবে জমা হয়েছে, অনুগ্রহ করে অপেক্ষা করুন।"
+  },
+
+  pt: {
+    title: "Saque",
+    currency: "moeda<br>virtual",
+    wallet: "Carteira",
+    noWallet: "Nenhuma carteira adicionada",
+    maximum: "Valor máximo",
+    ok: "OK",
+    processing: "Processando...",
+    accessDenied: "Acesso negado",
+    addWallet: "Adicione uma carteira primeiro",
+    serverError: "Erro do servidor",
+    minimum: "O saque mínimo é de 10 USDT",
+    submitted: "Solicitação de saque enviada",
+    failed: "Falha no saque",
+    insufficient: "Saldo insuficiente",
+    pending:
+      "Sua solicitação de saque foi enviada com sucesso, aguarde pacientemente."
+  },
+
+  ru: {
+    title: "Вывод",
+    currency: "виртуальная<br>валюта",
+    wallet: "Кошелёк",
+    noWallet: "Кошелёк не добавлен",
+    maximum: "Максимальная сумма",
+    ok: "ОК",
+    processing: "Обработка...",
+    accessDenied: "Доступ запрещён",
+    addWallet: "Сначала добавьте кошелёк",
+    serverError: "Ошибка сервера",
+    minimum: "Минимальная сумма вывода — 10 USDT",
+    submitted: "Запрос на вывод отправлен",
+    failed: "Вывод не выполнен",
+    insufficient: "Недостаточно средств.",
+    pending:
+      "Ваш запрос на вывод успешно отправлен, пожалуйста, подождите."
+  },
+
+  ur: {
+    title: "رقم نکلوانا",
+    currency: "ورچوئل<br>کرنسی",
+    wallet: "والیٹ",
+    noWallet: "کوئی والیٹ شامل نہیں کیا گیا",
+    maximum: "زیادہ سے زیادہ رقم",
+    ok: "ٹھیک ہے",
+    processing: "پروسیسنگ...",
+    accessDenied: "رسائی مسترد کر دی گئی",
+    addWallet: "براہ کرم پہلے والیٹ شامل کریں",
+    serverError: "سرور کی خرابی",
+    minimum: "کم از کم رقم نکلوانا 10 USDT ہے",
+    submitted: "رقم نکلوانے کی درخواست جمع ہو گئی ہے",
+    failed: "رقم نکلوانے میں ناکامی",
+    insufficient: "بیلنس کافی نہیں ہے",
+    pending:
+      "آپ کی رقم نکلوانے کی درخواست کامیابی سے جمع ہو گئی ہے، براہ کرم انتظار کریں۔"
+  },
+
+  id: {
+    title: "Penarikan",
+    currency: "mata uang<br>virtual",
+    wallet: "Dompet",
+    noWallet: "Belum ada dompet yang ditambahkan",
+    maximum: "Jumlah maksimum",
+    ok: "OK",
+    processing: "Memproses...",
+    accessDenied: "Akses ditolak",
+    addWallet: "Silakan tambahkan dompet terlebih dahulu",
+    serverError: "Kesalahan server",
+    minimum: "Penarikan minimum adalah 10 USDT",
+    submitted: "Permintaan penarikan berhasil dikirim",
+    failed: "Penarikan gagal",
+    insufficient: "Saldo tidak mencukupi",
+    pending:
+      "Permintaan penarikan Anda telah berhasil dikirim, silakan tunggu."
+  },
+
+  de: {
+    title: "Auszahlung",
+    currency: "virtuelle<br>Währung",
+    wallet: "Wallet",
+    noWallet: "Keine Wallet hinzugefügt",
+    maximum: "Maximaler Betrag",
+    ok: "OK",
+    processing: "Wird verarbeitet...",
+    accessDenied: "Zugriff verweigert",
+    addWallet: "Bitte zuerst eine Wallet hinzufügen",
+    serverError: "Serverfehler",
+    minimum: "Die Mindestauszahlung beträgt 10 USDT",
+    submitted: "Auszahlungsanfrage wurde gesendet",
+    failed: "Auszahlung fehlgeschlagen",
+    insufficient: "Nicht genügend Guthaben",
+    pending:
+      "Ihre Auszahlungsanfrage wurde erfolgreich gesendet, bitte warten Sie geduldig."
+  },
+
+
+  ja: {
+    title: "出金",
+    currency: "仮想<br>通貨",
+    wallet: "ウォレット",
+    noWallet: "ウォレットが追加されていません",
+    maximum: "最大金額",
+    ok: "OK",
+    processing: "処理中...",
+    accessDenied: "アクセスが拒否されました",
+    addWallet: "最初にウォレットを追加してください",
+    serverError: "サーバーエラー",
+    minimum: "最低出金額は10 USDTです",
+    submitted: "出金リクエストが送信されました",
+    failed: "出金に失敗しました",
+    insufficient: "残高が不足しています",
+    pending:
+      "出金リクエストは正常に送信されました。しばらくお待ちください。"
+  },
+
+  it: {
+    title: "Prelievo",
+    currency: "valuta<br>virtuale",
+    wallet: "Portafoglio",
+    noWallet: "Nessun portafoglio aggiunto",
+    maximum: "Importo massimo",
+    ok: "OK",
+    processing: "Elaborazione...",
+    accessDenied: "Accesso negato",
+    addWallet: "Aggiungi prima un portafoglio.",
+    serverError: "Errore del server",
+    minimum: "Il prelievo minimo è di 10 USDT.",
+    submitted: "Richiesta di prelievo inviata.",
+    failed: "Prelievo non riuscito",
+    insufficient: "Saldo insufficiente.",
+    pending:
+      "La richiesta di prelievo è stata inviata correttamente, attendi pazientemente."
+  },
+
+
+  tr: {
+    title: "Para Çekme",
+    currency: "sanal<br>para",
+    wallet: "Cüzdan",
+    noWallet: "Cüzdan eklenmedi",
+    maximum: "Maksimum miktar",
+    ok: "Tamam",
+    processing: "İşleniyor...",
+    accessDenied: "Erişim reddedildi",
+    addWallet: "Lütfen önce cüzdan ekleyin.",
+    serverError: "Sunucu hatası",
+    minimum: "Minimum çekim miktarı 10 USDT'dir.",
+    submitted: "Para çekme talebi gönderildi.",
+    failed: "Para çekme başarısız.",
+    insufficient: "Yetersiz bakiye.",
+    pending:
+      "Para çekme talebiniz başarıyla gönderildi, lütfen bekleyin."
+  },
+
+  fa: {
+    title: "برداشت",
+    currency: "ارز<br>مجازی",
+    wallet: "کیف پول",
+    noWallet: "کیف پولی اضافه نشده است",
+    maximum: "حداکثر مبلغ",
+    ok: "تأیید",
+    processing: "در حال پردازش...",
+    accessDenied: "دسترسی رد شد",
+    addWallet: "لطفاً ابتدا کیف پول اضافه کنید",
+    serverError: "خطای سرور",
+    minimum: "حداقل مبلغ برداشت 10 USDT است",
+    submitted: "درخواست برداشت ارسال شد",
+    failed: "برداشت ناموفق بود",
+    insufficient: "موجودی کافی نیست",
+    pending:
+      "درخواست برداشت شما با موفقیت ارسال شد، لطفاً منتظر بمانید."
+  },
+
+
+  nl: {
+    title: "Opnemen",
+    currency: "virtuele<br>valuta",
+    wallet: "Wallet",
+    noWallet: "Geen wallet toegevoegd",
+    maximum: "Maximaal bedrag",
+    ok: "OK",
+    processing: "Verwerken...",
+    accessDenied: "Toegang geweigerd",
+    addWallet: "Voeg eerst een wallet toe.",
+    serverError: "Serverfout",
+    minimum: "De minimale opname is 10 USDT.",
+    submitted: "Opnameverzoek verzonden.",
+    failed: "Opname mislukt",
+    insufficient: "Onvoldoende saldo.",
+    pending:
+      "Uw opnameverzoek is succesvol ingediend, even geduld alstublieft."
+  }
+};
+
+const currentTexts =
+  withdrawTexts[lang] || withdrawTexts.en;
+
+document.getElementById("withdrawTitle").innerText =
+  currentTexts.title;
+document.getElementById("currencyText").innerHTML =
+  currentTexts.currency;
+document.getElementById("walletTitle").innerText =
+  currentTexts.wallet;
+document.getElementById("walletName").innerText =
+  currentTexts.noWallet;
+document.getElementById("maximumText").innerText =
+  currentTexts.maximum;
+document.getElementById("okBtn").innerText =
+  currentTexts.ok;
+
+const amountInput =
+  document.getElementById("amount");
+const okBtn =
+  document.getElementById("okBtn");
+const token =
+  localStorage.getItem("token");
 
 function showMessage(text) {
-
-  const alertBox = document.getElementById("customAlert");
-
-  alertBox.innerText = text;
-
-  alertBox.style.display = "block";
-
+  const alertBox =
+    document.getElementById("customAlert");
+  alertBox.innerText =
+    text;
+  alertBox.style.display =
+    "block";
   setTimeout(() => {
-    alertBox.style.display = "none";
+    alertBox.style.display =
+      "none";
   }, 3000);
 
 }
 
 async function loadWallet() {
 
-  if (sessionStorage.getItem("withdrawAccess") !== "true") {
+  if (
+    sessionStorage.getItem("withdrawAccess")
+    !== "true"
+  ) {
 
-    showMessage("Access denied");
-
-    window.location.href = "mine.html";
-
+    showMessage(
+      currentTexts.accessDenied
+    );
+    window.location.href =
+      "mine.html";
     return;
   }
 
   try {
 
-    const res = await fetch("/get-wallet", {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    });
+    const res =
+      await fetch("/get-wallet", {
+        headers: {
+          Authorization:
+            "Bearer " + token
+        }
+      });
 
-    const data = await res.json();
-
+    const data =
+      await res.json();
     if (
       !data.success ||
       !data.wallet ||
       !data.wallet.locked
     ) {
-
-      showMessage("Please add wallet first");
-
-      window.location.href = "wallet.html";
-
+      showMessage(
+        currentTexts.addWallet
+      );
+      window.location.href =
+        "wallet.html";
       return;
     }
 
-    window.walletData = data.wallet;
-
-    document.getElementById("walletName").innerText =
-      data.wallet.name + " (" + data.wallet.protocol + ")";
+    window.walletData =
+      data.wallet;
+    document.getElementById(
+      "walletName"
+    ).innerText =
+      data.wallet.name +
+      " (" +
+      data.wallet.protocol +
+      ")";
 
   } catch (err) {
-
-    showMessage("Server error");
+    showMessage(
+      currentTexts.serverError
+    );
   }
 }
 
 loadWallet();
 
-amountInput.addEventListener("input", () => {
-  let amount = parseFloat(amountInput.value) || 0;
+amountInput.addEventListener(
+  "input",
+  () => {
+    let amount =
+      parseFloat(amountInput.value) || 0;
 
-  if (amount >= 10) {
-    okBtn.disabled = false;
-    okBtn.classList.add("active");
-  } else {
-    okBtn.disabled = true;
-    okBtn.classList.remove("active");
-  }
-});
-
-okBtn.addEventListener("click", async () => {
-  let amount = parseFloat(amountInput.value);
-
-  if (!window.walletData) {
-    showMessage("Please add wallet first");
-    return;
-  }
-
-  if (amount < 10) {
-    showMessage("Minimum withdrawal is 10 USDT");
-    return;
-  }
-
-  okBtn.disabled = true;
-  okBtn.innerText = "Processing...";
-
-  const token = localStorage.getItem("token");
-
-  try {
-    const res = await fetch("/withdraw", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token
-      },
-      body: JSON.stringify({ amount })
-    });
-
-    const result = await res.json();
-
-    if (result.success) {
-
-  showMessage("Withdrawal request submitted");
-
-  setTimeout(() => {
-    window.location.href = "mine.html";
-  }, 3000);
-
+    if (amount >= 10) {
+      okBtn.disabled =
+        false;
+      okBtn.classList.add(
+        "active"
+      );
     } else {
-      showMessage(result.msg || "Withdrawal failed");
-      okBtn.disabled = false;
-      okBtn.innerText = "OK";
+      okBtn.disabled =
+        true;
+      okBtn.classList.remove(
+        "active"
+      );
+    }
+  }
+);
+
+okBtn.addEventListener(
+  "click",
+  async () => {
+
+    let amount =
+      parseFloat(amountInput.value);
+    if (!window.walletData) {
+      showMessage(
+        currentTexts.addWallet
+      );
+      return;
     }
 
-  } catch (err) {
-    showMessage("Server error");
-    okBtn.disabled = false;
-    okBtn.innerText = "OK";
-  }
-});
+    if (amount < 10) {
+      showMessage(
+        currentTexts.minimum
+      );
+      return;
+    }
 
-window.addEventListener("pagehide", () => {
-  sessionStorage.removeItem("withdrawAccess");
-});
+    okBtn.disabled =
+      true;
+
+    okBtn.innerText =
+      currentTexts.processing;
+
+    const token =
+      localStorage.getItem("token");
+
+    try {
+
+      const res =
+        await fetch("/withdraw", {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+            "Authorization":
+              "Bearer " + token
+          },
+
+          body: JSON.stringify({
+            amount
+          })
+        });
+
+      const result =
+        await res.json();
+
+      if (result.success) {
+        showMessage(
+          currentTexts.submitted
+        );
+
+        setTimeout(() => {
+          window.location.href =
+            "mine.html";
+        }, 3000);
+
+      } else {
+
+        let message =
+          result.msg || "";
+
+        if (
+          message ===
+          "You have successfully submitted for withdrawal, please wait patiently."
+        ) {
+          message =
+            currentTexts.pending;
+        }
+
+        else if (
+          message ===
+          "Not enough balance"
+        ) {
+          message =
+            currentTexts.insufficient;
+        }
+
+        else if (
+          message ===
+          "Invalid withdraw amount"
+        ) {
+          message =
+            currentTexts.minimum;
+        }
+
+        else {
+          message =
+            result.msg ||
+            currentTexts.failed;
+        }
+
+        showMessage(message);
+        okBtn.disabled =
+          false;
+        okBtn.innerText =
+          currentTexts.ok;
+
+      }
+
+    } catch (err) {
+
+      showMessage(
+        currentTexts.serverError
+      );
+      okBtn.disabled =
+        false;
+      okBtn.innerText =
+        currentTexts.ok;
+    }
+  }
+);
+
+window.addEventListener(
+  "pagehide",
+  () => {
+    sessionStorage.removeItem(
+      "withdrawAccess"
+    );
+  }
+);
+
 </script>
 
 </body>
+
 </html>
