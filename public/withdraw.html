@@ -91,7 +91,7 @@ const withdrawTexts = {
 
   en: {
     title: "Withdrawal",
-    currency: "virtual<br>currency",
+    currency: "Virtual<br>currency",
     wallet: "Wallet",
     noWallet: "No wallet added",
     maximum: "Maximum amount",
@@ -104,6 +104,8 @@ const withdrawTexts = {
     submitted: "Withdrawal request submitted.",
     failed: "Withdrawal failed",
     insufficient: "Not enough balance.",
+    taskLimit: (count) =>
+      `You have not completed ${count} tasks yet, please complete ${count} tasks first.`,
     pending:
       "You have successfully submitted for withdrawal, please wait patiently."
   },
@@ -123,6 +125,8 @@ const withdrawTexts = {
     submitted: "提现申请已提交",
     failed: "提现失败",
     insufficient: "余额不足",
+    taskLimit: (count) =>
+      `您尚未完成 ${count} 个任务，请先完成 ${count} 个任务。`,
     pending:
       "您已成功提交提现申请，请耐心等待。"
   },
@@ -142,13 +146,15 @@ const withdrawTexts = {
     submitted: "निकासी अनुरोध सबमिट हो गया",
     failed: "निकासी विफल",
     insufficient: "पर्याप्त बैलेंस नहीं है",
+    taskLimit: (count) =>
+      `आपने अभी तक ${count} कार्य पूरे नहीं किए हैं, कृपया पहले ${count} कार्य पूरे करें।`,
     pending:
       "आपने निकासी के लिए सफलतापूर्वक अनुरोध सबमिट किया है, कृपया प्रतीक्षा करें।"
   },
 
   es: {
     title: "Retiro",
-    currency: "moneda<br>virtual",
+    currency: "Moneda<br>virtual",
     wallet: "Billetera",
     noWallet: "No se ha añadido ninguna billetera",
     maximum: "Cantidad máxima",
@@ -161,13 +167,15 @@ const withdrawTexts = {
     submitted: "Solicitud de retiro enviada",
     failed: "Retiro fallido",
     insufficient: "Saldo insuficiente",
+    taskLimit: (count) =>
+      `Aún no has completado ${count} tareas, por favor completa primero ${count} tareas.`,
     pending:
       "Has enviado correctamente la solicitud de retiro, espera pacientemente."
   },
 
   fr: {
     title: "Retrait",
-    currency: "monnaie<br>virtuelle",
+    currency: "Monnaie<br>virtuelle",
     wallet: "Portefeuille",
     noWallet: "Aucun portefeuille ajouté",
     maximum: "Montant maximum",
@@ -180,6 +188,8 @@ const withdrawTexts = {
     submitted: "Demande de retrait envoyée",
     failed: "Échec du retrait",
     insufficient: "Solde insuffisant",
+    taskLimit: (count) =>
+      `Vous n'avez pas encore terminé ${count} tâches, veuillez d'abord terminer ${count} tâches.`,
     pending:
       "Votre demande de retrait a été soumise avec succès, veuillez patienter."
   },
@@ -199,6 +209,8 @@ const withdrawTexts = {
     submitted: "تم إرسال طلب السحب",
     failed: "فشل السحب",
     insufficient: "الرصيد غير كافٍ",
+    taskLimit: (count) =>
+      `لم تكمل ${count} مهمة بعد، يرجى إكمال ${count} مهمة أولاً.`,
     pending:
       "لقد تم إرسال طلب السحب بنجاح، يرجى الانتظار."
   },
@@ -218,13 +230,15 @@ const withdrawTexts = {
     submitted: "উত্তোলনের অনুরোধ জমা দেওয়া হয়েছে।",
     failed: "উত্তোলন ব্যর্থ হয়েছে",
     insufficient: "পর্যাপ্ত ব্যালেন্স নেই।",
+    taskLimit: (count) =>
+      `আপনি এখনও ${count}টি টাস্ক সম্পন্ন করেননি। অনুগ্রহ করে প্রথমে ${count}টি টাস্ক সম্পন্ন করুন।`,
     pending:
       "আপনার উত্তোলনের অনুরোধ সফলভাবে জমা হয়েছে, অনুগ্রহ করে অপেক্ষা করুন।"
   },
 
   pt: {
     title: "Saque",
-    currency: "moeda<br>virtual",
+    currency: "Moeda<br>virtual",
     wallet: "Carteira",
     noWallet: "Nenhuma carteira adicionada",
     maximum: "Valor máximo",
@@ -237,13 +251,16 @@ const withdrawTexts = {
     submitted: "Solicitação de saque enviada",
     failed: "Falha no saque",
     insufficient: "Saldo insuficiente",
+    taskLimit: (count) =>
+      `Você ainda não concluiu ${count} tarefas. Por favor, conclua ${count} tarefas primeiro.`,
+
     pending:
       "Sua solicitação de saque foi enviada com sucesso, aguarde pacientemente."
   },
 
   ru: {
     title: "Вывод",
-    currency: "виртуальная<br>валюта",
+    currency: "Виртуальная<br>валюта",
     wallet: "Кошелёк",
     noWallet: "Кошелёк не добавлен",
     maximum: "Максимальная сумма",
@@ -256,6 +273,9 @@ const withdrawTexts = {
     submitted: "Запрос на вывод отправлен",
     failed: "Вывод не выполнен",
     insufficient: "Недостаточно средств.",
+    taskLimit: (count) =>
+      `Вы ещё не выполнили ${count} заданий. Пожалуйста, сначала выполните ${count} заданий.`,
+
     pending:
       "Ваш запрос на вывод успешно отправлен, пожалуйста, подождите."
   },
@@ -275,13 +295,16 @@ const withdrawTexts = {
     submitted: "رقم نکلوانے کی درخواست جمع ہو گئی ہے",
     failed: "رقم نکلوانے میں ناکامی",
     insufficient: "بیلنس کافی نہیں ہے",
+    taskLimit: (count) =>
+      `آپ نے ابھی تک ${count} کام مکمل نہیں کیے ہیں، براہ کرم پہلے ${count} کام مکمل کریں۔`,
+
     pending:
       "آپ کی رقم نکلوانے کی درخواست کامیابی سے جمع ہو گئی ہے، براہ کرم انتظار کریں۔"
   },
 
   id: {
     title: "Penarikan",
-    currency: "mata uang<br>virtual",
+    currency: "Mata uang<br>virtual",
     wallet: "Dompet",
     noWallet: "Belum ada dompet yang ditambahkan",
     maximum: "Jumlah maksimum",
@@ -294,13 +317,16 @@ const withdrawTexts = {
     submitted: "Permintaan penarikan berhasil dikirim",
     failed: "Penarikan gagal",
     insufficient: "Saldo tidak mencukupi",
+    taskLimit: (count) =>
+      `Anda belum menyelesaikan ${count} tugas, silakan selesaikan ${count} tugas terlebih dahulu.`,
+
     pending:
       "Permintaan penarikan Anda telah berhasil dikirim, silakan tunggu."
   },
 
   de: {
     title: "Auszahlung",
-    currency: "virtuelle<br>Währung",
+    currency: "Virtuelle<br>Währung",
     wallet: "Wallet",
     noWallet: "Keine Wallet hinzugefügt",
     maximum: "Maximaler Betrag",
@@ -313,10 +339,12 @@ const withdrawTexts = {
     submitted: "Auszahlungsanfrage wurde gesendet",
     failed: "Auszahlung fehlgeschlagen",
     insufficient: "Nicht genügend Guthaben",
+    taskLimit: (count) =>
+      `Sie haben noch nicht ${count} Aufgaben abgeschlossen. Bitte schließen Sie zuerst ${count} Aufgaben ab.`,
+
     pending:
       "Ihre Auszahlungsanfrage wurde erfolgreich gesendet, bitte warten Sie geduldig."
   },
-
 
   ja: {
     title: "出金",
@@ -333,13 +361,16 @@ const withdrawTexts = {
     submitted: "出金リクエストが送信されました",
     failed: "出金に失敗しました",
     insufficient: "残高が不足しています",
+    taskLimit: (count) =>
+      `まだ${count}件のタスクを完了していません。先に${count}件のタスクを完了してください。`,
+
     pending:
       "出金リクエストは正常に送信されました。しばらくお待ちください。"
   },
 
   it: {
     title: "Prelievo",
-    currency: "valuta<br>virtuale",
+    currency: "Valuta<br>virtuale",
     wallet: "Portafoglio",
     noWallet: "Nessun portafoglio aggiunto",
     maximum: "Importo massimo",
@@ -352,14 +383,16 @@ const withdrawTexts = {
     submitted: "Richiesta di prelievo inviata.",
     failed: "Prelievo non riuscito",
     insufficient: "Saldo insufficiente.",
+    taskLimit: (count) =>
+      `Non hai ancora completato ${count} attività, completa prima ${count} attività.`,
+
     pending:
       "La richiesta di prelievo è stata inviata correttamente, attendi pazientemente."
   },
 
-
   tr: {
     title: "Para Çekme",
-    currency: "sanal<br>para",
+    currency: "Sanal<br>para",
     wallet: "Cüzdan",
     noWallet: "Cüzdan eklenmedi",
     maximum: "Maksimum miktar",
@@ -372,6 +405,9 @@ const withdrawTexts = {
     submitted: "Para çekme talebi gönderildi.",
     failed: "Para çekme başarısız.",
     insufficient: "Yetersiz bakiye.",
+    taskLimit: (count) =>
+      `Henüz ${count} görevi tamamlamadınız, lütfen önce ${count} görevi tamamlayın.`,
+
     pending:
       "Para çekme talebiniz başarıyla gönderildi, lütfen bekleyin."
   },
@@ -391,14 +427,16 @@ const withdrawTexts = {
     submitted: "درخواست برداشت ارسال شد",
     failed: "برداشت ناموفق بود",
     insufficient: "موجودی کافی نیست",
+    taskLimit: (count) =>
+      `شما هنوز ${count} وظیفه را تکمیل نکرده‌اید، لطفاً ابتدا ${count} وظیفه را تکمیل کنید.`,
+
     pending:
       "درخواست برداشت شما با موفقیت ارسال شد، لطفاً منتظر بمانید."
   },
 
-
   nl: {
     title: "Opnemen",
-    currency: "virtuele<br>valuta",
+    currency: "Virtuele<br>valuta",
     wallet: "Wallet",
     noWallet: "Geen wallet toegevoegd",
     maximum: "Maximaal bedrag",
@@ -411,9 +449,13 @@ const withdrawTexts = {
     submitted: "Opnameverzoek verzonden.",
     failed: "Opname mislukt",
     insufficient: "Onvoldoende saldo.",
+    taskLimit: (count) =>
+      `U heeft nog geen ${count} taken voltooid. Voltooi eerst ${count} taken.`,
+
     pending:
       "Uw opnameverzoek is succesvol ingediend, even geduld alstublieft."
   }
+
 };
 
 const currentTexts =
@@ -595,43 +637,45 @@ okBtn.addEventListener(
 
       } else {
 
-        let message =
-          result.msg || "";
+        let message = result.msg || "";
 
-        if (
+        const taskMatch = message.match(
+          /^You have not completed (\d+) tasks yet, please complete \1 tasks first\.$/
+        );
+
+        if (taskMatch) {
+
+        const count = taskMatch[1];
+          message = currentTexts.taskLimit(count);
+        }
+        else if (
           message ===
           "You have successfully submitted for withdrawal, please wait patiently."
         ) {
-          message =
-            currentTexts.pending;
-        }
 
+  message = currentTexts.pending;
+
+}
         else if (
-          message ===
-          "Not enough balance"
+          message === "Not enough balance" ||
+          message === "Not enough balance."
         ) {
-          message =
-            currentTexts.insufficient;
+          message = currentTexts.insufficient;
         }
-
         else if (
-          message ===
-          "Invalid withdraw amount"
+          message === "Invalid withdraw amount"
         ) {
-          message =
-            currentTexts.minimum;
+          message = currentTexts.minimum;
         }
-
         else {
           message =
-            result.msg ||
-            currentTexts.failed;
+          result.msg ||
+          currentTexts.failed;
         }
 
         showMessage(message);
-        okBtn.disabled =
-          false;
-        okBtn.innerText =
+          okBtn.disabled = false;
+          okBtn.innerText =
           currentTexts.ok;
 
       }
