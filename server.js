@@ -622,6 +622,51 @@ app.post("/admin/approve", verifyAdmin, async (req, res) => {
   }
 });
 
+app.post("/admin/reject-deposit", verifyAdmin, async (req, res) => {
+
+  try {
+
+    const { id } = req.body;
+
+    const deposit = await Deposit.findById(id);
+
+    if (!deposit) {
+      return res.json({
+        success: false,
+        message: "Deposit not found"
+      });
+    }
+
+    if (deposit.status !== "Pending") {
+      return res.json({
+        success: false,
+        message: "This deposit is no longer pending"
+      });
+    }
+
+    deposit.status = "Rejected";
+    deposit.approvedAmount = 0;
+
+    await deposit.save();
+
+    res.json({
+      success: true,
+      message: "Deposit rejected"
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+});
+
 app.get("/balance", verifyToken, async (req, res) => {
 
   try {
@@ -738,7 +783,7 @@ app.post("/admin/approve-withdraw", verifyAdmin, async (req, res) => {
 
     const withdraw = await Withdraw.findById(id);
     if (!withdraw || withdraw.status === "Success") {
-      return res.json({ success: false, message: "Withdraw not found" });
+      return res.json({ success: false, message: "Withdraw is not processing" });
     }
 
     const user = await User.findOne({ username: withdraw.username });
@@ -760,6 +805,42 @@ app.post("/admin/approve-withdraw", verifyAdmin, async (req, res) => {
     });
 
   } catch (err) {
+    res.json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
+app.post("/admin/reject-withdraw", verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const withdraw = await Withdraw.findById(id);
+    if (!withdraw) {
+      return res.json({
+        success: false,
+        message: "Withdraw not found"
+      });
+    }
+
+    if (withdraw.status !== "Processing") {
+      return res.json({
+        success: false,
+        message: "This withdrawal is no longer processing"
+      });
+    }
+
+    withdraw.status = "Rejected";
+    withdraw.approvedAmount = 0;
+    await withdraw.save();
+    res.json({
+      success: true,
+      message: "Withdraw rejected"
+    });
+
+  } catch (err) {
+    console.log(err);
+
     res.json({
       success: false,
       message: err.message

@@ -6,6 +6,8 @@
 <title>Record</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 body{
@@ -141,51 +143,59 @@ html {
 
 <div class="bottom-nav">
 
-  <div
-    class="nav-item"
-    data-page="home.html"
-    onclick="goPage('home.html')"
-  >
-    <span>🏠</span>
+  <div class="nav-item"
+       data-page="home.html"
+       onclick="goPage('home.html')">
+    <span class="home-icon-box">
+      <svg class="home-svg" viewBox="0 0 48 48">
+        <path
+          d="M8 22 L24 8 L40 22"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+        <path
+          d="M12 20 V40 H21 V30 H27 V40 H36 V20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
     <div id="navHome">Home</div>
   </div>
 
-  <div
-    class="nav-item"
-    data-page="service.html"
-    onclick="goPage('service.html')"
-  >
-    <span>🎧</span>
+  <div class="nav-item"
+       data-page="service.html"
+       onclick="goPage('service.html')">
+    <i class="fa-solid fa-headset nav-icon"></i>
     <div id="navService">Service</div>
   </div>
 
-  <div
-    class="nav-item"
-    data-page="menu.html"
-    onclick="goPage('menu.html')"
-  >
-    <span>🛍️</span>
+  <div class="nav-item"
+       data-page="menu.html"
+       onclick="goPage('menu.html')">
+    <i class="fa-solid fa-bag-shopping nav-icon"></i>
     <div id="navMenu">Menu</div>
   </div>
 
-  <div
-    class="nav-item"
-    data-page="record.html"
-    onclick="goPage('record.html')"
-  >
-    <span>📄</span>
+  <div class="nav-item active"
+       data-page="record.html"
+       onclick="goPage('record.html')">
+    <i class="fa-regular fa-clipboard nav-icon"></i>
     <div id="navRecord">Record</div>
   </div>
-
-  <div
-    class="nav-item"
-    data-page="mine.html"
-    onclick="goPage('mine.html')"
-  >
-    <span>👤</span>
+  <div class="nav-item"
+       data-page="mine.html"
+       onclick="goPage('mine.html')">
+    <i class="fa-regular fa-user nav-icon"></i>
     <div id="navMine">Mine</div>
   </div>
-
 </div>
 
 <div id="customAlert"></div>

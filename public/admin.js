@@ -325,17 +325,31 @@ async function loadDeposits() {
   box.innerHTML = "";
 
   deposits
-    .filter(d => d.status === "Pending")
-    .forEach(dep => {
-      box.innerHTML += `
-        <div class="admin-item">
-          <p>User: ${dep.username}</p>
-          <p>Requested Deposit: ${dep.amount}</p>
-          <input type="number" id="dep_${dep._id}" value="${dep.amount}">
-          <button class="green-btn" onclick="approveDeposit('${dep._id}')">Approve Deposit</button>
-        </div>
-      `;
-    });
+  .filter(d => d.status === "Pending")
+  .forEach(dep => {
+    box.innerHTML += `
+      <div class="admin-item">
+        <p>User: ${dep.username}</p>
+        <p>Requested Deposit: ${dep.amount}</p>
+        <input
+          type="number"
+          id="dep_${dep._id}"
+          value="${dep.amount}"
+        >
+        <button
+          class="green-btn"
+          onclick="approveDeposit('${dep._id}')">
+          Approve Deposit
+        </button>
+        <button
+          class="reject-btn"
+          onclick="rejectDeposit('${dep._id}')">
+          Reject Deposit
+        </button>
+      </div>
+    `;
+
+  });
 }
 
 async function approveDeposit(id) {
@@ -355,6 +369,47 @@ async function approveDeposit(id) {
   loadDeposits();
 }
 
+async function rejectDeposit(id) {
+
+  const confirmReject = await showConfirm(
+    "Are you sure you want to reject this deposit?"
+  );
+
+  if (!confirmReject) return;
+
+  try {
+
+    const res = await fetch("/admin/reject-deposit", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+
+      body: JSON.stringify({
+        id
+      })
+
+    });
+
+    const data = await res.json();
+
+    showMessage(data.message);
+
+    if (data.success) {
+      loadDeposits();
+    }
+
+  } catch (err) {
+
+    showMessage("Server error");
+
+  }
+
+}
+
 async function loadWithdraws() {
   const res = await fetch("/admin/withdraws", {
     headers: { Authorization: "Bearer " + token }
@@ -365,17 +420,30 @@ async function loadWithdraws() {
   box.innerHTML = "";
 
   withdraws
-    .filter(w => w.status === "Processing")
-    .forEach(wd => {
-      box.innerHTML += `
-        <div class="admin-item">
-          <p>User: ${wd.username}</p>
-          <p>Requested Withdraw: ${wd.amount}</p>
-          <input type="number" id="wd_${wd._id}" value="${wd.amount}">
-          <button class="green-btn" onclick="approveWithdraw('${wd._id}')">Approve Withdraw</button>
-        </div>
-      `;
-    });
+  .filter(w => w.status === "Processing")
+  .forEach(wd => {
+    box.innerHTML += `
+      <div class="admin-item">
+        <p>User: ${wd.username}</p>
+        <p>Requested Withdraw: ${wd.amount}</p>
+        <input
+          type="number"
+          id="wd_${wd._id}"
+          value="${wd.amount}"
+        >
+        <button
+          class="green-btn"
+          onclick="approveWithdraw('${wd._id}')">
+          Approve Withdraw
+        </button>
+        <button
+          class="reject-btn"
+          onclick="rejectWithdraw('${wd._id}')">
+          Reject Withdraw
+        </button>
+      </div>
+    `;
+  });
 }
 
 async function approveWithdraw(id) {
@@ -393,6 +461,47 @@ async function approveWithdraw(id) {
   const data = await res.json();
   showMessage(data.message);
   loadWithdraws();
+}
+
+async function rejectWithdraw(id) {
+
+  const confirmReject = await showConfirm(
+    "Are you sure you want to reject this withdrawal?"
+  );
+
+  if (!confirmReject) return;
+
+  try {
+
+    const res = await fetch("/admin/reject-withdraw", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+
+      body: JSON.stringify({
+        id
+      })
+
+    });
+
+    const data = await res.json();
+
+    showMessage(data.message);
+
+    if (data.success) {
+      loadWithdraws();
+    }
+
+  } catch (err) {
+
+    showMessage("Server error");
+
+  }
+
 }
 
 function logout() {

@@ -79,6 +79,10 @@
       background:#d97706;
     }
 
+    .rejected{
+      background:#dc3545;
+    }
+
     .empty{
       text-align:center;
       color:#999;
@@ -121,6 +125,7 @@ const depositTexts = {
     time: "Time",
     success: "Success",
     pending: "Pending",
+    rejected: "Rejected",
     noDepositRecords: "No deposit records found",
     loading: "Loading...",
     userNotLoggedIn: "User not logged in",
@@ -134,6 +139,7 @@ const depositTexts = {
     time: "时间",
     success: "成功",
     pending: "处理中",
+    rejected: "已拒绝",
     noDepositRecords: "未找到存款记录",
     loading: "加载中...",
     userNotLoggedIn: "用户未登录",
@@ -147,6 +153,7 @@ const depositTexts = {
     time: "समय",
     success: "सफल",
     pending: "लंबित",
+    rejected: "अस्वीकृत",
     noDepositRecords: "कोई जमा रिकॉर्ड नहीं मिला",
     loading: "लोड हो रहा है...",
     userNotLoggedIn: "उपयोगकर्ता लॉग इन नहीं है",
@@ -160,6 +167,7 @@ const depositTexts = {
     time: "Hora",
     success: "Éxito",
     pending: "Pendiente",
+    rejected: "Rechazado",
     noDepositRecords: "No se encontraron registros de depósitos",
     loading: "Cargando...",
     userNotLoggedIn: "Usuario no ha iniciado sesión",
@@ -173,6 +181,7 @@ const depositTexts = {
     time: "Heure",
     success: "Réussi",
     pending: "En attente",
+    rejected: "Rejeté",
     noDepositRecords: "Aucun historique de dépôt trouvé",
     loading: "Chargement...",
     userNotLoggedIn: "Utilisateur non connecté",
@@ -186,6 +195,7 @@ const depositTexts = {
     time: "الوقت",
     success: "ناجح",
     pending: "قيد الانتظار",
+    rejected: "مرفوض",
     noDepositRecords: "لم يتم العثور على سجلات إيداع",
     loading: "جارٍ التحميل...",
     userNotLoggedIn: "المستخدم غير مسجل الدخول",
@@ -199,6 +209,7 @@ const depositTexts = {
     time: "সময়",
     success: "সফল",
     pending: "অপেক্ষমাণ",
+    rejected: "বাতিল",
     noDepositRecords: "কোনো ডিপোজিট রেকর্ড পাওয়া যায়নি",
     loading: "লোড হচ্ছে...",
     userNotLoggedIn: "ইউজার লগইন করা নেই",
@@ -212,6 +223,7 @@ const depositTexts = {
     time: "Hora",
     success: "Sucesso",
     pending: "Pendente",
+    rejected: "Rejeitado",
     noDepositRecords: "Nenhum registro de depósito encontrado",
     loading: "Carregando...",
     userNotLoggedIn: "Usuário não conectado",
@@ -225,6 +237,7 @@ const depositTexts = {
     time: "Время",
     success: "Успешно",
     pending: "В обработке",
+    rejected: "Отклонено",
     noDepositRecords: "История пополнений не найдена",
     loading: "Загрузка...",
     userNotLoggedIn: "Пользователь не вошёл в систему",
@@ -238,6 +251,7 @@ const depositTexts = {
     time: "وقت",
     success: "کامیاب",
     pending: "زیر التوا",
+    rejected: "مسترد",
     noDepositRecords: "جمع کرنے کا کوئی ریکارڈ نہیں ملا",
     loading: "لوڈ ہو رہا ہے...",
     userNotLoggedIn: "صارف لاگ ان نہیں ہے",
@@ -251,6 +265,7 @@ const depositTexts = {
     time: "Waktu",
     success: "Berhasil",
     pending: "Tertunda",
+    rejected: "Ditolak",
     noDepositRecords: "Tidak ada catatan deposit",
     loading: "Memuat...",
     userNotLoggedIn: "Pengguna belum masuk",
@@ -264,6 +279,7 @@ const depositTexts = {
     time: "Zeit",
     success: "Erfolgreich",
     pending: "Ausstehend",
+    rejected: "Abgelehnt",
     noDepositRecords: "Keine Einzahlungsdaten gefunden",
     loading: "Wird geladen...",
     userNotLoggedIn: "Benutzer nicht angemeldet",
@@ -277,6 +293,7 @@ const depositTexts = {
     time: "時間",
     success: "成功",
     pending: "保留中",
+    rejected: "拒否",
     noDepositRecords: "入金履歴が見つかりません",
     loading: "読み込み中...",
     userNotLoggedIn: "ユーザーがログインしていません",
@@ -290,6 +307,7 @@ const depositTexts = {
     time: "Ora",
     success: "Successo",
     pending: "In attesa",
+    rejected: "Rifiutato",
     noDepositRecords: "Nessun record di deposito trovato",
     loading: "Caricamento...",
     userNotLoggedIn: "Utente non connesso",
@@ -303,6 +321,7 @@ const depositTexts = {
     time: "Zaman",
     success: "Başarılı",
     pending: "Beklemede",
+    rejected: "Reddedildi",
     noDepositRecords: "Para yatırma kaydı bulunamadı",
     loading: "Yükleniyor...",
     userNotLoggedIn: "Kullanıcı giriş yapmamış",
@@ -316,6 +335,7 @@ const depositTexts = {
     time: "زمان",
     success: "موفق",
     pending: "در انتظار",
+    rejected: "رد شده",
     noDepositRecords: "هیچ سابقه واریزی یافت نشد",
     loading: "در حال بارگذاری...",
     userNotLoggedIn: "کاربر وارد نشده است",
@@ -329,6 +349,7 @@ const depositTexts = {
     time: "Tijd",
     success: "Geslaagd",
     pending: "In behandeling",
+    rejected: "Afgewezen",
     noDepositRecords: "Geen stortingsrecords gevonden",
     loading: "Laden...",
     userNotLoggedIn: "Gebruiker is niet ingelogd",
@@ -347,6 +368,9 @@ document.querySelector(
 function translateStatus(status) {
   if (status === "Pending") {
     return currentTexts.pending;
+  }
+  if (status === "Rejected") {
+    return currentTexts.rejected;
   }
   return currentTexts.success;
 }
@@ -381,10 +405,15 @@ async function loadDeposits() {
     }
 
     records.forEach(r => {
-      let statusClass =
-        r.status === "Pending"
-          ? "pending"
-          : "success";
+      let statusClass = "success";
+
+if (r.status === "Pending") {
+  statusClass = "pending";
+}
+
+if (r.status === "Rejected") {
+  statusClass = "rejected";
+}
       box.innerHTML += `
         <div class="record-item">
           <div class="status ${statusClass}">
