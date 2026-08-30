@@ -34,61 +34,80 @@
     </div>
 
     <div class="action-icons">
-      <div onclick="goPage('deposit.html')">
-        💳
-        <p data-lang="deposit">Deposit</p>
-      </div>
 
-      <div onclick="checkWithdrawPassword()">
-        💳
-        <p data-lang="withdrawal">Withdrawal</p> 
-      </div>
-    </div>
+  <div onclick="goPage('deposit.html')">
+    <span class="wallet-box">
+      <span class="wallet-icon deposit-icon"></span>
+    </span>
+    <p data-lang="deposit">Deposit</p>
+  </div>
+
+  <div onclick="checkWithdrawPassword()">
+    <span class="wallet-box">
+      <span class="wallet-icon withdrawal-icon"></span>
+    </span>
+    <p data-lang="withdrawal">Withdrawal</p>
+  </div>
+
+</div>
   </div>
 </div>
 
 <div class="menu-grid">
-  <div onclick="goPage('team.html')"> 
-  <span>👥</span>
-  <span data-lang="teams">Teams</span>
-</div> 
- 
-<div onclick="goPage('record.html')"> 
-  <span>📄</span>
-  <span data-lang="record">Record</span>
-</div> 
- 
-<div onclick="goPage('wallet.html')"> 
-  <span>💳</span>
-  <span data-lang="walletManagement">Wallet management</span>
-</div> 
- 
-<div onclick="goPage('invite.html')"> 
-  <span>📩</span>
-  <span data-lang="inviteFriends">Invite friends</span>
-</div>
+
+  <div onclick="goPage('team.html')">
+    <span class="css-icon team-icon"></span>
+    <span data-lang="teams">Teams</span>
+  </div>
+
+  <div onclick="goPage('record.html')">
+    <span class="css-icon record-icon"></span>
+    <span data-lang="record">Record</span>
+  </div>
+
+  <div onclick="goPage('wallet.html')">
+    <span class="css-icon wallet-menu-icon"></span>
+    <span data-lang="walletManagement">Wallet</span>
+  </div>
+
+  <div onclick="goPage('invite.html')">
+    <span class="css-icon invite-icon"></span>
+    <span data-lang="inviteFriends">Invite friends</span>
+  </div>
 </div>
 
 <div class="menu-list">
 
   <div class="menu-item" onclick="goPage('profile.html')">
-    <span>👤 <span data-lang="profile">Profile</span></span>
-    <span>›</span>
+    <span class="menu-left">
+      <i class="fa-regular fa-id-card menu-icon"></i>
+      <span data-lang="profile">Profile</span>
+    </span>
+    <i class="fa-solid fa-chevron-right menu-arrow"></i>
   </div>
 
   <div class="menu-item" onclick="goPage('deposit-record.html')">
-    <span>📄 <span data-lang="depositRecords">Deposit records</span></span>
-    <span>›</span>
+    <span class="menu-left">
+      <i class="fa-solid fa-clipboard-list menu-icon"></i>
+      <span data-lang="depositRecords">Deposit records</span>
+    </span>
+    <i class="fa-solid fa-chevron-right menu-arrow"></i>
   </div>
 
   <div class="menu-item" onclick="goPage('withdraw-record.html')">
-    <span>💳 <span data-lang="withdrawRecords">Withdrawal records</span></span>
-    <span>›</span>
+    <span class="menu-left">
+      <i class="fa-solid fa-money-bill-transfer menu-icon"></i>
+      <span data-lang="withdrawRecords">Withdrawal records</span>
+    </span>
+    <i class="fa-solid fa-chevron-right menu-arrow"></i>
   </div>
 
   <div class="menu-item" onclick="goPage('setting.html')">
-    <span>⚙ <span data-lang="settings">Settings</span></span>
-    <span>›</span>
+    <span class="menu-left">
+      <i class="fa-solid fa-gear menu-icon"></i>
+      <span data-lang="settings">Settings</span>
+    </span>
+    <i class="fa-solid fa-chevron-right menu-arrow"></i>
   </div>
 
 </div>
@@ -323,7 +342,7 @@ const texts = {
     withdrawal: "Withdrawal",
     teams: "Teams",
     record: "Record",
-    walletManagement: "Wallet management",
+    walletManagement: "Wallet",
     inviteFriends: "Invite friends",
     profile: "Profile",
     depositRecords: "Deposit records",
@@ -355,7 +374,7 @@ const texts = {
     withdrawal: "提款",
     teams: "团队",
     record: "记录",
-    walletManagement: "钱包管理",
+    walletManagement: "钱包",
     inviteFriends: "邀请好友",
     profile: "个人资料",
     depositRecords: "存款记录",
@@ -387,7 +406,7 @@ const texts = {
     withdrawal: "निकासी",
     teams: "टीम",
     record: "रिकॉर्ड",
-    walletManagement: "वॉलेट प्रबंधन",
+    walletManagement: "वॉलेट",
     inviteFriends: "दोस्तों को आमंत्रित करें",
     profile: "प्रोफ़ाइल",
     depositRecords: "जमा रिकॉर्ड",
@@ -410,7 +429,6 @@ const texts = {
 
   },
 
-
   es: {
 
     invitationCode: "Código de invitación",
@@ -419,7 +437,7 @@ const texts = {
     withdrawal: "Retiro",
     teams: "Equipos",
     record: "Registro",
-    walletManagement: "Gestión de billetera",
+    walletManagement: "Billetera",
     inviteFriends: "Invitar amigos",
     profile: "Perfil",
     depositRecords: "Registros de depósitos",
@@ -451,7 +469,7 @@ const texts = {
     withdrawal: "Retrait",
     teams: "Équipes",
     record: "Historique",
-    walletManagement: "Gestion du portefeuille",
+    walletManagement: "Portefeuille",
     inviteFriends: "Inviter des amis",
     profile: "Profil",
     depositRecords: "Historique des dépôts",
@@ -483,7 +501,7 @@ const texts = {
     withdrawal: "سحب",
     teams: "الفريق",
     record: "السجل",
-    walletManagement: "إدارة المحفظة",
+    walletManagement: "محفظة",
     inviteFriends: "دعوة الأصدقاء",
     profile: "الملف الشخصي",
     depositRecords: "سجلات الإيداع",
@@ -515,7 +533,7 @@ const texts = {
     withdrawal: "উইথড্র",
     teams: "টিম",
     record: "রেকর্ড",
-    walletManagement: "ওয়ালেট ম্যানেজমেন্ট",
+    walletManagement: "ওয়ালেট",
     inviteFriends: "বন্ধুদের আমন্ত্রণ করুন",
     profile: "প্রোফাইল",
     depositRecords: "ডিপোজিট রেকর্ড",
@@ -547,7 +565,7 @@ const texts = {
     withdrawal: "Retirada",
     teams: "Equipes",
     record: "Registro",
-    walletManagement: "Gestão da carteira",
+    walletManagement: "Carteira",
     inviteFriends: "Convidar amigos",
     profile: "Perfil",
     depositRecords: "Registros de depósitos",
@@ -579,7 +597,7 @@ const texts = {
     withdrawal: "Вывод",
     teams: "Команда",
     record: "Записи",
-    walletManagement: "Управление кошельком",
+    walletManagement: "Kошельком",
     inviteFriends: "Пригласить друзей",
     profile: "Профиль",
     depositRecords: "История пополнений",
@@ -611,7 +629,7 @@ const texts = {
     withdrawal: "رقم نکلوانا",
     teams: "ٹیمیں",
     record: "ریکارڈ",
-    walletManagement: "والیٹ مینجمنٹ",
+    walletManagement: "بٹوے",
     inviteFriends: "دوستوں کو مدعو کریں",
     profile: "پروفائل",
     depositRecords: "جمع ریکارڈ",
@@ -643,7 +661,7 @@ const texts = {
     withdrawal: "Penarikan",
     teams: "Tim",
     record: "Catatan",
-    walletManagement: "Manajemen dompet",
+    walletManagement: "Dompet",
     inviteFriends: "Undang teman",
     profile: "Profil",
     depositRecords: "Catatan deposit",
@@ -675,7 +693,7 @@ const texts = {
     withdrawal: "Auszahlung",
     teams: "Teams",
     record: "Aufzeichnungen",
-    walletManagement: "Wallet-Verwaltung",
+    walletManagement: "Wallet",
     inviteFriends: "Freunde einladen",
     profile: "Profil",
     depositRecords: "Einzahlungsverlauf",
@@ -707,7 +725,7 @@ const texts = {
     withdrawal: "出金",
     teams: "チーム",
     record: "記録",
-    walletManagement: "ウォレット管理",
+    walletManagement: "財布",
     inviteFriends: "友達を招待",
     profile: "プロフィール",
     depositRecords: "入金履歴",
@@ -739,7 +757,7 @@ const texts = {
     withdrawal: "Prelievo",
     teams: "Squadre",
     record: "Registro",
-    walletManagement: "Gestione portafoglio",
+    walletManagement: "Portafoglio",
     inviteFriends: "Invita amici",
     profile: "Profilo",
     depositRecords: "Cronologia depositi",
@@ -771,7 +789,7 @@ const texts = {
     withdrawal: "Para çekme",
     teams: "Takımlar",
     record: "Kayıt",
-    walletManagement: "Cüzdan yönetimi",
+    walletManagement: "Cüzdan",
     inviteFriends: "Arkadaşlarını davet et",
     profile: "Profil",
     depositRecords: "Para yatırma kayıtları",
@@ -803,7 +821,7 @@ const texts = {
     withdrawal: "برداشت",
     teams: "تیم‌ها",
     record: "سوابق",
-    walletManagement: "مدیریت کیف پول",
+    walletManagement: "کیف پول",
     inviteFriends: "دعوت از دوستان",
     profile: "پروفایل",
     depositRecords: "سوابق واریز",
@@ -835,7 +853,7 @@ const texts = {
     withdrawal: "Opnemen",
     teams: "Teams",
     record: "Records",
-    walletManagement: "Walletbeheer",
+    walletManagement: "Portemonnee",
     inviteFriends: "Vrienden uitnodigen",
     profile: "Profiel",
     depositRecords: "Stortingsrecords",

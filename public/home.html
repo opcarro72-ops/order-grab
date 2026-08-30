@@ -22,7 +22,7 @@
 
 <div class="live-box">
   <div class="live-left">
-    <span class="live-icon">👤</span>
+    <span class="live-icon"></span>
     <span id="liveUser">b****2 successful</span>
   </div>
   <div id="liveAmount">108.85 USDT</div>
@@ -274,27 +274,48 @@ function openPage(page){
 }
 
 const users = [
-  "a******1","b****2","c******3",
-  "d****4","z****9","j*******7",
-  "p*****0","t******8","s********6"
+  "W******1","B****2","C******3",
+  "D****4","Z****9","J*******7",
+  "3*****0","T******8","S********6","Z******3","T******2","Y******9","A******2","F******7"
 ];
 
 const amounts = [
   "120.50","18.20","250.00",
   "76.30","20.00","40.50",
-  "80.00","100.30","35.00"
+  "80.00","100.30","35.00","140.30","232.50","63.20","88.20","153.20"
 ];
 
-setInterval(() => {
-  const i = Math.floor(Math.random() * users.length);
+const liveBox = document.querySelector(".live-box");
+const liveUser = document.getElementById("liveUser");
+const liveAmount = document.getElementById("liveAmount");
 
-  document.getElementById("liveUser").innerText =
-    users[i] + " successful";
+let lastIndex = -1;
 
-  document.getElementById("liveAmount").innerText =
-    amounts[i] + " USDT";
+function showNextLiveMessage() {
+  liveBox.classList.remove("live-enter");
+  liveBox.classList.add("live-exit");
 
-}, 2000);
+  setTimeout(() => {
+
+    let i;
+    do {
+      i = Math.floor(Math.random() * users.length);
+    } while (i === lastIndex && users.length > 1);
+    lastIndex = i;
+    liveUser.innerText =
+      users[i] + " successful";
+    liveAmount.innerText =
+      amounts[i] + " USDT";
+    liveBox.classList.remove("live-exit");
+    void liveBox.offsetWidth;
+    liveBox.classList.add("live-enter");
+  }, 600);
+}
+
+liveBox.classList.add("live-enter");
+
+setInterval(showNextLiveMessage, 2600);
+
 </script>
 
 </body>

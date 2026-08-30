@@ -129,22 +129,177 @@ button.active {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   text-align: center;
   background: #fff;
-  padding: 18px 0;
+  padding: 10px 0 12px;
   margin-top: -10px;
 }
 
-.menu-grid div {
+.menu-grid > div {
   font-size: 13px;
-  color: #555;
+  color: #222;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.menu-grid div > span:first-child {
+.css-icon {
+  position: relative;
   display: block;
-  font-size: 22px;
-  margin-bottom: 5px;
+  width: 45px;
+  height: 45px;
+  margin-bottom: 1px;
+}
+
+.team-icon {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  overflow: visible;
+  margin-top: 10px;
+}
+
+.team-icon::before {
+  content: "";
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  background: #24ac18;
+  border-radius: 50%;
+  left: 12px;
+  top: 2px;
+}
+
+.team-icon::after {
+  content: "";
+  position: absolute;
+  width: 32px;
+  height: 18px;
+  background: #24ac18;
+  border-radius: 20px 20px 9px 9px;
+  left: 6px;
+  bottom: 4px;
+}
+
+.team-icon span {
+  display: none;
+}
+
+.record-icon {
+  position: relative;
+  width: 36px;
+  height: 42px;
+  background: #42c98d;
+  border-radius: 5px;
+  margin-top: 13px;
+}
+
+.record-icon::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 9px;
+  width: 22px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
+
+  box-shadow:
+    0 8px 0 #fff,
+    0 16px 0 #fff;
+}
+
+.record-icon::after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 22px;
+  background: #42c98d;
+  border: 4px solid #42c98d;
+  border-left: 0;
+  border-radius: 0 12px 12px 0;
+  right: -7px;
+  bottom: 0;
+  transform: rotate(30deg);
+}
+
+.wallet-menu-icon {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  background: #f0444b;
+  border-radius: 50%;
+  margin-top: 11px;
+}
+
+.wallet-menu-icon::before {
+  content: "";
+  position: absolute;
+  width: 21px;
+  height: 4px;
+  background: #fff;
+  left: 11px;
+  top: 23px;
+  transform: rotate(-43deg);
+  border-radius: 5px;
+}
+
+.wallet-menu-icon::after {
+  content: "";
+  position: absolute;
+  width: 23px;
+  height: 4px;
+  background: #fff;
+  left: 23px;
+  top: 19px;
+  transform: rotate(-43deg);
+  border-radius: 5px;
+}
+
+.invite-icon {
+  position: relative;
+  width: 45px;
+  height: 34px;
+  background: #2997e8;
+  border-radius: 6px;
+  margin-top: 24px;
+}
+
+.invite-icon::before {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  background: #2997e8;
+  left: 8px;
+  top: -10px;
+  border-radius: 16px;
+}
+
+.invite-icon::after {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 14px;
+  left: 8px;
+  top: 2px;
+  border-left: 3px solid #fff;
+  border-bottom: 3px solid #fff;
+  transform: rotate(-45deg);
+  box-sizing: border-box;
+}
+
+.menu-grid div > span[data-lang] {
+  display: block;
+  font-size: 15px;
+  line-height: 19px;
+  color: #222;
+  text-align: center;
+  max-width: 110px;
+  margin-top: 2px;
 }
 
 .menu-grid div > span[data-lang] {
@@ -153,24 +308,54 @@ button.active {
 }
 
 .menu-list {
-  margin: 12px;
+  margin: 12px 10px;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .menu-item {
+  width: 100%;
+  height: 74px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 5px;
-  border-bottom: 1px solid #eee;
-  font-size: 3px;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid #eeeeee;
+  font-size: 13px;
+  color: #222;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .menu-item:last-child {
   border-bottom: none;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.menu-icon {
+  width: 30px;
+  text-align: center;
+  font-size: 26px;
+  color: #9da5b5;
+  flex-shrink: 0;
+}
+
+.menu-arrow {
+  font-size: 22px;
+  color: #9da5b5;
+  flex-shrink: 0;
+}
+
+.menu-item:active {
+  background: #f7f7f7;
 }
 
 #balance {
@@ -701,15 +886,56 @@ transform: translateX(-50%);
   height:40px;
 }
 
-.live-box{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#f5f5f5;
-  margin:10px;
-  padding:12px;
-  border-radius:8px;
-  font-size:14px;
+/* =================================
+   LIVE MESSAGE ANIMATION
+   ================================= */
+
+.live-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  margin: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+
+  overflow: hidden;
+  position: relative;
+}
+
+/* নতুন message নিচ থেকে উঠবে */
+.live-box.live-enter {
+  animation: liveMessageIn 0.6s ease-out;
+}
+
+@keyframes liveMessageIn {
+  0% {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* message উপরের দিকে চলে যাবে */
+.live-box.live-exit {
+  animation: liveMessageOut 0.6s ease-in;
+}
+
+@keyframes liveMessageOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-35px);
+  }
 }
 
 .live-left{
@@ -718,9 +944,36 @@ transform: translateX(-50%);
   gap:8px;
 }
 
-.live-icon{
-  color:red;
-  font-size:18px;
+.live-icon {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.live-icon::before {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 3px solid #2b971c;
+  border-radius: 50%;
+  top: 0;
+  left: 8px;
+  box-sizing: border-box;
+}
+
+.live-icon::after {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 13px;
+  border: 3px solid #2b971c;
+  border-radius: 13px 13px 3px 3px;
+  bottom: 4px;
+  left: 2.5px;
+  box-sizing: border-box;
 }
 
 .platform-title{
@@ -1241,4 +1494,155 @@ transform: translateX(-50%);
     opacity:1;
     transform:translate(-50%, 0);
   }
+}
+
+.menu-list .menu-item {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  height: 74px;
+  padding: 0 20px;
+  font-size: 16px;
+  color: #222;
+}
+
+.menu-list .menu-item .menu-left {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 18px;
+}
+
+.menu-list .menu-item .menu-left > span {
+  display: inline !important;
+  margin: 0 !important;
+  font-size: 16px !important;
+  white-space: nowrap;
+}
+
+.menu-list .menu-item .menu-icon {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  min-width: 10px;
+  font-size: 16px;
+  color: #9da5b5;
+  margin: 0 !important;
+}
+
+.menu-list .menu-item .menu-arrow {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #9da5b5;
+  margin: 0 !important;
+}
+
+.action-icons {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-left: auto;
+}
+
+.action-icons > div {
+  width: 95px;
+  text-align: center;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.wallet-box {
+  width: 82px;
+  height: 82px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 7px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.wallet-icon {
+  position: relative;
+  display: block;
+  width: 58px;
+  height: 64px;
+  box-sizing: border-box;
+}
+
+.deposit-icon {
+  width: 58px;
+  height: 44px;
+  background: #1769d5;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+.deposit-icon::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -7px;
+  width: 38px;
+  height: 14px;
+  background: #1769d5;
+  border-radius: 7px 7px 0 0;
+}
+
+.deposit-icon::after {
+  content: "";
+  position: absolute;
+  right: 7px;
+  top: 14px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.withdrawal-icon {
+  width: 58px;
+  height: 44px;
+  background: #1769d5;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+.withdrawal-icon::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 100%;
+  height: 5px;
+  background: #fff;
+}
+
+.withdrawal-icon::after {
+  content: "";
+  position: absolute;
+  right: 7px;
+  bottom: 8px;
+  width: 19px;
+  height: 7px;
+  background: #fff;
+  transform: skewX(-28deg);
+  border-radius: 2px;
+}
+
+.action-icons p {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
 }
