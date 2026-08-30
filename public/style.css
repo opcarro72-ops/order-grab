@@ -1563,11 +1563,11 @@ transform: translateX(-50%);
 }
 
 .deposit-icon {
-  width: 44px;
-  height: 30px;
+  width: 48px;
+  height: 34px;
   background: #1769d5;
   border-radius: 7px;
-  margin-top: 10px;
+  margin-top: 9px;
 }
 
 .deposit-icon::before {
