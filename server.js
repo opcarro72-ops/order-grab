@@ -67,6 +67,11 @@ const userSchema = new mongoose.Schema({
 
   password: String,
 
+  sessionVersion: {
+    type: Number,
+    default: 0
+  },
+
   profileImage: {
     type: String,
     default: "default.png"
@@ -270,7 +275,7 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model("Order", orderSchema);
 
-function verifyToken(req, res, next) {
+async function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
@@ -282,15 +287,37 @@ function verifyToken(req, res, next) {
 
   try {
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.userId = decoded.id;
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    if (
+      decoded.sessionVersion !== user.sessionVersion
+    ) {
+      return res.status(401).json({
+        success: false,
+        msg: "Session expired"
+      });
+    }
+
+    req.userId = user._id;
     next();
 
   } catch (err) {
     return res.status(401).json({
       success: false,
-      msg: "Invalid token"
+      msg: "Invalid or expired token"
     });
   }
 }
@@ -429,9 +456,14 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+    {
+      id: user._id,
+      sessionVersion: user.sessionVersion
+    },
       process.env.JWT_SECRET,
-      { expiresIn: "365d" }
+    {
+      expiresIn: "365d"
+     }
     );
 
     res.json({
@@ -1400,6 +1432,8 @@ app.post("/admin/reset-user-password", verifyAdmin, async (req, res) => {
 
     user.password = hashedPassword;
 
+    user.sessionVersion = (user.sessionVersion || 0) + 1;
+
     await user.save();
 
     res.json({
@@ -1414,6 +1448,14 @@ app.post("/admin/reset-user-password", verifyAdmin, async (req, res) => {
       msg: err.message
     });
   }
+
+});
+
+app.get("/session-check", verifyToken, async (req, res) => {
+
+  res.json({
+    success: true
+  });
 
 });
 

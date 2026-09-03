@@ -590,3 +590,40 @@ function setActiveNav() {
     }
   });
 }
+
+(function checkLoginSession() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return;
+  }
+
+  async function verifyCurrentSession() {
+    const currentToken = localStorage.getItem("token");
+    if (!currentToken) {
+      return;
+    }
+
+    try {
+      const res = await fetch("/session-check", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + currentToken
+        }
+      });
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("inviteCode");
+        window.location.href = "/login.html";
+      }
+
+    } catch (err) {
+      console.log("Session check error:", err);
+    }
+  }
+
+  verifyCurrentSession();
+  setInterval(verifyCurrentSession, 5000);
+
+})();
