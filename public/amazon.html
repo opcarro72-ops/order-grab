@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Amazon</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
   <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body class="amazon-page">
@@ -726,7 +728,9 @@ let currentCommission = 0;
 let currentOrderAmount = 0;
 
 async function openPopup() {
+  showPageLoading();
 
+  try {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
 
@@ -743,18 +747,20 @@ async function openPopup() {
   );
 
   if (pending) {
+    hidePageLoading();
     showMessage(amazonLanguage.unpaidOrder);
+    hidePageLoading();
     return;
   }
-
-  try {
 
     const res = await fetch("/task-status", {
       headers: { Authorization: "Bearer " + token }
     });
 
     if (!res.ok) {
+      hidePageLoading();
   showMessage(amazonLanguage.serverResponseFailed);
+  hidePageLoading();
   return;
 }
 
@@ -764,21 +770,25 @@ async function openPopup() {
       showMessage(
   data.msg || amazonLanguage.failedLoadStatus
 );
+hidePageLoading();
       return;
     }
 
     if (data.balance < 20) {
       showMessage(amazonLanguage.insufficientBalance);
+      hidePageLoading();
       return;
     }
 
     if (data.balance > 498.99) {
       showMessage(amazonLanguage.amazonUpgrade);
+      hidePageLoading();
       return;
     }
 
     if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
       showMessage(amazonLanguage.noOrder);
+      hidePageLoading();
       return;
     }
 
@@ -1032,6 +1042,7 @@ Number(
 
     document.getElementById("popup").style.display =
       "flex";
+      hidePageLoading();
 
     await fetch("/save-order", {
 
@@ -1061,6 +1072,7 @@ Number(
 }
 
 async function submitOrder() {
+  showPageLoading();
 
   const token = localStorage.getItem("token");
 
@@ -1083,6 +1095,7 @@ async function submitOrder() {
   )
 );
 
+hidePageLoading();
     return;
   }
 
@@ -1154,6 +1167,8 @@ async function submitOrder() {
   console.log(err);
 
   showMessage(amazonLanguage.serverError);
+  } finally {
+    hidePageLoading();
 }
 }
 

@@ -4,6 +4,8 @@
   <title>Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="logo.png">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
 
   <style>
     body{
@@ -30,22 +32,39 @@
       cursor:pointer;
     }
 
-    .lang{
-      border:1px solid #ddd;
-      padding:6px 10px;
-      border-radius:8px;
-      font-size:14px;
-      background:#fff;
-      cursor:pointer;
-    }
+.lang {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 136px;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  color: #222;
+  cursor: pointer;
+  box-sizing: border-box;
+}
 
-    .current-flag{
-  width:24px;
-  height:16px;
-  object-fit:cover;
-  border-radius:2px;
-  vertical-align:middle;
-  margin-right:6px;
+.current-flag {
+  width: 28px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 50%;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.language-arrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #666;
+  margin-left: 5px;
+  flex-shrink: 0;
 }
 
 .language-popup-overlay{
@@ -99,32 +118,53 @@
     h1{
       margin-top:30px;
       font-size:22px;
-      color:#555;
+      color:#0aa80c;
     }
 
     h2{
       margin-top:5px;
       font-size:26px;
-      color:#333;
+      color:#0aa80c;
     }
 
-    .input-box{
-      background:#fff;
-      border:1px solid #ddd;
-      border-radius:10px;
-      padding:12px;
-      margin-top:15px;
-      display:flex;
-      align-items:center;
-    }
+.input-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  box-sizing: border-box;
+}
 
-    .input-box input{
-      border:none;
-      outline:none;
-      width:100%;
-      font-size:16px;
-      background:transparent;
-    }
+.input-icon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  color: #222;
+  display: block;
+}
+
+.input-box input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  background: transparent;
+  color: #333;
+}
+
+.input-box input::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
 
     .register-btn{
       margin-top:20px;
@@ -171,6 +211,16 @@
         transform:translateX(-50%) translateY(0);
       }
     }
+
+.input-box input:-webkit-autofill,
+.input-box input:-webkit-autofill:hover,
+.input-box input:-webkit-autofill:focus,
+.input-box input:-webkit-autofill:active {
+  -webkit-text-fill-color: #333;
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+  box-shadow: 0 0 0 1000px #fff inset;
+}
+
   </style>
 </head>
 
@@ -179,21 +229,15 @@
 <div class="container">
 
   <div class="top">
-    <div class="back" onclick="history.back()">❮</div>
+    <div class="back" onclick="goBackWithLoading()">❮</div>
 
-    <div
-  class="lang"
-  onclick="toggleLanguage()"
-  id="currentLanguage"
->
-  <img
-    src="flags/gb.png"
-    class="current-flag"
-    alt="English"
-  >
-
+    
+<div class="lang" onclick="toggleLanguage()" id="currentLanguage">
+  <img src="flags/gb.png" class="current-flag" alt="">
   <span>English</span>
+  <span class="language-arrow" aria-hidden="true"></span>
 </div>
+
 
   </div>
 
@@ -347,21 +391,62 @@
   <h1 id="welcome">Hello,Welcome!</h1>
   <h2 id="title">Register</h2>
 
-  <div class="input-box">
-    <input type="text" id="username" placeholder="6-16 letters or numbers">
-  </div>
+<div class="input-box">
+  <svg class="input-icon" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 40 40" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true">
+    <circle cx="20" cy="20" r="17"/>
+    <circle cx="20" cy="14" r="6"/>
+    <path d="M8 30c2-6 6-9 12-9s10 3 12 9"/>
+  </svg>
+  <input type="text" id="username"
+         placeholder="6-16 letters or numbers"
+         autocomplete="username">
+</div>
 
-  <div class="input-box">
-    <input type="text" id="password" placeholder="6-16 alphanumeric password">
-  </div>
+<div class="input-box">
+  <svg class="input-icon" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 40 40" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true">
+    <rect x="7" y="17" width="26" height="19" rx="2"/>
+    <path d="M12 17v-5a8 8 0 0 1 16 0v5"/>
+    <path d="M20 24v5"/>
+  </svg>
+  <input type="text" id="password"
+         placeholder="6-16 alphanumeric password"
+         autocomplete="new-password">
+</div>
 
-  <div class="input-box">
-    <input type="text" id="confirmPassword" placeholder="Please enter the password again">
-  </div>
+<div class="input-box">
+  <svg class="input-icon" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 40 40" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true">
+    <rect x="7" y="17" width="26" height="19" rx="2"/>
+    <path d="M12 17v-5a8 8 0 0 1 16 0v5"/>
+    <path d="M20 24v5"/>
+  </svg>
+  <input type="text" id="confirmPassword"
+         placeholder="Please enter the password again"
+         autocomplete="new-password">
+</div>
 
-  <div class="input-box">
-    <input type="text" id="invite" placeholder="Invitation code (required)">
-  </div>
+<div class="input-box">
+  <svg class="input-icon" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 40 40" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true">
+    <circle cx="20" cy="20" r="17"/>
+    <circle cx="20" cy="14" r="6"/>
+    <path d="M8 30c2-6 6-9 12-9s10 3 12 9"/>
+  </svg>
+  <input type="text" id="invite"
+         placeholder="Invitation code (required)"
+         autocomplete="off">
+</div>
+
 
   <button class="register-btn" onclick="registerUser()">
     Registration
@@ -874,8 +959,44 @@ function showMessage(text) {
 
 }
 
-function goLogin(){
-  window.location.href = "login.html";
+
+function showLoadingBeforeNavigation() {
+  let loader = document.getElementById("globalPageLoader");
+
+  if (!loader) {
+    loader = document.createElement("div");
+    loader.id = "globalPageLoader";
+    loader.setAttribute("role", "status");
+    loader.setAttribute("aria-label", "Loading");
+
+    const spinner = document.createElement("div");
+    spinner.className = "loader-spinner";
+
+    loader.appendChild(spinner);
+    document.body.appendChild(loader);
+  }
+
+  loader.classList.add("active");
+}
+
+function goBackWithLoading() {
+  showLoadingBeforeNavigation();
+
+  setTimeout(function () {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "/login.html";
+    }
+  }, 150);
+}
+
+function goLogin() {
+  showLoadingBeforeNavigation();
+
+  setTimeout(function () {
+    window.location.href = "/login.html";
+  }, 150);
 }
 
 function changeLang(lang){
@@ -904,15 +1025,12 @@ function changeLang(lang){
 
   const languageName =
     names[lang] || names.en;
-
-  document.getElementById("currentLanguage").innerHTML = `
-    <img
-      src="flags/${flagFile}"
-      class="current-flag"
-      alt="${languageName}"
-    >
-    <span>${languageName}</span>
-  `;
+  
+document.getElementById("currentLanguage").innerHTML = `
+  <img src="flags/${flagFile}" class="current-flag" alt="">
+  <span>${languageName}</span>
+  <span class="language-arrow" aria-hidden="true"></span>
+`;
 
   if(
     lang === "ar" ||

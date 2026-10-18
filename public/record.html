@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Record</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/loading.css">
+<script src="/loading.js" defer></script>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -785,24 +787,53 @@ function goRecord(){
   window.location.href = "record.html";
 }
 
-function switchTab(tab){
+function switchTab(tab) {
+  try {
+    sessionStorage.setItem("recordSelectedTab", tab);
+  } catch (error) {}
 
   document.getElementById("incompleteTab").style.display =
     tab === "incomplete" ? "block" : "none";
+
   document.getElementById("completeTab").style.display =
     tab === "complete" ? "block" : "none";
+
   document.getElementById("tabIncomplete").classList.toggle(
     "active",
     tab === "incomplete"
   );
+
+  document.getElementById("tabComplete").classList.toggle(
+    "active",
+    tab === "complete"
+  );
+
+  window.location.reload();
+}
+
+const savedTab =
+  sessionStorage.getItem("recordSelectedTab") || "incomplete";
+
+switchTabWithoutReload(savedTab);
+renderOrders();
+
+function switchTabWithoutReload(tab) {
+  document.getElementById("incompleteTab").style.display =
+    tab === "incomplete" ? "block" : "none";
+
+  document.getElementById("completeTab").style.display =
+    tab === "complete" ? "block" : "none";
+
+  document.getElementById("tabIncomplete").classList.toggle(
+    "active",
+    tab === "incomplete"
+  );
+
   document.getElementById("tabComplete").classList.toggle(
     "active",
     tab === "complete"
   );
 }
-
-switchTab("incomplete");
-renderOrders();
 
 </script>
 

@@ -266,39 +266,63 @@ const names = {
 async function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  const res = await fetch("/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      username,
-      password
-    })
-  });
-
-  const data = await res.json();
   const lang = localStorage.getItem("lang") || "en";
   const t = translations[lang] || translations.en;
 
-  if (data.token) {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("username", data.username);
-    localStorage.setItem("inviteCode", data.inviteCode);
-    showMessage(t.success);
-    setTimeout(() => {
-      window.location.href = "/home.html";
-    }, 3000);
-  } else {
-    if (data.msg === "Wrong password") {
-      showMessage(t.wrongPassword);
-    } else if (data.msg === "User not found") {
-      showMessage(t.userNotFound);
-    } else {
-      showMessage(t.failed);
+  if (!username.trim() || !password) {
+    showMessage(t.failed);
+    return;
+  }
 
+  if (typeof window.showPageLoading === "function") {
+    window.showPageLoading();
+  }
+
+  try {
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("inviteCode", data.inviteCode);
+
+      showMessage(t.success);
+
+      setTimeout(() => {
+        window.location.href = "/home.html";
+      }, 3000);
+
+    } else {
+      if (typeof window.hidePageLoading === "function") {
+        window.hidePageLoading();
+      }
+
+      if (data.msg === "Wrong password") {
+        showMessage(t.wrongPassword);
+      } else if (data.msg === "User not found") {
+        showMessage(t.userNotFound);
+      } else {
+        showMessage(t.failed);
+      }
     }
 
+  } catch (error) {
+    if (typeof window.hidePageLoading === "function") {
+      window.hidePageLoading();
+    }
+
+    showMessage(t.failed);
   }
 }
 
@@ -314,10 +338,12 @@ function changeLang(lang) {
   document.querySelector(".register").innerText = t.register;
   const flagFile = flags[lang] || flags.en;
   const languageName = names[lang] || names.en;
-  document.getElementById("currentLanguage").innerHTML = `
-    <img src="flags/${flagFile}" class="current-flag">
-    <span>${languageName}</span>
-  `;
+  
+document.getElementById("currentLanguage").innerHTML = `
+  <img src="flags/${flagFile}" class="current-flag" alt="">
+  <span>${languageName}</span>
+  <span class="language-arrow" aria-hidden="true"></span>
+`;
 
   if (
     lang === "ar" ||
@@ -351,6 +377,7 @@ function showMessage(text) {
 }
 
 function goRegister() {
+  window.showPageLoading();
   window.location.href = "/register.html";
 }
 

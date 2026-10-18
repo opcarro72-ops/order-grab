@@ -338,7 +338,7 @@ if (userBalance < pendingOrder.orderAmount) {
 
   renderOrders();
   localStorage.setItem("recordTab", "complete");
-  switchTab("complete");
+  switchTabWithoutReload("complete");
   loadBalance();
 
   const t = window.recordLanguage || {};

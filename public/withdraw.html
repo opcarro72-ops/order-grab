@@ -7,6 +7,8 @@
     content="width=device-width, initial-scale=1.0"
   >
   <link rel="stylesheet" href="withdraw.css">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
   <link
     rel="icon"
     type="image/png"
@@ -576,122 +578,93 @@ amountInput.addEventListener(
   }
 );
 
-okBtn.addEventListener(
-  "click",
-  async () => {
+okBtn.addEventListener("click", async () => {
+  showPageLoading();
 
-    let amount =
-      parseFloat(amountInput.value);
-    if (!window.walletData) {
-      showMessage(
-        currentTexts.addWallet
-      );
-      return;
-    }
+  const amount = parseFloat(amountInput.value);
 
-    if (amount < 10) {
-      showMessage(
-        currentTexts.minimum
-      );
-      return;
-    }
-
-    okBtn.disabled =
-      true;
-
-    okBtn.innerText =
-      currentTexts.processing;
-
-    const token =
-      localStorage.getItem("token");
-
-    try {
-
-      const res =
-        await fetch("/withdraw", {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-            "Authorization":
-              "Bearer " + token
-          },
-
-          body: JSON.stringify({
-            amount
-          })
-        });
-
-      const result =
-        await res.json();
-
-      if (result.success) {
-        showMessage(
-          currentTexts.submitted
-        );
-
-        setTimeout(() => {
-          window.location.href =
-            "mine.html";
-        }, 3000);
-
-      } else {
-
-        let message = result.msg || "";
-
-        const taskMatch = message.match(
-          /^You have not completed (\d+) tasks yet, please complete \1 tasks first\.$/
-        );
-
-        if (taskMatch) {
-
-        const count = taskMatch[1];
-          message = currentTexts.taskLimit(count);
-        }
-        else if (
-          message ===
-          "You have successfully submitted for withdrawal, please wait patiently."
-        ) {
-
-  message = currentTexts.pending;
-
-}
-        else if (
-          message === "Not enough balance" ||
-          message === "Not enough balance."
-        ) {
-          message = currentTexts.insufficient;
-        }
-        else if (
-          message === "Invalid withdraw amount"
-        ) {
-          message = currentTexts.minimum;
-        }
-        else {
-          message =
-          result.msg ||
-          currentTexts.failed;
-        }
-
-        showMessage(message);
-          okBtn.disabled = false;
-          okBtn.innerText =
-          currentTexts.ok;
-
-      }
-
-    } catch (err) {
-
-      showMessage(
-        currentTexts.serverError
-      );
-      okBtn.disabled =
-        false;
-      okBtn.innerText =
-        currentTexts.ok;
-    }
+  if (!window.walletData) {
+    setTimeout(() => {
+      hidePageLoading();
+      showMessage(currentTexts.addWallet);
+    }, 500);
+    return;
   }
-);
+
+  if (amount < 10 || !Number.isFinite(amount)) {
+    setTimeout(() => {
+      hidePageLoading();
+      showMessage(currentTexts.minimum);
+    }, 500);
+    return;
+  }
+
+  okBtn.disabled = true;
+  okBtn.innerText = currentTexts.processing;
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch("/withdraw", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ amount })
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      hidePageLoading();
+      showMessage(currentTexts.submitted);
+
+      setTimeout(() => {
+        window.location.href = "mine.html";
+      }, 3000);
+
+      return;
+    }
+
+    let message = result.msg || "";
+
+    const taskMatch = message.match(
+      /^You have not completed (\d+) tasks yet, please complete \1 tasks first\.$/
+    );
+
+    if (taskMatch) {
+      message = currentTexts.taskLimit(taskMatch[1]);
+    } else if (
+      message ===
+      "You have successfully submitted for withdrawal, please wait patiently."
+    ) {
+      message = currentTexts.pending;
+    } else if (
+      message === "Not enough balance" ||
+      message === "Not enough balance."
+    ) {
+      message = currentTexts.insufficient;
+    } else if (message === "Invalid withdraw amount") {
+      message = currentTexts.minimum;
+    } else {
+      message = result.msg || currentTexts.failed;
+    }
+
+    hidePageLoading();
+    showMessage(message);
+
+    okBtn.disabled = false;
+    okBtn.innerText = currentTexts.ok;
+
+  } catch (err) {
+    hidePageLoading();
+    showMessage(currentTexts.serverError);
+
+    okBtn.disabled = false;
+    okBtn.innerText = currentTexts.ok;
+  }
+});
 
 window.addEventListener(
   "pagehide",

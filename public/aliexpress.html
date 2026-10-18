@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AliExpress</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
   <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body class="aliexpress-page">
@@ -719,9 +721,11 @@ let currentCommission = 0;
 let currentOrderAmount = 0;
 
 async function openPopup() {
+  showPageLoading();
+
+  try {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
-
   const pendingRes = await fetch("/my-orders", {
   headers: {
     Authorization: "Bearer " + token
@@ -729,42 +733,44 @@ async function openPopup() {
 });
 
 const pendingData = await pendingRes.json();
-
 const pending = pendingData.orders.find(
   o => o.type === "AliExpress" && o.status === "pending"
 );
 
 if (pending) {
   showMessage(aliexpressLanguage.unpaidOrder);
+  hidePageLoading();
   return;
 }
 
-  try {
     const res = await fetch("/task-status", {
       headers: { Authorization: "Bearer " + token }
     });
 
     if (!res.ok) {
   showMessage(aliexpressLanguage.serverResponseFailed);
+  hidePageLoading();
   return;
 }
 
     const data = await res.json();
-
     if (!data.success) {
       showMessage(
   data.msg || aliexpressLanguage.failedLoadStatus
 );
+hidePageLoading();
       return;
     }
 
     if (data.balance < 899) {
       showMessage(aliexpressLanguage.insufficientBalance);
+      hidePageLoading();
       return;
     }
 
     if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
       showMessage(aliexpressLanguage.noOrder);
+      hidePageLoading();
       return;
     }
 
@@ -936,6 +942,7 @@ if (
 
     document.getElementById("productList").innerHTML = productHTML;
     document.getElementById("popup").style.display = "flex";
+    hidePageLoading();
 
     await fetch("/save-order", {
 
@@ -959,6 +966,8 @@ if (
   } catch (err) {
     console.log(err);
     showMessage(aliexpressLanguage.serverError);
+    } finally {
+      hidePageLoading();
   }
 }
 
@@ -967,6 +976,8 @@ function closePopup() {
 }
 
 async function submitOrder() {
+  showPageLoading();
+
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
 
@@ -982,6 +993,7 @@ async function submitOrder() {
     shortage
   )
 );
+hidePageLoading();
     return;
   }
 
@@ -1038,9 +1050,11 @@ async function submitOrder() {
     }
 
   } catch (err) {
-    console.log(err);
-    showMessage("Server error");
-  }
+  console.log(err);
+  showMessage(aliexpressLanguage.serverError);
+} finally {
+  hidePageLoading();
+}
 }
 
 async function loadUserStatus() {

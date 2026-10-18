@@ -4,6 +4,8 @@
   <title>Deposit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <link rel="stylesheet" href="deposit.css">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
   <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body>
@@ -341,6 +343,7 @@ async function goNext() {
   if (data.pending) {
     localStorage.setItem("depositAmount", data.amount);
     localStorage.setItem("depositWarning", data.msg);
+    showPageLoading();
     window.location.href = "payment.html";
     return;
   }
@@ -348,6 +351,7 @@ async function goNext() {
   if (data.success) {
     localStorage.setItem("depositAmount", amount);
     localStorage.removeItem("depositWarning");
+    showPageLoading();
     window.location.href = "payment.html";
   } else {
     alert(data.msg);

@@ -740,27 +740,46 @@ app.get("/balance", verifyToken, async (req, res) => {
 });
 
 app.post("/withdraw", verifyToken, async (req, res) => {
+  let debited = false;
+  let amountToRefund = 0;
+  let userIdToRefund = null;
+
   try {
     const user = await User.findById(req.userId);
     const amount = Number(req.body.amount || 0);
 
-    if (!user) return res.json({ success: false, msg: "User not found" });
-    if (amount <= 0) return res.json({ success: false, msg: "Invalid withdraw amount" });
-    if (user.balanceFrozen === true) { return res.json({ success: false,msg: user.freezeReason ? `Withdrawal frozen: ${user.freezeReason}` : "Withdrawal is currently frozen" });}
-    if (user.balance < amount) return res.json({ success: false, msg: "Not enough balance" });
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "User not found"
+      });
+    }
 
-if (user.taskLimit > 0) {
+    if (!Number.isFinite(amount) || amount < 10) {
+      return res.json({
+        success: false,
+        msg: "Invalid withdraw amount"
+      });
+    }
 
-  if (user.todayTasks < user.taskLimit) {
+    if (user.balanceFrozen === true) {
+      return res.json({
+        success: false,
+        msg: user.freezeReason
+          ? `Withdrawal frozen: ${user.freezeReason}`
+          : "Withdrawal is currently frozen"
+      });
+    }
 
-    return res.json({
-      success: false,
-      msg: `You have not completed ${user.taskLimit} tasks yet, please complete ${user.taskLimit} tasks first.`
-    });
-
-  }
-
-}
+    if (
+      user.taskLimit > 0 &&
+      user.todayTasks < user.taskLimit
+    ) {
+      return res.json({
+        success: false,
+        msg: `You have not completed ${user.taskLimit} tasks yet, please complete ${user.taskLimit} tasks first.`
+      });
+    }
 
     const pendingWithdraw = await Withdraw.findOne({
       username: user.username,
@@ -774,22 +793,54 @@ if (user.taskLimit > 0) {
       });
     }
 
+    const updatedUser = await User.findOneAndUpdate(
+      {
+        _id: user._id,
+        balance: { $gte: amount },
+        balanceFrozen: { $ne: true }
+      },
+      {
+        $inc: { balance: -amount }
+      },
+      {
+        new: true
+      }
+    );
+
+    if (!updatedUser) {
+      return res.json({
+        success: false,
+        msg: "Not enough balance"
+      });
+    }
+
+    debited = true;
+    amountToRefund = amount;
+    userIdToRefund = user._id;
     const withdraw = new Withdraw({
       username: user.username,
-      amount
+      amount,
+      approvedAmount: 0,
+      status: "Processing"
     });
 
     await withdraw.save();
-
-    res.json({
+    debited = false;
+    return res.json({
       success: true,
       msg: "Withdraw request submitted"
     });
 
   } catch (err) {
-    res.json({
+    if (debited && userIdToRefund) {
+      await User.findByIdAndUpdate(userIdToRefund, {
+        $inc: { balance: amountToRefund }
+      });
+    }
+
+    return res.status(500).json({
       success: false,
-      msg: err.message
+      msg: "Withdrawal request failed"
     });
   }
 });
@@ -811,35 +862,37 @@ app.get("/admin/withdraws", verifyAdmin, async (req, res) => {
 
 app.post("/admin/approve-withdraw", verifyAdmin, async (req, res) => {
   try {
-    const { id, approvedAmount } = req.body;
+    const { id } = req.body;
 
-    const withdraw = await Withdraw.findById(id);
-    if (!withdraw || withdraw.status === "Success") {
-      return res.json({ success: false, message: "Withdraw is not processing" });
+    const withdraw = await Withdraw.findOneAndUpdate(
+      { _id: id, status: "Processing" },
+      {
+        $set: { status: "Success" },
+        $setOnInsert: {}
+      },
+      { new: true }
+    );
+
+    if (!withdraw) {
+      return res.json({
+        success: false,
+        message: "Withdrawal is not processing"
+      });
     }
-
-    const user = await User.findOne({ username: withdraw.username });
-    if (!user) {
-      return res.json({ success: false, message: "User not found" });
-    }
-
-    withdraw.approvedAmount = Number(approvedAmount);
-    withdraw.status = "Success";
-
-    user.balance -= Number(approvedAmount);
-
-    await user.save();
+    
+    withdraw.approvedAmount = withdraw.amount;
     await withdraw.save();
 
-    res.json({
+    return res.json({
       success: true,
       message: "Withdraw approved"
     });
-
   } catch (err) {
-    res.json({
+    console.error("Approve withdrawal error:", err);
+
+    return res.status(500).json({
       success: false,
-      message: err.message
+      message: "Server error while approving withdrawal"
     });
   }
 });
@@ -847,35 +900,60 @@ app.post("/admin/approve-withdraw", verifyAdmin, async (req, res) => {
 app.post("/admin/reject-withdraw", verifyAdmin, async (req, res) => {
   try {
     const { id } = req.body;
-    const withdraw = await Withdraw.findById(id);
+    const withdraw = await Withdraw.findOneAndUpdate(
+      {
+        _id: id,
+        status: "Processing"
+      },
+      {
+        $set: {
+          status: "Rejected",
+          approvedAmount: 0
+        }
+      },
+      {
+        new: true
+      }
+    );
+
     if (!withdraw) {
       return res.json({
         success: false,
-        message: "Withdraw not found"
+        message: "Withdrawal is not processing"
       });
     }
 
-    if (withdraw.status !== "Processing") {
-      return res.json({
+    const user = await User.findOneAndUpdate(
+      { username: withdraw.username },
+      {
+        $inc: { balance: withdraw.amount }
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      console.error(
+        "Withdrawal refund requires manual recovery:",
+        withdraw._id
+      );
+
+      return res.status(500).json({
         success: false,
-        message: "This withdrawal is no longer processing"
+        message: "Withdrawal was rejected but refund failed. Please contact support."
       });
     }
 
-    withdraw.status = "Rejected";
-    withdraw.approvedAmount = 0;
-    await withdraw.save();
-    res.json({
+    return res.json({
       success: true,
-      message: "Withdraw rejected"
+      message: "Withdraw rejected and balance refunded"
     });
 
   } catch (err) {
-    console.log(err);
+    console.error("Reject withdrawal error:", err);
 
-    res.json({
+    return res.status(500).json({
       success: false,
-      message: err.message
+      message: "Server error while rejecting withdrawal"
     });
   }
 });

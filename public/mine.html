@@ -4,6 +4,8 @@
   <title>Mine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -252,6 +254,7 @@ async function loadProfileImage() {
 loadProfileImage();
 
 async function checkWithdrawPassword() {
+  showPageLoading();
 
   const token = localStorage.getItem("token");
 
@@ -281,6 +284,7 @@ showMessage(currentTexts.pleaseAddWallet);
     window.walletPassword = data.wallet.password;
 
 document.getElementById("withdrawPopup").style.display = "flex";
+hidePageLoading();
 
   } catch (err) {
 
@@ -288,40 +292,39 @@ document.getElementById("withdrawPopup").style.display = "flex";
   texts[lang] || texts.en;
 
 showMessage(currentTexts.serverError);
+hidePageLoading();
   }
 }
 
 function closeWithdrawPopup() {
-
   document.getElementById("withdrawPopup").style.display = "none";
+  window.location.reload();
 }
 
 function submitWithdrawPassword() {
+  showPageLoading();
 
   const inputPass =
     document.getElementById("withdrawPassword").value;
 
+  const currentTexts = texts[lang] || texts.en;
+
   if (!inputPass) {
-
-    const currentTexts =
-  texts[lang] || texts.en;
-
-showMessage(currentTexts.enterWithdrawalPasswordError);
+    setTimeout(() => {
+      hidePageLoading();
+      showMessage(currentTexts.enterWithdrawalPasswordError);
+    }, 800);
     return;
   }
 
   if (inputPass === window.walletPassword) {
-
     sessionStorage.setItem("withdrawAccess", "true");
-
     window.location.href = "withdraw.html";
-
   } else {
-
-    const currentTexts =
-  texts[lang] || texts.en;
-
-showMessage(currentTexts.wrongPassword);
+    setTimeout(() => {
+      hidePageLoading();
+      showMessage(currentTexts.wrongPassword);
+    }, 800);
   }
 }
 

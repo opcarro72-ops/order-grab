@@ -411,56 +411,68 @@ async function rejectDeposit(id) {
 }
 
 async function loadWithdraws() {
-  const res = await fetch("/admin/withdraws", {
-    headers: { Authorization: "Bearer " + token }
-  });
+  try {
+    const res = await fetch("/admin/withdraws", {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
 
-  const withdraws = await res.json();
-  const box = document.getElementById("withdrawList");
-  box.innerHTML = "";
+    const withdraws = await res.json();
+    const box = document.getElementById("withdrawList");
 
-  withdraws
-  .filter(w => w.status === "Processing")
-  .forEach(wd => {
-    box.innerHTML += `
-      <div class="admin-item">
-        <p>User: ${wd.username}</p>
-        <p>Requested Withdraw: ${wd.amount}</p>
-        <input
-          type="number"
-          id="wd_${wd._id}"
-          value="${wd.amount}"
-        >
-        <button
-          class="green-btn"
-          onclick="approveWithdraw('${wd._id}')">
-          Approve Withdraw
-        </button>
-        <button
-          class="reject-btn"
-          onclick="rejectWithdraw('${wd._id}')">
-          Reject Withdraw
-        </button>
-      </div>
-    `;
-  });
+    box.innerHTML = "";
+
+    withdraws
+      .filter(w => w.status === "Processing")
+      .forEach(wd => {
+        box.innerHTML += `
+          <div class="admin-item">
+            <p>User: ${wd.username}</p>
+            <p>Requested Withdraw: ${wd.amount} USDT</p>
+
+            <button
+              class="green-btn"
+              onclick="approveWithdraw('${wd._id}')">
+              Approve Withdraw
+            </button>
+
+            <button
+              class="reject-btn"
+              onclick="rejectWithdraw('${wd._id}')">
+              Reject Withdraw
+            </button>
+          </div>
+        `;
+      });
+
+  } catch (err) {
+    showMessage("Failed to load withdrawals");
+  }
 }
 
 async function approveWithdraw(id) {
-  const approvedAmount = document.getElementById("wd_" + id).value;
+  try {
+    const res = await fetch("/admin/approve-withdraw", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      body: JSON.stringify({ id })
+    });
 
-  const res = await fetch("/admin/approve-withdraw", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({ id, approvedAmount })
-  });
+    const data = await res.json();
 
-  const data = await res.json();
-  showMessage(data.message);
-  loadWithdraws();
+    showMessage(data.message);
+
+    if (data.success) {
+      loadWithdraws();
+    }
+
+  } catch (err) {
+    showMessage("Server error");
+  }
 }
 
 async function rejectWithdraw(id) {
@@ -690,3 +702,57 @@ async function unfreezeBalance() {
   }
 
 }
+
+let sectionLoadingCount = 0;
+
+async function withSectionLoading(callback) {
+  if (typeof window.showPageLoading === "function") {
+    sectionLoadingCount++;
+    window.showPageLoading();
+  }
+
+  try {
+    await callback();
+  } catch (error) {
+    console.error("Section loading error:", error);
+    showMessage("Failed to load data. Please try again.");
+  } finally {
+    if (typeof window.hidePageLoading === "function") {
+      sectionLoadingCount = Math.max(0, sectionLoadingCount - 1);
+      if (sectionLoadingCount === 0) {
+        window.hidePageLoading();
+      }
+    }
+  }
+}
+
+window.reloadDashboardSection = function () {
+  return withSectionLoading(async () => {
+    const previousUsername = document.getElementById("userSelect").value;
+
+    await loadUsers();
+
+    const select = document.getElementById("userSelect");
+    if (
+      previousUsername &&
+      [...select.options].some(o => o.value === previousUsername)
+    ) {
+      if (userSelectTom) {
+        userSelectTom.setValue(previousUsername, true);
+      } else {
+        select.value = previousUsername;
+      }
+
+      await loadUserStatus();
+    }
+  });
+};
+
+window.reloadFundsSection = function () {
+  return withSectionLoading(async () => {
+    await Promise.all([
+      loadDeposits(),
+      loadWithdraws()
+    ]);
+  });
+};

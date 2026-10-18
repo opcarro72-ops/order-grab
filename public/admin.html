@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Admin Dashboard</title>
 <link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="/loading.css">
+<script src="/loading.js" defer></script>
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 
 <style>
@@ -374,13 +376,13 @@ label{
         <span class="menu-item active"
               id="dashboardTab"
               onclick="showDashboard()">
-            Admin Dashboard
+            Dashboard
         </span>
 
         <span class="menu-item"
               id="fundTab"
               onclick="showFunds()">
-            Funds Management
+            Funds
         </span>
 
     </div>
@@ -544,28 +546,28 @@ label{
 
 <script>
 
-function showDashboard(){
+function showDashboard() {
+  document.getElementById("dashboardSection").style.display = "block";
+  document.getElementById("fundSection").style.display = "none";
 
-    document.getElementById("dashboardSection").style.display="block";
+  document.getElementById("dashboardTab").classList.add("active");
+  document.getElementById("fundTab").classList.remove("active");
 
-    document.getElementById("fundSection").style.display="none";
-
-    document.getElementById("dashboardTab").classList.add("active");
-
-    document.getElementById("fundTab").classList.remove("active");
-
+  if (typeof window.reloadDashboardSection === "function") {
+    window.reloadDashboardSection();
+  }
 }
 
-function showFunds(){
+function showFunds() {
+  document.getElementById("dashboardSection").style.display = "none";
+  document.getElementById("fundSection").style.display = "block";
 
-    document.getElementById("dashboardSection").style.display="none";
+  document.getElementById("fundTab").classList.add("active");
+  document.getElementById("dashboardTab").classList.remove("active");
 
-    document.getElementById("fundSection").style.display="block";
-
-    document.getElementById("fundTab").classList.add("active");
-
-    document.getElementById("dashboardTab").classList.remove("active");
-
+  if (typeof window.reloadFundsSection === "function") {
+    window.reloadFundsSection();
+  }
 }
 
 showDashboard();

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alibaba</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/loading.css">
+  <script src="/loading.js" defer></script>
   <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body class="alibaba-page">
@@ -739,6 +741,9 @@ let currentCommission = 0;
 let currentOrderAmount = 0;
 
 async function openPopup() {
+  showPageLoading();
+
+  try {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
 
@@ -756,16 +761,17 @@ const pending = pendingData.orders.find(
 
 if (pending) {
   showMessage(alibabaLanguage.unpaidOrder);
+  hidePageLoading()
   return;
 }
 
-  try {
     const res = await fetch("/task-status", {
       headers: { Authorization: "Bearer " + token }
     });
 
     if (!res.ok) {
   showMessage(alibabaLanguage.serverResponseFailed);
+  hidePageLoading()
   return;
 }
 
@@ -773,21 +779,25 @@ if (pending) {
 
     if (!data.success) {
       showMessage(data.msg || alibabaLanguage.failedLoadStatus);
+      hidePageLoading()
       return;
     }
 
     if (data.balance < 499) {
       showMessage(alibabaLanguage.insufficientBalance);
+      hidePageLoading()
       return;
     }
 
     if (data.balance > 898.99) {
       showMessage(alibabaLanguage.alibabaUpgrade);
+      hidePageLoading()
       return;
     }
 
     if (data.todayTasks >= data.taskLimit || data.taskLimit === 0) {
       showMessage(alibabaLanguage.noOrder);
+      hidePageLoading()
       return;
     }
 
@@ -964,6 +974,7 @@ if (
 
     document.getElementById("productList").innerHTML = productHTML;
     document.getElementById("popup").style.display = "flex";
+    hidePageLoading()
 
     await fetch("/save-order", {
 
@@ -987,10 +998,15 @@ if (
   } catch (err) {
     console.log(err);
     showMessage(alibabaLanguage.serverError);
+    } finally {
+      hidePageLoading()
   }
 }
 
 async function submitOrder() {
+  showPageLoading();
+
+  try {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
 
@@ -1006,6 +1022,8 @@ async function submitOrder() {
     shortage
   )
 );
+
+hidePageLoading()
     return;
   }
 
@@ -1053,10 +1071,17 @@ async function submitOrder() {
     closePopup();
     showMessage(alibabaLanguage.orderSubmitted);
 
-  } else {
+    } else {
     showMessage(
-  data.msg || alibabaLanguage.submitFailed
-);
+      data.msg || alibabaLanguage.submitFailed
+    );
+  }
+
+  } catch (err) {
+    console.log(err);
+    showMessage(alibabaLanguage.serverError);
+  } finally {
+    hidePageLoading();
   }
 }
 
