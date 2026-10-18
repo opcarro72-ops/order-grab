@@ -902,6 +902,7 @@ async function registerUser() {
   }
 
   try {
+    window.showPageLoading();
 
     const res = await fetch("/register", {
       method: "POST",
@@ -945,7 +946,10 @@ async function registerUser() {
     showMessage(t.failed);
   } catch (err) {
     showMessage(t.serverError);
+    } finally {
+      window.hidePageLoading();
   }
+
 }
 
 function showMessage(text) {
@@ -958,7 +962,6 @@ function showMessage(text) {
   }, 3000);
 
 }
-
 
 function showLoadingBeforeNavigation() {
   let loader = document.getElementById("globalPageLoader");
