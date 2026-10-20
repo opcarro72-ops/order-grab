@@ -368,6 +368,7 @@
     type="text"
     placeholder="6-16 letters or numbers"
     autocomplete="username"
+    oninput="this.value = this.value.replace(/\s/g, '')"
   >
 </div>
 
@@ -392,6 +393,7 @@
     type="text"
     placeholder="6-16 alphanumeric password"
     autocomplete="current-password"
+    oninput="this.value = this.value.replace(/\s/g, '')"
   >
 </div>
 
