@@ -1,11 +1,25 @@
 
 (function () {
+  "use strict";
+
   const LOADING_KEY = "globalPageLoading";
+  const SETTINGS_BACK_KEY = "returnedFromSettings";
+  const EXIT_DURATION = 350;
+
+  let hideTimer = null;
+  let reloadScheduled = false;
+
+  function currentPage() {
+    return window.location.pathname
+      .split("/")
+      .pop()
+      .toLowerCase();
+  }
 
   function createLoader() {
     let loader = document.getElementById("globalPageLoader");
 
-    if (!loader) {
+    if (!loader && document.body) {
       loader = document.createElement("div");
       loader.id = "globalPageLoader";
       loader.setAttribute("role", "status");
@@ -26,7 +40,11 @@
       sessionStorage.setItem(LOADING_KEY, "1");
     } catch (error) {}
 
-    createLoader().classList.add("active");
+    const loader = createLoader();
+
+    if (loader) {
+      loader.classList.add("active");
+    }
   }
 
   function hidePageLoading() {
@@ -39,34 +57,61 @@
     if (loader) {
       loader.classList.remove("active");
     }
+
+    if (hideTimer) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+  }
+
+  function scheduleHide() {
+    if (hideTimer) {
+      clearTimeout(hideTimer);
+    }
+
+    hideTimer = setTimeout(function () {
+      hidePageLoading();
+    }, EXIT_DURATION);
   }
 
   window.showPageLoading = showPageLoading;
   window.hidePageLoading = hidePageLoading;
 
-  let shouldShow = false;
-
-  try {
-    shouldShow = sessionStorage.getItem(LOADING_KEY) === "1";
-  } catch (error) {}
-
   const navigationEntry =
     performance.getEntriesByType("navigation")[0];
 
-  if (navigationEntry && navigationEntry.type === "reload") {
+  const navigationType =
+    navigationEntry ? navigationEntry.type : "navigate";
+
+  let shouldShow = false;
+
+  try {
+    shouldShow =
+      sessionStorage.getItem(LOADING_KEY) === "1";
+  } catch (error) {}
+
+  if (
+    navigationType === "reload" ||
+    navigationType === "back_forward"
+  ) {
     shouldShow = true;
   }
 
+  if (currentPage() === "setting.html") {
+    try {
+      sessionStorage.setItem(SETTINGS_BACK_KEY, "1");
+    } catch (error) {}
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    createLoader();
+
     if (shouldShow) {
-      createLoader().classList.add("active");
+      showPageLoading();
     }
   });
 
   document.addEventListener("click", function (event) {
-    const target = event.target;
-
-    if (!target || typeof target.closest !== "function") return;
     if (event.defaultPrevented) return;
 
     if (
@@ -79,7 +124,16 @@
       return;
     }
 
-    const control = target.closest("a[href], [onclick]");
+    const target = event.target;
+
+    if (!target || typeof target.closest !== "function") {
+      return;
+    }
+
+    const control = target.closest(
+      'a[href], [onclick], [data-page]'
+    );
+
     if (!control) return;
 
     if (
@@ -92,36 +146,37 @@
     const href = control.getAttribute("href") || "";
     const onclick = control.getAttribute("onclick") || "";
 
-    if (/^javascript:\s*history\.back\s*\(/i.test(href)) {
-      showPageLoading();
+    if (/^javascript:/i.test(href)) {
+      if (/history\s*\.\s*(back|forward)\s*\(/i.test(href)) {
+        showPageLoading();
+      }
       return;
     }
 
     if (control.matches("a[href]") && href) {
       try {
-        const url = new URL(control.href, window.location.href);
+        const url = new URL(href, window.location.href);
 
-        if (url.origin !== window.location.origin) return;
+        if (url.origin !== window.location.origin) {
+          return;
+        }
 
         if (
           url.pathname === window.location.pathname &&
-          url.search === window.location.search &&
-          url.hash &&
-          url.hash !== window.location.hash
+          url.search === window.location.search
         ) {
           return;
         }
 
-        if (url.href !== window.location.href) {
-          showPageLoading();
-        }
-
+        showPageLoading();
         return;
-      } catch (error) {}
+      } catch (error) {
+        return;
+      }
     }
 
     const navigationClick =
-      /\b(goPage|openPage|goBack|goHelp|logout)\s*\(|history\s*\.\s*back\s*\(|location\s*\.\s*(href|assign|replace)\b|window\s*\.\s*location\b/i
+      /\b(goPage|openPage|goBack|goHelp|logout|goRegister)\s*\(|history\s*\.\s*(back|forward)\s*\(|location\s*\.\s*(href|assign|replace)\b|window\s*\.\s*location\b/i
         .test(onclick);
 
     if (navigationClick) {
@@ -139,14 +194,48 @@
     showPageLoading();
   });
 
+  window.addEventListener("beforeunload", function () {
+    try {
+      sessionStorage.setItem(LOADING_KEY, "1");
+    } catch (error) {}
+  });
+
   window.addEventListener("load", function () {
-    hidePageLoading();
+    scheduleHide();
   });
 
   window.addEventListener("pageshow", function (event) {
     if (event.persisted) {
-      showPageLoading();
-      window.location.reload();
+      let returnedFromSettings = false;
+
+      try {
+        returnedFromSettings =
+          sessionStorage.getItem(SETTINGS_BACK_KEY) === "1";
+
+        if (returnedFromSettings) {
+          sessionStorage.removeItem(SETTINGS_BACK_KEY);
+        }
+      } catch (error) {}
+
+      if (returnedFromSettings && !reloadScheduled) {
+        reloadScheduled = true;
+        showPageLoading();
+        window.location.reload();
+        return;
+      }
+
+      hidePageLoading();
+      return;
+    }
+
+    scheduleHide();
+  });
+
+  window.addEventListener("pagehide", function () {
+    if (hideTimer) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
     }
   });
+
 })();

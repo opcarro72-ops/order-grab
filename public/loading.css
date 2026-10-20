@@ -5,9 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.10);
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -17,7 +17,7 @@
 #globalPageLoader.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: all;
+  pointer-events: none;
 }
 
 #globalPageLoader .loader-spinner {
@@ -28,7 +28,7 @@
   border-top-color: #777;
   border-bottom-color: #777;
   border-radius: 50%;
-  animation: globalLoaderSpin 1.5s linear infinite;
+  animation: globalLoaderSpin 0.8s linear infinite;
 }
 
 @keyframes globalLoaderSpin {
@@ -39,6 +39,36 @@
 
 @media (prefers-reduced-motion: reduce) {
   #globalPageLoader .loader-spinner {
-    animation-duration: 2s;
+    animation-duration: 1.5s;
+  }
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: pageExitRight 0.35s ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: pageEnterLeft 0.35s ease-out both;
+}
+
+@keyframes pageEnterLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pageExitRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
