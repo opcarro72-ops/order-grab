@@ -47,32 +47,28 @@
   navigation: auto;
 }
 
-::view-transition-group(root) {
-  animation-duration: 350ms;
-}
-
 ::view-transition-old(root) {
-  animation: oldPageMoveRight 350ms ease-in both;
+  animation: pageExitRight 0.35s ease-in both;
 }
 
 ::view-transition-new(root) {
-  animation: newPageEnterLeft 350ms ease-out both;
+  animation: pageEnterLeft 0.35s ease-out both;
 }
 
-@keyframes oldPageMoveRight {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes newPageEnterLeft {
+@keyframes pageEnterLeft {
   from {
     transform: translateX(-100%);
   }
   to {
     transform: translateX(0);
+  }
+}
+
+@keyframes pageExitRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
