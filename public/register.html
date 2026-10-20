@@ -401,8 +401,9 @@
     <path d="M8 30c2-6 6-9 12-9s10 3 12 9"/>
   </svg>
   <input type="text" id="username"
-         placeholder="6-16 letters or numbers"
-         autocomplete="username">
+       placeholder="6-16 letters or numbers"
+       autocomplete="username"
+       oninput="this.value = this.value.replace(/\s/g, '')">
 </div>
 
 <div class="input-box">
@@ -415,8 +416,9 @@
     <path d="M20 24v5"/>
   </svg>
   <input type="text" id="password"
-         placeholder="6-16 alphanumeric password"
-         autocomplete="new-password">
+       placeholder="6-16 alphanumeric password"
+       autocomplete="new-password"
+       oninput="this.value = this.value.replace(/\s/g, '')">
 </div>
 
 <div class="input-box">
@@ -429,8 +431,9 @@
     <path d="M20 24v5"/>
   </svg>
   <input type="text" id="confirmPassword"
-         placeholder="Please enter the password again"
-         autocomplete="new-password">
+       placeholder="Please enter the password again"
+       autocomplete="new-password"
+       oninput="this.value = this.value.replace(/\s/g, '')">
 </div>
 
 <div class="input-box">

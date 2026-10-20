@@ -155,156 +155,46 @@ button.active {
 }
 
 .team-icon {
-  position: relative;
+  display: block;
   width: 45px;
   height: 45px;
-  overflow: visible;
-  margin-top: 10px;
-}
-
-.team-icon::before {
-  content: "";
-  position: absolute;
-  width: 21px;
-  height: 21px;
-  background: #24ac18;
-  border-radius: 50%;
-  left: 12px;
-  top: 2px;
-}
-
-.team-icon::after {
-  content: "";
-  position: absolute;
-  width: 32px;
-  height: 18px;
-  background: #24ac18;
-  border-radius: 20px 20px 9px 9px;
-  left: 6px;
-  bottom: 4px;
-}
-
-.team-icon span {
-  display: none;
+  object-fit: contain;
+  margin-top: 13px;
+  margin-bottom: 1px;
+  flex-shrink: 0;
 }
 
 .record-icon {
-  position: relative;
-  width: 36px;
-  height: 42px;
-  background: #42c98d;
-  border-radius: 5px;
-  margin-top: 13px;
-}
-
-.record-icon::before {
-  content: "";
-  position: absolute;
-  left: 7px;
-  top: 9px;
-  width: 22px;
-  height: 3px;
-  background: #fff;
-  border-radius: 3px;
-
-  box-shadow:
-    0 8px 0 #fff,
-    0 16px 0 #fff;
-}
-
-.record-icon::after {
-  content: "";
-  position: absolute;
-  width: 11px;
-  height: 22px;
-  background: #42c98d;
-  border: 4px solid #42c98d;
-  border-left: 0;
-  border-radius: 0 12px 12px 0;
-  right: -7px;
-  bottom: 0;
-  transform: rotate(30deg);
-}
-
-.wallet-menu-icon {
-  position: relative;
+  display: block;
   width: 45px;
   height: 45px;
-  background: #f0444b;
-  border-radius: 50%;
-  margin-top: 11px;
+  object-fit: contain;
+  margin-top: 13px;
+  margin-bottom: 1px;
+  flex-shrink: 0;
 }
 
-.wallet-menu-icon::before {
-  content: "";
-  position: absolute;
-  width: 21px;
-  height: 4px;
-  background: #fff;
-  left: 11px;
-  top: 23px;
-  transform: rotate(-43deg);
-  border-radius: 5px;
-}
-
-.wallet-menu-icon::after {
-  content: "";
-  position: absolute;
-  width: 23px;
-  height: 4px;
-  background: #fff;
-  left: 23px;
-  top: 19px;
-  transform: rotate(-43deg);
-  border-radius: 5px;
-}
-
-.invite-icon {
-  position: relative;
-  width: 45px;
-  height: 34px;
-  background: #2997e8;
-  border-radius: 6px;
-  margin-top: 24px;
-}
-
-.invite-icon::before {
-  content: "";
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  background: #2997e8;
-  left: 8px;
-  top: -10px;
-  border-radius: 16px;
-}
-
-.invite-icon::after {
-  content: "";
-  position: absolute;
-  width: 28px;
-  height: 14px;
-  left: 8px;
-  top: 2px;
-  border-left: 3px solid #fff;
-  border-bottom: 3px solid #fff;
-  transform: rotate(-45deg);
-  box-sizing: border-box;
-}
-
-.menu-grid div > span[data-lang] {
+.wallet-icon-img {
   display: block;
-  font-size: 15px;
-  line-height: 19px;
-  color: #222;
-  text-align: center;
-  max-width: 110px;
-  margin-top: 2px;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  margin-top: 13px;
+  margin-bottom: 1px;
+  flex-shrink: 0;
 }
 
-.menu-grid div > span[data-lang] {
+.invite-icon-img {
   display: block;
-  font-size: 13px;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-top: 23px;
+  margin-bottom: 1px;
+  flex-shrink: 0;
 }
 
 .menu-list {
@@ -880,10 +770,6 @@ transform: translateX(-50%);
   height:40px;
 }
 
-/* =================================
-   LIVE MESSAGE ANIMATION
-   ================================= */
-
 .live-box {
   display: flex;
   justify-content: space-between;
@@ -893,40 +779,37 @@ transform: translateX(-50%);
   padding: 12px;
   border-radius: 8px;
   font-size: 14px;
-
   overflow: hidden;
   position: relative;
 }
 
-/* নতুন message নিচ থেকে উঠবে */
-.live-box.live-enter {
+.live-box.live-enter .live-left,
+.live-box.live-enter #liveAmount {
   animation: liveMessageIn 0.6s ease-out;
 }
 
-@keyframes liveMessageIn {
-  0% {
-    opacity: 0;
-    transform: translateY(35px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* message উপরের দিকে চলে যাবে */
-.live-box.live-exit {
+.live-box.live-exit .live-left,
+.live-box.live-exit #liveAmount {
   animation: liveMessageOut 0.6s ease-in;
 }
 
-@keyframes liveMessageOut {
-  0% {
+@keyframes liveMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
     opacity: 1;
     transform: translateY(0);
   }
+}
 
-  100% {
+@keyframes liveMessageOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
     opacity: 0;
     transform: translateY(-35px);
   }

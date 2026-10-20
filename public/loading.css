@@ -28,7 +28,7 @@
   border-top-color: #777;
   border-bottom-color: #777;
   border-radius: 50%;
-  animation: globalLoaderSpin 0.7s linear infinite;
+  animation: globalLoaderSpin 1.5s linear infinite;
 }
 
 @keyframes globalLoaderSpin {
@@ -39,6 +39,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   #globalPageLoader .loader-spinner {
-    animation-duration: 1.5s;
+    animation-duration: 2s;
   }
 }
