@@ -278,6 +278,7 @@ async function checkWithdrawPassword() {
       const currentTexts =
   texts[lang] || texts.en;
 
+  hidePageLoading();
 showMessage(currentTexts.pleaseAddWallet);
       return;
     }
