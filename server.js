@@ -1125,6 +1125,47 @@ app.get("/admin/users", verifyAdmin, async (req, res) => {
   }
 });
 
+app.get("/admin/ip-history", verifyAdmin, async (req, res) => {
+  try {
+    const records = await User.aggregate([
+      {
+        $unwind: "$ipHistory"
+      },
+      {
+        $sort: {
+          "ipHistory.loggedAt": -1
+        }
+      },
+      {
+        $limit: 1000
+      },
+      {
+        $project: {
+          _id: 0,
+          username: 1,
+          ip: "$ipHistory.ip",
+          country: "$ipHistory.country",
+          countryCode: "$ipHistory.countryCode",
+          loggedAt: "$ipHistory.loggedAt"
+        }
+      }
+    ]);
+
+    return res.json({
+      success: true,
+      records
+    });
+
+  } catch (err) {
+    console.error("IP History Error:", err);
+    return res.status(500).json({
+      success: false,
+      msg: "Failed to load IP history"
+    });
+
+  }
+});
+
 app.get("/admin/user-status/:username", verifyAdmin, async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });

@@ -363,6 +363,30 @@ label{
 
 }
 
+.ip-history-table th,
+.ip-history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.ip-history-table th {
+    background: #f1f1f1;
+    color: #111;
+}
+
+@media (prefers-color-scheme: dark) {
+    .ip-history-table th {
+        background: #1a1f27;
+        color: #fff;
+    }
+
+    .ip-history-table td {
+        border-bottom: 1px solid #333;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -373,19 +397,25 @@ label{
 
     <div class="menu">
 
-        <span class="menu-item active"
-              id="dashboardTab"
-              onclick="showDashboard()">
-            Dashboard
-        </span>
+    <span class="menu-item active"
+          id="dashboardTab"
+          onclick="showDashboard()">
+        Dashboard
+    </span>
 
-        <span class="menu-item"
-              id="fundTab"
-              onclick="showFunds()">
-            Funds
-        </span>
+    <span class="menu-item"
+          id="fundTab"
+          onclick="showFunds()">
+        Funds
+    </span>
 
-    </div>
+    <span class="menu-item"
+          id="ipCheckTab"
+          onclick="showIPCheck()">
+        IP Check
+    </span>
+
+</div>
 
 </div>
 
@@ -421,7 +451,7 @@ label{
     <label>Enter new balance</label>
     <input type="number" id="newBalance" placeholder="Enter new balance">
 
-    <button class="green-btn" ="updateBalance()">Update Balance</button>
+    <button class="green-btn" onclick="updateBalance()">Update Balance</button>
 
 <div style="margin-top:25px;">
 
@@ -521,6 +551,58 @@ label{
 
 </div>
 
+<div id="ipCheckSection" style="display:none;">
+
+    <div class="card">
+
+        <h2>IP Check</h2>
+
+        <input
+            type="text"
+            id="ipHistorySearch"
+            placeholder="Search Username, IP or Country..."
+            oninput="filterIPHistory()"
+        >
+
+        <button
+            class="blue-btn"
+            onclick="loadIPHistory()">
+            Refresh IP History
+        </button>
+
+        <div style="overflow-x:auto; margin-top:20px;">
+
+            <table class="ip-history-table"
+                   style="width:100%; border-collapse:collapse;">
+
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>IP Address</th>
+                        <th>Country</th>
+                        <th>Country Code</th>
+                        <th>Login Time</th>
+                    </tr>
+                </thead>
+
+                <tbody id="ipHistoryBody">
+
+    <tr>
+        <td colspan="5" style="text-align:center;">
+            Enter Username or IP Address to search
+        </td>
+    </tr>
+
+</tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
 </div>
 
 <div id="customMessage" class="custom-message">
@@ -547,27 +629,50 @@ label{
 <script>
 
 function showDashboard() {
-  document.getElementById("dashboardSection").style.display = "block";
-  document.getElementById("fundSection").style.display = "none";
 
-  document.getElementById("dashboardTab").classList.add("active");
-  document.getElementById("fundTab").classList.remove("active");
+    document.getElementById("dashboardSection").style.display = "block";
+    document.getElementById("fundSection").style.display = "none";
+    document.getElementById("ipCheckSection").style.display = "none";
 
-  if (typeof window.reloadDashboardSection === "function") {
-    window.reloadDashboardSection();
-  }
+    document.getElementById("dashboardTab").classList.add("active");
+    document.getElementById("fundTab").classList.remove("active");
+    document.getElementById("ipCheckTab").classList.remove("active");
+
+    if (typeof window.reloadDashboardSection === "function") {
+        window.reloadDashboardSection();
+    }
 }
 
+
 function showFunds() {
-  document.getElementById("dashboardSection").style.display = "none";
-  document.getElementById("fundSection").style.display = "block";
 
-  document.getElementById("fundTab").classList.add("active");
-  document.getElementById("dashboardTab").classList.remove("active");
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("fundSection").style.display = "block";
+    document.getElementById("ipCheckSection").style.display = "none";
 
-  if (typeof window.reloadFundsSection === "function") {
-    window.reloadFundsSection();
-  }
+    document.getElementById("fundTab").classList.add("active");
+    document.getElementById("dashboardTab").classList.remove("active");
+    document.getElementById("ipCheckTab").classList.remove("active");
+
+    if (typeof window.reloadFundsSection === "function") {
+        window.reloadFundsSection();
+    }
+}
+
+function showIPCheck() {
+
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("fundSection").style.display = "none";
+    document.getElementById("ipCheckSection").style.display = "block";
+
+    document.getElementById("dashboardTab").classList.remove("active");
+    document.getElementById("fundTab").classList.remove("active");
+    document.getElementById("ipCheckTab").classList.add("active");
+
+    if (typeof window.loadIPHistory === "function") {
+        window.loadIPHistory();
+    }
+
 }
 
 showDashboard();

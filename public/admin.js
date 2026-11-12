@@ -756,3 +756,103 @@ window.reloadFundsSection = function () {
     ]);
   });
 };
+
+let ipHistoryRecords = [];
+
+window.loadIPHistory = async function () {
+
+    const tbody = document.getElementById("ipHistoryBody");
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="5" style="text-align:center;">
+                Loading IP History...
+            </td>
+        </tr>
+    `;
+    try {
+
+        const res = await fetch("/admin/ip-history", {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+            throw new Error(data.msg || "Failed to load IP history");
+        }
+        ipHistoryRecords = data.records || [];
+        filterIPHistory();
+    } catch (err) {
+        console.error("IP History Error:", err);
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    Failed to load IP History
+                </td>
+            </tr>
+        `;
+        showMessage("Failed to load IP History");
+    }
+};
+
+
+function renderIPHistory(records) {
+
+    const tbody = document.getElementById("ipHistoryBody");
+    tbody.innerHTML = "";
+    if (!records || records.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    No IP History Found
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    records.forEach(record => {
+
+        const tr = document.createElement("tr");
+        const values = [
+            record.username || "Unknown",
+            record.ip || "Unknown",
+            record.country || "Unknown",
+            record.countryCode || "Unknown",
+            record.loggedAt
+                ? new Date(record.loggedAt).toLocaleString()
+                : "Unknown"
+        ];
+
+        values.forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            td.style.padding = "12px";
+            td.style.borderBottom = "1px solid #ddd";
+            td.style.textAlign = "left";
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+}
+
+function filterIPHistory() {
+    const search = document
+        .getElementById("ipHistorySearch")
+        .value
+        .trim()
+        .toLowerCase();
+
+    if (!search) {
+        renderIPHistory([]);
+        return;
+    }
+
+    const filtered = ipHistoryRecords.filter(record => {
+        const username = String(record.username || "").toLowerCase();
+        const ip = String(record.ip || "").toLowerCase();
+        return username.includes(search) || ip.includes(search);
+    });
+    renderIPHistory(filtered);
+}
