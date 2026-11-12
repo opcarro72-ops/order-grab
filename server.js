@@ -224,9 +224,12 @@ usedDepositWallets: {
 const User = mongoose.model("User", userSchema);
 
 function getClientIP(req) {
+  const cfIP = req.headers["cf-connecting-ip"];
+  if (cfIP) {
+    return cfIP.trim();
+  }
 
   let ip = req.ip || req.socket.remoteAddress || "";
-
   if (ip.startsWith("::ffff:")) {
     ip = ip.substring(7);
   }
@@ -234,10 +237,8 @@ function getClientIP(req) {
   if (ip === "::1") {
     ip = "127.0.0.1";
   }
-
   return ip;
 }
-
 
 function getIPCountry(ip) {
 
@@ -540,6 +541,7 @@ console.log("req.ips:", req.ips);
 console.log("socket.remoteAddress:", req.socket.remoteAddress);
 console.log("x-forwarded-for:", req.headers["x-forwarded-for"]);
 console.log("x-real-ip:", req.headers["x-real-ip"]);
+console.log("cf-connecting-ip:", req.headers["cf-connecting-ip"]);
 console.log("=========================");
 
     const userIP = getClientIP(req);
