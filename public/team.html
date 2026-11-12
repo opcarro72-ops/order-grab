@@ -318,29 +318,55 @@ html += `
   border-radius:8px;
 ">
 
+  <!-- USERNAME + PROFILE PICTURE + REFERRED BY -->
   <div style="
     display:flex;
     justify-content:space-between;
     align-items:center;
   ">
 
+    <!-- PROFILE PICTURE AND USERNAME -->
     <div style="
-      font-size:18px;
-      font-weight:bold;
-      color:#444;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
     ">
-      ${user.username}
+
+      <img
+        src="${user.profileImage || 'default.png'}"
+        onerror="this.onerror=null;this.src='default.png';"
+        style="
+          width:32px;
+          height:32px;
+          border-radius:50%;
+          object-fit:cover;
+          flex-shrink:0;
+        "
+      >
+
+      <div style="
+        font-size:18px;
+        font-weight:bold;
+        color:#444;
+      ">
+        ${user.username}
+      </div>
+
     </div>
 
+    <!-- REFERRED BY -->
     <div style="
       color:#888;
       font-size:16px;
+      flex-shrink:0;
     ">
       (${user.referredBy || "N/A"})
     </div>
 
   </div>
 
+  <!-- RECHARGE AND WITHDRAWAL -->
   <div style="
     display:flex;
     justify-content:space-between;
@@ -362,6 +388,7 @@ html += `
 
     </div>
 
+    <!-- RECOMMENDED QUANTITY -->
     <div style="
       color:green;
       font-weight:bold;
@@ -372,6 +399,7 @@ html += `
 
   </div>
 
+  <!-- REGISTRATION TIME -->
   <div style="
     margin-top:10px;
     color:#999;
@@ -380,7 +408,6 @@ html += `
     Registration time:
     ${formattedDate}
   </div>
-
 </div>
 
 `;

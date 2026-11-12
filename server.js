@@ -1849,6 +1849,8 @@ app.get("/team-data", verifyToken, async (req, res) => {
         finalUsers.push({
           username: u.username,
 
+          profileImage: u.profileImage || "default.png",
+
           referredBy: u.referredBy,
 
           createdAt: u.createdAt || new Date(),
