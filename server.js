@@ -534,6 +534,14 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    console.log("===== IP DIAGNOSTIC =====");
+console.log("req.ip:", req.ip);
+console.log("req.ips:", req.ips);
+console.log("socket.remoteAddress:", req.socket.remoteAddress);
+console.log("x-forwarded-for:", req.headers["x-forwarded-for"]);
+console.log("x-real-ip:", req.headers["x-real-ip"]);
+console.log("=========================");
+
     const userIP = getClientIP(req);
     const location = getIPCountry(userIP);
 
