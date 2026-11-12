@@ -761,41 +761,42 @@ let ipHistoryRecords = [];
 
 window.loadIPHistory = async function () {
 
-    const tbody = document.getElementById("ipHistoryBody");
-    tbody.innerHTML = `
-        <tr>
-            <td colspan="5" style="text-align:center;">
-                Loading IP History...
-            </td>
-        </tr>
-    `;
-    try {
-
-        const res = await fetch("/admin/ip-history", {
-            headers: {
-                Authorization: "Bearer " + token
-            }
-        });
-
-        const data = await res.json();
-        if (!res.ok || !data.success) {
-            throw new Error(data.msg || "Failed to load IP history");
-        }
-        ipHistoryRecords = data.records || [];
-        filterIPHistory();
-    } catch (err) {
-        console.error("IP History Error:", err);
+    return withSectionLoading(async () => {
+        const tbody = document.getElementById("ipHistoryBody");
         tbody.innerHTML = `
             <tr>
                 <td colspan="5" style="text-align:center;">
-                    Failed to load IP History
+                    Loading IP History...
                 </td>
             </tr>
         `;
-        showMessage("Failed to load IP History");
-    }
-};
 
+        try {
+            const res = await fetch("/admin/ip-history", {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            });
+
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.msg || "Failed to load IP history");
+            }
+            ipHistoryRecords = data.records || [];
+            filterIPHistory();
+        } catch (err) {
+            console.error("IP History Error:", err);
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align:center;">
+                        Failed to load IP History
+                    </td>
+                </tr>
+            `;
+            showMessage("Failed to load IP History");
+        }
+    });
+};
 
 function renderIPHistory(records) {
 
