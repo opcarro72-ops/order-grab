@@ -221,6 +221,8 @@ usedDepositWallets: {
   timestamps: true
 });
 
+userSchema.index({ referredBy: 1 });
+
 const User = mongoose.model("User", userSchema);
 
 function getClientIP(req) {
@@ -305,6 +307,9 @@ const depositSchema = new mongoose.Schema({
   status: { type: String, default: "Pending" },
   time: { type: Date, default: Date.now }
 });
+
+depositSchema.index({ username: 1, status: 1 });
+
 const Deposit = mongoose.model("Deposit", depositSchema);
 
 const withdrawSchema = new mongoose.Schema({
@@ -314,6 +319,9 @@ const withdrawSchema = new mongoose.Schema({
   status: { type: String, default: "Processing" },
   time: { type: Date, default: Date.now }
 });
+
+withdrawSchema.index({ username: 1, status: 1 });
+
 const Withdraw = mongoose.model("Withdraw", withdrawSchema);
 
 const orderSchema = new mongoose.Schema({
@@ -1806,10 +1814,10 @@ app.get("/deposit-wallet", (req, res) => {
 });
 
 app.get("/team-data", verifyToken, async (req, res) => {
-
   try {
-
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId)
+      .select("username")
+      .lean();
 
     if (!user) {
       return res.json({
@@ -1818,90 +1826,121 @@ app.get("/team-data", verifyToken, async (req, res) => {
       });
     }
 
-    async function buildUsers(users){
-
-      const finalUsers = [];
-
-      for(const u of users){
-
-        const deposits = await Deposit.find({
-          username: u.username,
-          status: "Success"
-        });
-
-        let totalRecharge = 0;
-
-        deposits.forEach(d=>{
-          totalRecharge += d.approvedAmount || 0;
-        });
-
-        const withdraws = await Withdraw.find({
-          username: u.username,
-          status: "Success"
-        });
-
-        let totalWithdraw = 0;
-
-        withdraws.forEach(w=>{
-          totalWithdraw += w.approvedAmount || 0;
-        });
-
-        finalUsers.push({
-          username: u.username,
-
-          profileImage: u.profileImage || "default.png",
-
-          referredBy: u.referredBy,
-
-          createdAt: u.createdAt || new Date(),
-
-          recharge: totalRecharge,
-
-          withdraw: totalWithdraw,
-
-          recommendedQuantity: u.invitedUsers
-            ? u.invitedUsers.length
-            : 0
-        });
-      }
-
-      return finalUsers;
-    }
-
     const rawLevel1 = await User.find({
       referredBy: user.username
-    });
+    })
+      .select("username profileImage referredBy createdAt invitedUsers")
+      .lean();
 
-    const rawLevel2 = await User.find({
-      referredBy: {
-        $in: rawLevel1.map(u => u.username)
-      }
-    });
+    const level1Names = rawLevel1.map(u => u.username);
 
-    const rawLevel3 = await User.find({
-      referredBy: {
-        $in: rawLevel2.map(u => u.username)
-      }
-    });
+    const rawLevel2 = level1Names.length
+      ? await User.find({
+          referredBy: { $in: level1Names }
+        })
+          .select("username profileImage referredBy createdAt invitedUsers")
+          .lean()
+      : [];
 
-    const level1 = await buildUsers(rawLevel1);
+    const level2Names = rawLevel2.map(u => u.username);
 
-    const level2 = await buildUsers(rawLevel2);
+    const rawLevel3 = level2Names.length
+      ? await User.find({
+          referredBy: { $in: level2Names }
+        })
+          .select("username profileImage referredBy createdAt invitedUsers")
+          .lean()
+      : [];
 
-    const level3 = await buildUsers(rawLevel3);
+    const allUsers = [
+      ...rawLevel1,
+      ...rawLevel2,
+      ...rawLevel3
+    ];
 
-    res.json({
+    const usernames = allUsers.map(u => u.username);
+
+    let depositMap = new Map();
+    let withdrawMap = new Map();
+
+    if (usernames.length > 0) {
+
+      const [depositTotals, withdrawTotals] = await Promise.all([
+
+        Deposit.aggregate([
+          {
+            $match: {
+              username: { $in: usernames },
+              status: "Success"
+            }
+          },
+          {
+            $group: {
+              _id: "$username",
+              total: {
+                $sum: { $ifNull: ["$approvedAmount", 0] }
+              }
+            }
+          }
+        ]),
+
+        Withdraw.aggregate([
+          {
+            $match: {
+              username: { $in: usernames },
+              status: "Success"
+            }
+          },
+          {
+            $group: {
+              _id: "$username",
+              total: {
+                $sum: { $ifNull: ["$approvedAmount", 0] }
+              }
+            }
+          }
+        ])
+
+      ]);
+
+      depositMap = new Map(
+        depositTotals.map(item => [item._id, item.total])
+      );
+
+      withdrawMap = new Map(
+        withdrawTotals.map(item => [item._id, item.total])
+      );
+    }
+
+    function buildUsers(users) {
+      return users.map(u => ({
+        username: u.username,
+        profileImage: u.profileImage || "default.png",
+        referredBy: u.referredBy || "",
+        createdAt: u.createdAt || null,
+
+        recharge: depositMap.get(u.username) || 0,
+        withdraw: withdrawMap.get(u.username) || 0,
+
+        recommendedQuantity: Array.isArray(u.invitedUsers)
+          ? u.invitedUsers.length
+          : 0
+      }));
+    }
+
+    return res.json({
       success: true,
-      level1,
-      level2,
-      level3
+      level1: buildUsers(rawLevel1),
+      level2: buildUsers(rawLevel2),
+      level3: buildUsers(rawLevel3)
     });
 
   } catch (err) {
+    console.error("Team Data Error:", err);
 
-    res.json({
+    return res.status(500).json({
       success: false,
-      msg: err.message
+      msg: "Failed to load team data"
     });
   }
 });
@@ -1910,7 +1949,6 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/login.html");
 });
 
-/* ---------------- SERVER ---------------- */
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, "0.0.0.0", () => {
