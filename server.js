@@ -8,8 +8,9 @@ const cron = require("node-cron");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-
+const geoip = require("geoip-lite");
 const app = express();
+app.set("trust proxy", 1);
 
 const depositWallets = [
 
@@ -48,6 +49,33 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     unique: true
+  },
+
+    ipHistory: {
+    type: [
+      {
+        ip: {
+          type: String,
+          default: ""
+        },
+
+        country: {
+          type: String,
+          default: "Unknown"
+        },
+
+        countryCode: {
+          type: String,
+          default: ""
+        },
+
+        loggedAt: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ],
+    default: []
   },
 
   inviteCode: {
@@ -194,6 +222,57 @@ usedDepositWallets: {
 });
 
 const User = mongoose.model("User", userSchema);
+
+function getClientIP(req) {
+
+  let ip = req.ip || req.socket.remoteAddress || "";
+
+  if (ip.startsWith("::ffff:")) {
+    ip = ip.substring(7);
+  }
+
+  if (ip === "::1") {
+    ip = "127.0.0.1";
+  }
+
+  return ip;
+}
+
+
+function getIPCountry(ip) {
+
+  const geo = geoip.lookup(ip);
+
+  if (!geo || !geo.country) {
+    return {
+      country: "Unknown",
+      countryCode: ""
+    };
+  }
+
+  let countryName = "Unknown";
+
+  try {
+
+    const regionNames = new Intl.DisplayNames(
+      ["en"],
+      { type: "region" }
+    );
+
+    countryName = regionNames.of(geo.country) || "Unknown";
+
+  } catch (error) {
+
+    countryName = geo.country;
+
+  }
+
+  return {
+    country: countryName,
+    countryCode: geo.country
+  };
+
+}
 
 async function generateInviteCode() {
 
@@ -454,6 +533,31 @@ app.post("/login", async (req, res) => {
         msg: "Wrong password"
       });
     }
+
+    console.log("===== IP DIAGNOSTIC =====");
+console.log("req.ip:", req.ip);
+console.log("req.ips:", req.ips);
+console.log("socket.remoteAddress:", req.socket.remoteAddress);
+console.log("x-forwarded-for:", req.headers["x-forwarded-for"]);
+console.log("x-real-ip:", req.headers["x-real-ip"]);
+console.log("=========================");
+
+    const userIP = getClientIP(req);
+    const location = getIPCountry(userIP);
+
+    user.ipHistory.push({
+      ip: userIP,
+      country: location.country,
+      countryCode: location.countryCode,
+      loggedAt: new Date()
+
+    });
+
+    if (user.ipHistory.length > 100) {
+      user.ipHistory = user.ipHistory.slice(-100);
+    }
+
+    await user.save();
 
     const token = jwt.sign(
     {
