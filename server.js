@@ -30,7 +30,7 @@ const depositWallets = [
   },
 
   {
-    address: "THCXPUpL9fjMSA4h3EQ3BQQjCWuFtN6mBH",
+    address: "TTBDg9DW5fSoxgeUzF2bnYTqVhBaVavMix",
     qr: "qr444.png"
   }
 
