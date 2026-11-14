@@ -44,34 +44,95 @@
     .container{
       padding:12px;
     }
+    
+.record-item{
+  background:#fff;
+  margin-bottom:12px;
+  padding:12px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
 
-    .record-item{
-      background:#fff;
-      margin-bottom:12px;
-      padding:15px;
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1.5fr) auto;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
 
-      border-radius:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+.record-left{
+  min-width:0;
+}
 
-      position:relative;
-    }
+.record-left p{
+  margin:6px 0;
+  color:#333;
+  font-size:13px;
+  white-space:nowrap;
+}
 
-    .record-item p{
-      margin:4px 0;
-      color:#333;
-      font-size:14px;
-    }
+.transaction-id{
+  text-align:center;
+  font-size:12px;
+  font-weight:bold;
+  color:#333;
+  white-space:nowrap;
+  overflow:visible;
+  overflow-wrap:normal;
+  word-break:normal;
+  min-width:0;
+}
 
-    .status{
-      position:absolute;
-      top:12px;
-      right:12px;
-      padding:5px 12px;
-      border-radius:20px;
-      font-size:11px;
-      font-weight:bold;
-      color:#fff;
-    }
+.record-right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+  min-width:0;
+}
+
+.record-time{
+  margin:0;
+  color:#666;
+  font-size:10px;
+  text-align:right;
+  white-space:nowrap;
+}
+
+.status{
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+  color:#fff;
+  white-space:nowrap;
+}
+
+@media(max-width:480px){
+
+  .record-item{
+    grid-template-columns:minmax(0, 1fr) minmax(0, 1.2fr) auto;
+    gap:4px;
+    padding:10px 6px;
+  }
+
+  .record-left p{
+    font-size:10px;
+  }
+
+  .transaction-id{
+    font-size:clamp(7px, 2.4vw, 10px);
+    letter-spacing:-0.4px;
+  }
+
+  .record-time{
+    font-size:8px;
+  }
+
+  .status{
+    font-size:9px;
+    padding:4px 6px;
+  }
+}
 
     .success{
       background:#16a34a;
@@ -407,36 +468,61 @@ async function loadDeposits() {
     }
 
     records.forEach(r => {
-      let statusClass = "success";
 
-if (r.status === "Pending") {
-  statusClass = "pending";
-}
+  let statusClass = "success";
 
-if (r.status === "Rejected") {
-  statusClass = "rejected";
-}
-      box.innerHTML += `
-        <div class="record-item">
-          <div class="status ${statusClass}">
-            ${translateStatus(r.status)}
-          </div>
-          <p>
-            ${currentTexts.amount}: ${r.amount} USDT
-          </p>
-          <p>
-            ${currentTexts.deposited}: ${r.approvedAmount || 0} USDT
-          </p>
-          <p>
-            ${currentTexts.time}: ${new Date(r.time).toLocaleString()}
-          </p>
+  if (r.status === "Pending") {
+    statusClass = "pending";
+  }
+
+  if (r.status === "Rejected") {
+    statusClass = "rejected";
+  }
+
+  const formattedTime = new Date(r.time).toLocaleString();
+
+  box.innerHTML += `
+    <div class="record-item">
+
+      <div class="record-left">
+        <p>
+          ${currentTexts.amount}: ${r.amount} USDT
+        </p>
+
+        <p>
+          ${currentTexts.deposited}: ${r.approvedAmount || 0} USDT
+        </p>
+      </div>
+
+      <div class="transaction-id">
+        ${r.transactionId || "N/A"}
+      </div>
+
+      <div class="record-right">
+
+        <div class="status ${statusClass}">
+          ${translateStatus(r.status)}
         </div>
-      `;
+
+        <p class="record-time">
+          ${currentTexts.time}: ${formattedTime}
+        </p>
+
+            </div>
+    </div>
+  `;
+
     });
+
   } catch (error) {
+
+    console.error("Deposit loading error:", error);
+
     box.innerHTML =
       `<p class="empty">${currentTexts.serverError}</p>`;
+
   }
+
 }
 
 loadDeposits();

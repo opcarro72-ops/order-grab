@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const cron = require("node-cron");
 const multer = require("multer");
 const path = require("path");
@@ -310,6 +311,12 @@ const depositSchema = new mongoose.Schema({
   username: String,
   amount: Number,
 
+  transactionId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+
   walletAddress: String,
   walletQr: String,
 
@@ -321,6 +328,34 @@ const depositSchema = new mongoose.Schema({
 depositSchema.index({ username: 1, status: 1 });
 
 const Deposit = mongoose.model("Deposit", depositSchema);
+
+async function generateTransactionId() {
+
+  const characters =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+  while (true) {
+
+    let transactionId = "R";
+
+    const randomBytes = crypto.randomBytes(18);
+
+    for (let i = 0; i < 18; i++) {
+      transactionId += characters[
+        randomBytes[i] % characters.length
+      ];
+    }
+
+    const exists = await Deposit.findOne({
+      transactionId
+    }).select("_id").lean();
+
+    if (!exists) {
+      return transactionId;
+    }
+
+  }
+}
 
 const withdrawSchema = new mongoose.Schema({
   username: String,
@@ -708,9 +743,11 @@ app.post("/deposit-request", verifyToken, async (req, res) => {
 
     await user.save();
 
+    const transactionId = await generateTransactionId();
     const deposit = new Deposit({
       username: user.username,
       amount,
+      transactionId,
       walletAddress: wallet.address,
       walletQr: wallet.qr
     });
@@ -720,7 +757,8 @@ app.post("/deposit-request", verifyToken, async (req, res) => {
     res.json({
       success: true,
       address: wallet.address,
-      qr: wallet.qr
+      qr: wallet.qr,
+      transactionId: deposit.transactionId
     });
 
   } catch (err) {
