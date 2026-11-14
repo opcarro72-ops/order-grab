@@ -252,14 +252,18 @@ body {
 const token = localStorage.getItem("token");
 const lang =
   localStorage.getItem("lang") || "en";
-const walletTexts = {
 
+const walletTexts = {
   en: {
     title: "Virtual Currency",
     walletName: "Wallet name",
     protocol: "Virtual currency protocol",
     address: "Wallet address",
     withdrawalPassword: "Withdrawal password",
+    phName: "Please enter the wallet name",
+    phProtocol: "Please enter virtual currency protocol",
+    phAddress: "Please enter the e-wallet address",
+    phPassword: "Please enter withdrawal password",
     ok: "OK",
     cancel: "Cancel",
     walletSaved: "Wallet saved",
@@ -273,6 +277,10 @@ const walletTexts = {
     protocol: "虚拟货币协议",
     address: "钱包地址",
     withdrawalPassword: "提款密码",
+    phName: "请输入钱包名称",
+    phProtocol: "请输入虚拟货币协议",
+    phAddress: "请输入电子钱包地址",
+    phPassword: "请输入提款密码",
     ok: "确定",
     cancel: "取消",
     walletSaved: "钱包已保存",
@@ -286,6 +294,10 @@ const walletTexts = {
     protocol: "वर्चुअल करेंसी प्रोटोकॉल",
     address: "वॉलेट पता",
     withdrawalPassword: "निकासी पासवर्ड",
+    phName: "वॉलेट का नाम दर्ज करें",
+    phProtocol: "वर्चुअल करेंसी प्रोटोकॉल दर्ज करें",
+    phAddress: "वॉलेट पता दर्ज करें",
+    phPassword: "निकासी पासवर्ड दर्ज करें",
     ok: "ठीक है",
     cancel: "रद्द करें",
     walletSaved: "वॉलेट सेव हो गया",
@@ -299,6 +311,10 @@ const walletTexts = {
     protocol: "Protocolo de moneda virtual",
     address: "Dirección de la billetera",
     withdrawalPassword: "Contraseña de retiro",
+    phName: "Ingrese el nombre de la billetera",
+    phProtocol: "Ingrese el protocolo de moneda virtual",
+    phAddress: "Ingrese la dirección de la billetera",
+    phPassword: "Ingrese la contraseña de retiro",
     ok: "Aceptar",
     cancel: "Cancelar",
     walletSaved: "Billetera guardada",
@@ -312,6 +328,10 @@ const walletTexts = {
     protocol: "Protocole de monnaie virtuelle",
     address: "Adresse du portefeuille",
     withdrawalPassword: "Mot de passe de retrait",
+    phName: "Entrez le nom du portefeuille",
+    phProtocol: "Entrez le protocole de monnaie virtuelle",
+    phAddress: "Entrez l'adresse du portefeuille",
+    phPassword: "Entrez le mot de passe de retrait",
     ok: "OK",
     cancel: "Annuler",
     walletSaved: "Portefeuille enregistré",
@@ -325,6 +345,10 @@ const walletTexts = {
     protocol: "بروتوكول العملة الافتراضية",
     address: "عنوان المحفظة",
     withdrawalPassword: "كلمة مرور السحب",
+    phName: "أدخل اسم المحفظة",
+    phProtocol: "أدخل بروتوكول العملة الافتراضية",
+    phAddress: "أدخل عنوان المحفظة",
+    phPassword: "أدخل كلمة مرور السحب",
     ok: "موافق",
     cancel: "إلغاء",
     walletSaved: "تم حفظ المحفظة",
@@ -338,6 +362,10 @@ const walletTexts = {
     protocol: "ভার্চুয়াল কারেন্সি প্রোটোকল",
     address: "ওয়ালেট অ্যাড্রেস",
     withdrawalPassword: "উইথড্র পাসওয়ার্ড",
+    phName: "ওয়ালেটের নাম লিখুন",
+    phProtocol: "ভার্চুয়াল কারেন্সি প্রোটোকল লিখুন",
+    phAddress: "ওয়ালেট অ্যাড্রেস লিখুন",
+    phPassword: "উইথড্র পাসওয়ার্ড লিখুন",
     ok: "ঠিক আছে",
     cancel: "বাতিল",
     walletSaved: "ওয়ালেট সংরক্ষণ হয়েছে",
@@ -351,6 +379,10 @@ const walletTexts = {
     protocol: "Protocolo de moeda virtual",
     address: "Endereço da carteira",
     withdrawalPassword: "Senha de retirada",
+    phName: "Digite o nome da carteira",
+    phProtocol: "Digite o protocolo da moeda virtual",
+    phAddress: "Digite o endereço da carteira",
+    phPassword: "Digite a senha de retirada",
     ok: "OK",
     cancel: "Cancelar",
     walletSaved: "Carteira salva",
@@ -364,6 +396,10 @@ const walletTexts = {
     protocol: "Протокол виртуальной валюты",
     address: "Адрес кошелька",
     withdrawalPassword: "Пароль для вывода",
+    phName: "Введите название кошелька",
+    phProtocol: "Введите протокол виртуальной валюты",
+    phAddress: "Введите адрес кошелька",
+    phPassword: "Введите пароль для вывода",
     ok: "ОК",
     cancel: "Отмена",
     walletSaved: "Кошелек сохранен",
@@ -377,6 +413,10 @@ const walletTexts = {
     protocol: "ورچوئل کرنسی پروٹوکول",
     address: "والیٹ ایڈریس",
     withdrawalPassword: "رقم نکلوانے کا پاس ورڈ",
+    phName: "والیٹ کا نام درج کریں",
+    phProtocol: "ورچوئل کرنسی پروٹوکول درج کریں",
+    phAddress: "والیٹ ایڈریس درج کریں",
+    phPassword: "رقم نکلوانے کا پاس ورڈ درج کریں",
     ok: "ٹھیک ہے",
     cancel: "منسوخ",
     walletSaved: "والیٹ محفوظ ہو گیا",
@@ -390,6 +430,10 @@ const walletTexts = {
     protocol: "Protokol mata uang virtual",
     address: "Alamat dompet",
     withdrawalPassword: "Kata sandi penarikan",
+    phName: "Masukkan nama dompet",
+    phProtocol: "Masukkan protokol mata uang virtual",
+    phAddress: "Masukkan alamat dompet",
+    phPassword: "Masukkan kata sandi penarikan",
     ok: "OK",
     cancel: "Batal",
     walletSaved: "Dompet berhasil disimpan",
@@ -403,6 +447,10 @@ const walletTexts = {
     protocol: "Protokoll der virtuellen Währung",
     address: "Wallet-Adresse",
     withdrawalPassword: "Auszahlungs-Passwort",
+    phName: "Wallet-Namen eingeben",
+    phProtocol: "Protokoll der virtuellen Währung eingeben",
+    phAddress: "Wallet-Adresse eingeben",
+    phPassword: "Auszahlungs-Passwort eingeben",
     ok: "OK",
     cancel: "Abbrechen",
     walletSaved: "Wallet gespeichert",
@@ -416,6 +464,10 @@ const walletTexts = {
     protocol: "仮想通貨プロトコル",
     address: "ウォレットアドレス",
     withdrawalPassword: "出金パスワード",
+    phName: "ウォレット名を入力してください",
+    phProtocol: "仮想通貨プロトコルを入力してください",
+    phAddress: "ウォレットアドレスを入力してください",
+    phPassword: "出金パスワードを入力してください",
     ok: "OK",
     cancel: "キャンセル",
     walletSaved: "ウォレットを保存しました",
@@ -429,6 +481,10 @@ const walletTexts = {
     protocol: "Protocollo della valuta virtuale",
     address: "Indirizzo del portafoglio",
     withdrawalPassword: "Password di prelievo",
+    phName: "Inserisci il nome del portafoglio",
+    phProtocol: "Inserisci il protocollo della valuta virtuale",
+    phAddress: "Inserisci l'indirizzo del portafoglio",
+    phPassword: "Inserisci la password di prelievo",
     ok: "OK",
     cancel: "Annulla",
     walletSaved: "Portafoglio salvato",
@@ -442,6 +498,10 @@ const walletTexts = {
     protocol: "Sanal para protokolü",
     address: "Cüzdan adresi",
     withdrawalPassword: "Para çekme şifresi",
+    phName: "Cüzdan adını girin",
+    phProtocol: "Sanal para protokolünü girin",
+    phAddress: "Cüzdan adresini girin",
+    phPassword: "Para çekme şifresini girin",
     ok: "Tamam",
     cancel: "İptal",
     walletSaved: "Cüzdan kaydedildi",
@@ -455,6 +515,10 @@ const walletTexts = {
     protocol: "پروتکل ارز مجازی",
     address: "آدرس کیف پول",
     withdrawalPassword: "رمز عبور برداشت",
+    phName: "نام کیف پول را وارد کنید",
+    phProtocol: "پروتکل ارز مجازی را وارد کنید",
+    phAddress: "آدرس کیف پول را وارد کنید",
+    phPassword: "رمز عبور برداشت را وارد کنید",
     ok: "تأیید",
     cancel: "لغو",
     walletSaved: "کیف پول ذخیره شد",
@@ -468,13 +532,16 @@ const walletTexts = {
     protocol: "Virtueel valutaprotocol",
     address: "Walletadres",
     withdrawalPassword: "Opnamewachtwoord",
+    phName: "Voer de walletnaam in",
+    phProtocol: "Voer het virtuele valutaprotocol in",
+    phAddress: "Voer het walletadres in",
+    phPassword: "Voer het opnamewachtwoord in",
     ok: "OK",
     cancel: "Annuleren",
     walletSaved: "Wallet opgeslagen",
     failed: "Mislukt",
     serverError: "Serverfout"
   }
-
 };
 
 const currentTexts =
@@ -506,6 +573,13 @@ document.getElementById("addressLabel").innerText =
 
 document.getElementById("passwordLabel").innerText =
   currentTexts.withdrawalPassword;
+
+nameInput.placeholder = currentTexts.phName;
+protocolInput.placeholder = currentTexts.phProtocol;
+addressInput.placeholder = currentTexts.phAddress;
+passwordInput.placeholder = currentTexts.phPassword;
+okBtn.innerText = currentTexts.ok;
+cancelBtn.innerText = currentTexts.cancel;
 
 function showMessage(text) {
   const alertBox = document.getElementById("customAlert");

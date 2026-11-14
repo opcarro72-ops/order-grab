@@ -63,14 +63,8 @@ body {
 }
 
 .option-box.active::after {
-  content: "✔";
-  position: absolute;
-  bottom: 5px;
-  right: 8px;
-  font-size: 10px;
-  color: white;
-  border-radius: 3px;
-  padding: 1px 3px;
+  content: none;
+  display: none;
 }
 
 .card input {
