@@ -8,10 +8,15 @@
   <script src="/loading.js" defer></script>
 
   <style>
-    body {
-  margin:0;
-  background:#f5f5f5;
+    
+body {
+  margin: 0;
+  background: #f5f5f5;
   font-family: Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .header {
@@ -20,7 +25,7 @@
   justify-content: center;
   position: relative;
   height: 55px;
-  background: #ffffff;
+  background: #fff;
   border-bottom: 1px solid #eee;
 }
 
@@ -38,27 +43,52 @@
 }
 
 .container {
-  padding: 12px;
+  padding: 0;
 }
 
 .card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 15px;
+  background: #fff;
+  border-radius: 0;
+  padding: 0;
   margin-bottom: 12px;
 }
 
-input {
+.form-row {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  align-items: center;
+  min-height: 68px;
+  border-bottom: 1px solid #eee;
+  padding: 9px 20px;
+  gap: 8px;
+}
+
+.form-row label {
+  font-size: 14px;
+  color: #222;
+  line-height: 1.4;
+}
+
+.form-row input {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+  min-width: 0;
+  padding: 9px 6px;
+  margin: 0;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+}
+
+.form-row input::placeholder {
+  color: #c0c0c0;
 }
 
 .password-box {
   position: relative;
+  width: 100%;
 }
 
 .password-box span {
@@ -70,12 +100,12 @@ input {
 }
 
 .btn {
-  width: 100%;
-  padding: 14px;
+  width: calc(100% - 32px);
+  margin: 12px 16px 0;
+  padding: 18px;
   border: none;
   border-radius: 10px;
   font-size: 16px;
-  margin-top: 10px;
 }
 
 #okBtn {
@@ -92,6 +122,24 @@ input {
   background: #fff;
   border: 1px solid #ddd;
   color: #333;
+}
+
+@media(max-width:480px) {
+  .form-row {
+    grid-template-columns: 115px minmax(0, 1fr);
+    min-height: 62px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .form-row label {
+    font-size: 12px;
+  }
+
+  .form-row input {
+    font-size: 12px;
+    padding: 8px 4px;
+  }
 }
 
 .custom-alert-inside-wallet{
@@ -121,49 +169,57 @@ input {
   </div>
 
   <div class="container">
-    <div class="card">
+  <div class="card">
 
-  <input
-    id="name"
-    placeholder="Wallet name"
-    autocomplete="off"
-  >
+    <div class="form-row">
+      <label id="nameLabel">Wallet name</label>
+      <input
+        id="name"
+        placeholder="Please enter the wallet name"
+        autocomplete="off"
+      >
+    </div>
 
-  <input
-    id="protocol"
-    placeholder="Virtual currency protocol"
-    autocomplete="off"
-  >
+    <div class="form-row">
+      <label id="protocolLabel">Virtual Currency Protocol</label>
+      <input
+        id="protocol"
+        placeholder="Please enter virtual currency protocol"
+        autocomplete="off"
+      >
+    </div>
 
-  <input
-    id="address"
-    placeholder="Wallet address"
-    autocomplete="off"
-  >
+    <div class="form-row">
+      <label id="addressLabel">Wallet address</label>
+      <input
+        id="address"
+        placeholder="Please enter the e-wallet address"
+        autocomplete="off"
+      >
+    </div>
 
-  <div class="password-box">
-    <input
-      id="password"
-      placeholder="Withdrawal password"
-      type="password"
-      autocomplete="new-password"
-    >
+    <div class="form-row">
+      <label id="passwordLabel">Withdrawal password</label>
 
-    <span onclick="togglePassword()">👁️</span>
+      <div class="password-box">
+        <input
+          id="password"
+          placeholder="Please enter withdrawal password"
+          type="password"
+          autocomplete="new-password"
+        >
+
+        <span onclick="togglePassword()">👁️</span>
+      </div>
+    </div>
 
   </div>
 
+  <button id="okBtn" class="btn" disabled>OK</button>
+  <button id="cancelBtn" class="btn">Cancel</button>
+
+  <div id="customAlert" class="custom-alert-inside-wallet"></div>
 </div>
-
-<button id="okBtn" class="btn" disabled>
-  OK
-</button>
-
-<button id="cancelBtn" class="btn">
-  Cancel
-</button>
-
-<div id="customAlert" class="custom-alert-inside-wallet"></div>
 
 <script>
 
@@ -413,18 +469,17 @@ const cancelBtn = document.getElementById("cancelBtn");
 
 document.getElementById("walletTitle").innerText =
   currentTexts.title;
-nameInput.placeholder =
+document.getElementById("nameLabel").innerText =
   currentTexts.walletName;
-protocolInput.placeholder =
+
+document.getElementById("protocolLabel").innerText =
   currentTexts.protocol;
-addressInput.placeholder =
+
+document.getElementById("addressLabel").innerText =
   currentTexts.address;
-passwordInput.placeholder =
+
+document.getElementById("passwordLabel").innerText =
   currentTexts.withdrawalPassword;
-okBtn.innerText =
-  currentTexts.ok;
-cancelBtn.innerText =
-  currentTexts.cancel;
 
 function showMessage(text) {
   const alertBox = document.getElementById("customAlert");
