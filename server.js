@@ -32,7 +32,17 @@ const depositWallets = [
   {
     address: "TTBDg9DW5fSoxgeUzF2bnYTqVhBaVavMix",
     qr: "qr444.png"
-  }
+  },
+
+  {
+    address: "TJfcrgdyDksSvjPLjUfjwSZrYXgfoNCDwZ",
+    qr: "qr555.png"
+  },
+  
+  {
+    address: "THSrkvqXvYje1EoefEaEqzTfdZ8zAR522v",
+    qr: "qr666.png"
+  }  
 
 ];
 
