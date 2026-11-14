@@ -360,6 +360,13 @@ async function generateTransactionId() {
 const withdrawSchema = new mongoose.Schema({
   username: String,
   amount: Number,
+
+  transactionId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+
   approvedAmount: { type: Number, default: 0 },
   status: { type: String, default: "Processing" },
   time: { type: Date, default: Date.now }
@@ -368,6 +375,34 @@ const withdrawSchema = new mongoose.Schema({
 withdrawSchema.index({ username: 1, status: 1 });
 
 const Withdraw = mongoose.model("Withdraw", withdrawSchema);
+
+async function generateWithdrawTransactionId() {
+
+  const characters =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+  while (true) {
+
+    let transactionId = "R";
+
+    const randomBytes = crypto.randomBytes(18);
+
+    for (let i = 0; i < 18; i++) {
+      transactionId += characters[
+        randomBytes[i] % characters.length
+      ];
+    }
+
+    const exists = await Withdraw.findOne({
+      transactionId
+    }).select("_id").lean();
+
+    if (!exists) {
+      return transactionId;
+    }
+
+  }
+}
 
 const orderSchema = new mongoose.Schema({
 
@@ -979,9 +1014,13 @@ app.post("/withdraw", verifyToken, async (req, res) => {
     debited = true;
     amountToRefund = amount;
     userIdToRefund = user._id;
+
+    const transactionId = await generateWithdrawTransactionId();
+
     const withdraw = new Withdraw({
       username: user.username,
       amount,
+      transactionId,
       approvedAmount: 0,
       status: "Processing"
     });
@@ -990,7 +1029,8 @@ app.post("/withdraw", verifyToken, async (req, res) => {
     debited = false;
     return res.json({
       success: true,
-      msg: "Withdraw request submitted"
+      msg: "Withdraw request submitted",
+      transactionId: withdraw.transactionId
     });
 
   } catch (err) {
